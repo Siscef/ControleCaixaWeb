@@ -1,0 +1,75 @@
+﻿@model IEnumerable<ControleCaixaWeb.Models.OperacaoCaixa>
+
+@{
+    ViewBag.Title = "VerPorFormaPagamento";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lista Das Operações da Forma Pagamento</h2>
+
+<p>
+    @Html.ActionLink("Fazer Novo Lançamento", "CadastrarOperacaoCaixa")
+</p>
+<h3>Soma do Valor Das Operações:R$ @Model.Sum(item => item.Valor)</h3>
+
+<table class="table table-bordered">
+    <tr>
+        
+        <th>
+            Data Lançamento:
+        </th>
+        <th>
+        Usuário:
+        </th>
+		<th>
+			Plano Pagamento:
+		</th>
+        <th>
+            Valor:
+        </th>
+        <th>
+            Descrição:
+        </th>
+        <th>
+            Observação:
+        </th>
+         <th>
+            Operações:
+        </th>
+        
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.DataLancamento)
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.UsuarioQueLancou.Nome)
+        </td>
+		<td>
+			@Html.DisplayFor(modelItem => item.FormaPagamentoUtilizada.NomeTipoFormaPagamento)
+		</td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Valor)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Descricao)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Observacao)
+        </td>
+        <td>
+            @if (item.Valor > 0)
+            {
+            @Html.ActionLink(" Alterar | ", "AlterarOperacaoCaixa", new { id=item.Codigo }) 
+            @Html.ActionLink(" Fazer Despejo |", "FazerDespejo", new { forma = item.FormaPagamentoUtilizada.Codigo, estabelecimento = item.EstabelecimentoOperacao.Codigo, valor = Model.Sum(x => x.Valor) }) 
+            @Html.ActionLink(" Excluir |", "ExcluirOperacaoCaixa", new {  id=item.Codigo })
+            }          
+           
+            @Html.ActionLink("Detalhes", "Detalhes", new {  id=item.Codigo })
+            
+        </td>
+    </tr>
+}

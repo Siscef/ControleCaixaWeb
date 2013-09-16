@@ -1,0 +1,3 @@
+no controller de operacao conta corrente, fazer a alteração em deposito para quando for feito um deposito
+alterado tambem alterar o valor de saida da operacao caixa
+e na exclusao tambem

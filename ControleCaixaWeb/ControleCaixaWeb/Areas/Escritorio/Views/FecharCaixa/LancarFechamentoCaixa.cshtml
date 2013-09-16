@@ -1,0 +1,71 @@
+﻿@model ControleCaixaWeb.Models.FechamentoCaixa
+@{
+	ViewBag.Title = "LancarFechamentoCaixa";
+	Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+<h2>
+	Lancar Fechamento Caixa</h2>
+<br />
+<h4>@ViewBag.DataErradaAmanha</h4>
+<br />
+<h4>@ViewBag.DataErradaOntem</h4>
+@using (Html.BeginForm( ))
+{
+	@Html.ValidationSummary(true)
+	<fieldset>
+		<legend>Fechamento Caixa</legend>
+		<div class="editor-label">
+			@Html.LabelFor(model => model.DataLancamento, "Data Lançamento:")
+		</div>
+		<div class="editor-field">
+			@Html.Telerik( ).DatePickerFor(model => model.DataLancamento)
+			@Html.ValidationMessageFor(model => model.DataLancamento)
+		</div>
+		<div class="editor-label">
+			@Html.LabelFor(model => model.CaixaAbertura, "Caixa de Abertura:")
+		</div>
+		<div class="editor-field">
+			@Html.TextBoxFor(model => model.CaixaAbertura)
+			@Html.ValidationMessageFor(model => model.CaixaAbertura)
+		</div>
+		<div class="editor-label">
+			@Html.LabelFor(model => model.CaixaFechamento, "Caixa de Fechamento:")
+		</div>
+		<div class="editor-field">
+			@Html.TextBoxFor(model => model.CaixaFechamento, new { @class = "input-xlarge" })
+			@Html.ValidationMessageFor(model => model.CaixaFechamento)
+		</div>
+		<div class="editor-label">
+			@Html.LabelFor(model => model.Faturamento, "Faturamento:")
+		</div>
+		<div class="editor-field">
+			@Html.TextBoxFor(model => model.Faturamento)
+			@Html.ValidationMessageFor(model => model.Faturamento)
+		</div>
+		<div class="editor-label">
+			@Html.LabelFor(model => model.FaturamentoUsuario, "Nome do Operador:")
+		</div>
+		<div class="editor-field">
+			@Html.DropDownListFor(model => model.FaturamentoUsuario.Codigo,(IEnumerable<SelectListItem>)ViewBag.Usuario,"Selecione Operador")
+			@Html.ValidationMessageFor(model => model.FaturamentoUsuario)
+		</div>
+		<div class="editor-label">
+			@Html.LabelFor(model => model.FaturamentoEstabelecimento, "Estabelecimento:")
+		</div>
+		<div class="editor-field">
+			@Html.DropDownListFor(model => model.FaturamentoEstabelecimento.Codigo,(IEnumerable<SelectListItem>)ViewBag.Loja,"Selecione Loja")
+			@Html.ValidationMessageFor(model => model.FaturamentoEstabelecimento)
+		</div>
+
+
+
+
+		<p>
+			<input class="btn btn-success" type="submit" value="Cadastar" />
+			<input class="btn btn-warning" type="reset" value="Limpar" />
+		</p>
+	</fieldset>
+}
+<div>
+	@Html.ActionLink("Página Inicial", "Index", "Home")
+</div>

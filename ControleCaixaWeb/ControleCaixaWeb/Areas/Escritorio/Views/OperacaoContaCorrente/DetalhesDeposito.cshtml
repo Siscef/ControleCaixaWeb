@@ -1,0 +1,62 @@
+﻿@model ControleCaixaWeb.Models.OperacaoFinanceiraContaCorrente
+@{
+    ViewBag.Title = "DetalhesDeposito";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>DetalhesDeposito</h2>
+
+<fieldset>
+    <legend>OperacaoFinanceiraContaCorrente</legend>
+
+    <div class="display-label">Código:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Codigo)
+    </div>
+
+    <div class="display-label">Data:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Data)
+    </div>
+
+    <div class="display-label">Valor:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Valor)
+    </div>
+
+    <div class="display-label">Descrição:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Descricao)
+    </div>
+    <div class="display-label">Forma de Pagamento:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.FormaPagamento.NomeTipoFormaPagamento)
+    </div>
+    <div class="display-label">Estabelecimento da Conta:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ContaLancamento.EstabelecimentoDaConta.RazaoSocial)
+    </div>
+    <div class="display-label">Número Conta Corrente:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ContaLancamento.Numero)
+    </div>
+    <div class="display-label">Agência Conta Corrente:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ContaLancamento.Agencia)
+    </div>
+
+
+    <div class="display-label">Usuário/Data/Hora/Inserção:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UsuarioDataHoraInsercao)
+    </div>
+
+    <div class="display-label">Data/Hora/Inserção:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DataHoraInsercao)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Alterar", "AlterarDeposito", new { id = Model.Codigo }) |
+    @Html.ActionLink("Página Inicial", "Index")
+</p>

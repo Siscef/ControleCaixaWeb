@@ -1,0 +1,33 @@
+﻿@model ContaCorrente
+
+@{
+    ViewBag.Title = "Detalhes";
+    Layout = "~/Areas/Administracao/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detalhes da Conta Corrente</h2>
+
+<fieldset>
+    <legend>Detalhes da Conta Corrente</legend>
+
+    
+
+    <div class="display-label">Banco:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Banco)
+    </div>
+
+    <div class="display-label">Agência:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Agencia)
+    </div>
+
+    <div class="display-label">Número:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Numero)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Alterar", "AlterarContaCorrente", new {  id=Model.Codigo }) |
+    @Html.ActionLink("Página Incial", "Index","Home")
+</p>

@@ -1,0 +1,76 @@
+﻿@model IEnumerable<ControleCaixaWeb.Models.ContaCorrente>
+
+@{
+    ViewBag.Title = "ListarContaCorrente";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lista das Contas Correntes</h2>
+
+@(Html.Telerik( ).Grid<ContaCorrente>( ).Name("GridConta").DataBinding(binding => binding.Ajax( ).Select("_ListarContaCorrente", "ContaCorrente"))
+.Columns(colunas =>
+{
+    colunas.Bound(c => c.Agencia).Title("Agência:").Width("25%");
+    colunas.Bound(c => c.Banco).Title("Banco:").Width("25%");
+    colunas.Bound(c => c.Numero).Title("Número:").Width("25%");
+    
+    
+})
+    .Pageable(paginas => paginas.PageSize(10))
+    .Scrollable( )
+    .Sortable( )
+    .Selectable( )
+    .Groupable( )
+    .Filterable( )
+    .Resizable(paginas => paginas.Columns(true))
+  
+    
+)
+
+<p>
+    @Html.ActionLink("Adicionar Nova", "CadastrarContaCorrente")
+</p>
+<table class="table table-bordered">
+    <tr>
+        
+        <th>
+            Banco:
+        </th>
+        <th>
+            Agencia:
+        </th>
+        <th>
+            Numero:
+        </th>
+         <th>
+            Razão Social:
+        </th>
+            <th>
+            Operações:
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.Banco)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Agencia)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Numero)
+        </td>
+          <td>
+            @Html.DisplayFor(modelItem => item.EstabelecimentoDaConta.RazaoSocial)
+        </td>
+        <td>
+            @Html.ActionLink("Alterar", "AlterarContaCorrente", new {  id=item.Codigo }) |
+            @Html.ActionLink("Detalhes", "Detalhes", new {  id=item.Codigo }) |
+            @Html.ActionLink("Excluir", "ExcluirContaCorrente", new {  id=item.Codigo })
+        </td>
+    </tr>
+}
+
+</table>

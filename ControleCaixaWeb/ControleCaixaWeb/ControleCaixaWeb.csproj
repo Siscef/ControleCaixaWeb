@@ -1,0 +1,1548 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C44F1D98-7EED-4C09-B0D5-FA14DFB188C7}</ProjectGuid>
+    <ProjectTypeGuids>{E53F8FEA-EAE0-44A6-8774-FFD645390401};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ControleCaixaWeb</RootNamespace>
+    <AssemblyName>ControleCaixaWeb</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>false</UseIISExpress>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <FilesToIncludeForPublish>AllFilesInTheProject</FilesToIncludeForPublish>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>Itanium</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>catalog.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DotNet.Highcharts">
+      <HintPath>..\packages\DotNet.Highcharts.1.2\lib\DotNet.Highcharts.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=4.3.1.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.4.3.1\lib\net40\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FluentNHibernate">
+      <HintPath>..\packages\FluentNHibernate.1.3.0.733\lib\FluentNHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Build.Engine" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Mono.Security">
+      <HintPath>..\packages\Npgsql.2.0.11\lib\Net40\Mono.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="NauckIT.PostgreSQLProvider">
+      <HintPath>..\packages\Nauck.PostgresSQLProvider.1.4.0\lib\Net40\NauckIT.PostgreSQLProvider.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\packages\NHibernate.3.3.1.4000\lib\Net35\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Npgsql">
+      <HintPath>..\packages\Npgsql.2.0.11\lib\Net40\Npgsql.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.WebPages.Administration, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.WebPages.Deployment, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.WebPages.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Telerik.Web.Mvc, Version=2012.1.214.340, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\TelerikMvcExtensions.2012.1.214\lib\net40\Telerik.Web.Mvc.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_GlobalResources\EditorLocalization.bg-BG.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditorLocalization.bg-BG.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\EditorLocalization.da-DK.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditorLocalization.da-DK.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\EditorLocalization.de-DE.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditorLocalization.de-DE.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\EditorLocalization.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditorLocalization.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\EditorLocalization.en-US.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditorLocalization.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\EditorLocalization.fr-FR.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditorLocalization.fr-FR.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\EditorLocalization.nl-NL.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditorLocalization.nl-NL.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\EditorLocalization.pl-PL.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditorLocalization.pl-PL.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\EditorLocalization.pt-BR.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditorLocalization.pt-BR.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\EditorLocalization.pt-PT.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditorLocalization.pt-PT.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\EditorLocalization.ru-RU.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditorLocalization.ru-RU.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\EditorLocalization.uk-UA.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditorLocalization.uk-UA.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\EditorLocalization.zh-CN.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditorLocalization.zh-CN.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.bg-BG.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GridLocalization.bg-BG.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.da-DK.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GridLocalization.da-DK.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.de-DE.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GridLocalization.de-DE.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GridLocalization.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.en-US.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GridLocalization.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.es-ES.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GridLocalization.es-ES.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.fr-FR.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GridLocalization.fr-FR.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.nl-NL.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GridLocalization.nl-NL.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.pl-PL.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GridLocalization.pl-PL.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.pt-BR.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GridLocalization.pt-BR.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.pt-PT.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GridLocalization.pt-PT.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.ru-RU.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GridLocalization.ru-RU.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.uk-UA.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GridLocalization.uk-UA.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.zh-CN.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GridLocalization.zh-CN.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\UploadLocalization.bg-BG.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UploadLocalization.bg-BG.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\UploadLocalization.da-DK.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UploadLocalization.da-DK.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\UploadLocalization.en-US.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UploadLocalization.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\UploadLocalization.fr-FR.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UploadLocalization.fr-FR.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\UploadLocalization.nl-NL.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UploadLocalization.nl-NL.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\UploadLocalization.pl-PL.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UploadLocalization.pl-PL.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\UploadLocalization.pt-BR.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UploadLocalization.pt-BR.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\UploadLocalization.pt-PT.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UploadLocalization.pt-PT.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\UploadLocalization.ru-RU.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UploadLocalization.ru-RU.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\UploadLocalization.zh-CN.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UploadLocalization.zh-CN.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Administracao\AdministracaoAreaRegistration.cs" />
+    <Compile Include="Areas\Administracao\Controllers\ConfiguracaoController.cs" />
+    <Compile Include="Areas\Administracao\Controllers\ContaCorrenteController.cs" />
+    <Compile Include="Areas\Administracao\Controllers\DespejoOperacaoCaixaController.cs" />
+    <Compile Include="Areas\Administracao\Controllers\EstabelecimentoController.cs" />
+    <Compile Include="Areas\Administracao\Controllers\FavorecidoController.cs" />
+    <Compile Include="Areas\Administracao\Controllers\FormaPagamentoController.cs" />
+    <Compile Include="Areas\Administracao\Controllers\FuncionarioController.cs" />
+    <Compile Include="Areas\Administracao\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Administracao\Controllers\OperacaoCaixaController.cs" />
+    <Compile Include="Areas\Administracao\Controllers\OperacaoContaCorrenteController.cs" />
+    <Compile Include="Areas\Administracao\Controllers\PagamentosController.cs" />
+    <Compile Include="Areas\Administracao\Controllers\RelatorioController.cs" />
+    <Compile Include="Areas\Escritorio\Controllers\ConfiguracaoController.cs" />
+    <Compile Include="Areas\Escritorio\Controllers\ContaCorrenteController.cs" />
+    <Compile Include="Areas\Escritorio\Controllers\DespejoOperacaoCaixaController.cs" />
+    <Compile Include="Areas\Escritorio\Controllers\EstabelecimentoController.cs" />
+    <Compile Include="Areas\Escritorio\Controllers\FavorecidoController.cs" />
+    <Compile Include="Areas\Escritorio\Controllers\FecharCaixaController.cs" />
+    <Compile Include="Areas\Escritorio\Controllers\FormaPagamentoController.cs" />
+    <Compile Include="Areas\Escritorio\Controllers\FuncionarioController.cs" />
+    <Compile Include="Areas\Escritorio\Controllers\GraficosController.cs" />
+    <Compile Include="Areas\Escritorio\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Escritorio\Controllers\OperacaoCaixaController.cs" />
+    <Compile Include="Areas\Escritorio\Controllers\OperacaoContaCorrenteController.cs" />
+    <Compile Include="Areas\Escritorio\Controllers\PagamentosController.cs" />
+    <Compile Include="Areas\Escritorio\Controllers\RelatorioController.cs" />
+    <Compile Include="Areas\Escritorio\EscritorioAreaRegistration.cs" />
+    <Compile Include="Areas\OperadorCaixa\Controllers\ConfiguracaoController.cs" />
+    <Compile Include="Areas\OperadorCaixa\Controllers\FecharCaixaController.cs" />
+    <Compile Include="Areas\OperadorCaixa\Controllers\HomeController.cs" />
+    <Compile Include="Areas\OperadorCaixa\Controllers\OperacaoCaixaController.cs" />
+    <Compile Include="Areas\OperadorCaixa\OperadorCaixaAreaRegistration.cs" />
+    <Compile Include="Controllers\ContaUsuarioController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Configuracao.cs" />
+    <Compile Include="Models\ContaCorrente.cs" />
+    <Compile Include="Models\Context\ContextoDadosNH.cs" />
+    <Compile Include="Models\Context\IContextoDados.cs" />
+    <Compile Include="Models\DateRange.cs" />
+    <Compile Include="Models\DespejoOPeracaoCaixa.cs" />
+    <Compile Include="Models\Endereco.cs" />
+    <Compile Include="Models\EnumTipoOperacao.cs" />
+    <Compile Include="Models\Estabelecimento.cs" />
+    <Compile Include="Models\Favorecido.cs" />
+    <Compile Include="Models\FechamentoCaixa.cs" />
+    <Compile Include="Models\FormaPagamentoEstabelecimento.cs" />
+    <Compile Include="Models\Mappings\CadastrarUsuarioMap.cs" />
+    <Compile Include="Models\Mappings\ConfiguracaoMap.cs" />
+    <Compile Include="Models\Mappings\ContaCorrenteMap.cs" />
+    <Compile Include="Models\Mappings\DespejoOPeracaoCaixaMap.cs" />
+    <Compile Include="Models\Mappings\EnderecoMap.cs" />
+    <Compile Include="Models\Mappings\EstabelecimentoMap.cs" />
+    <Compile Include="Models\Mappings\FavorecidoMap.cs" />
+    <Compile Include="Models\Mappings\FechamentoCaixaMap.cs" />
+    <Compile Include="Models\Mappings\FormaPagamentoEstabelecimentoMap.cs" />
+    <Compile Include="Models\Mappings\OperacaoCaixaMap.cs" />
+    <Compile Include="Models\Mappings\OperacaoFinanceiraMap.cs" />
+    <Compile Include="Models\Mappings\PagamentoMap.cs" />
+    <Compile Include="Models\Mappings\PapelMap.cs" />
+    <Compile Include="Models\Mappings\TrocarSenhaMap.cs" />
+    <Compile Include="Models\Mappings\UsuarioMap.cs" />
+    <Compile Include="Models\OperacaoCaixa.cs" />
+    <Compile Include="Models\OperacaoFinanceiraContaCorrente.cs" />
+    <Compile Include="Models\Pagamento.cs" />
+    <Compile Include="Models\Papel.cs" />
+    <Compile Include="Models\Usuario.cs" />
+    <Compile Include="Models\ValidarData.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="catalog.ico" />
+    <Content Include="Content\2012.1.214\Black\editor.png" />
+    <Content Include="Content\2012.1.214\Black\imagebrowser.png" />
+    <Content Include="Content\2012.1.214\Black\loading.gif" />
+    <Content Include="Content\2012.1.214\Black\slider-h.gif" />
+    <Content Include="Content\2012.1.214\Black\slider-v.gif" />
+    <Content Include="Content\2012.1.214\Black\sprite-vertical.png" />
+    <Content Include="Content\2012.1.214\Black\sprite.png" />
+    <Content Include="Content\2012.1.214\Black\treeview-line.png" />
+    <Content Include="Content\2012.1.214\Black\treeview-nodes-rtl.png" />
+    <Content Include="Content\2012.1.214\Black\treeview-nodes.png" />
+    <Content Include="Content\2012.1.214\Default\editor.png" />
+    <Content Include="Content\2012.1.214\Default\imagebrowser.png" />
+    <Content Include="Content\2012.1.214\Default\loading.gif" />
+    <Content Include="Content\2012.1.214\Default\slider-h.gif" />
+    <Content Include="Content\2012.1.214\Default\slider-v.gif" />
+    <Content Include="Content\2012.1.214\Default\sprite-vertical.png" />
+    <Content Include="Content\2012.1.214\Default\sprite.png" />
+    <Content Include="Content\2012.1.214\Default\treeview-line.png" />
+    <Content Include="Content\2012.1.214\Default\treeview-nodes-rtl.png" />
+    <Content Include="Content\2012.1.214\Default\treeview-nodes.png" />
+    <Content Include="Content\2012.1.214\Forest\editor.png" />
+    <Content Include="Content\2012.1.214\Forest\imagebrowser.png" />
+    <Content Include="Content\2012.1.214\Forest\loading.gif" />
+    <Content Include="Content\2012.1.214\Forest\slider-h.gif" />
+    <Content Include="Content\2012.1.214\Forest\slider-v.gif" />
+    <Content Include="Content\2012.1.214\Forest\sprite-vertical.png" />
+    <Content Include="Content\2012.1.214\Forest\sprite.png" />
+    <Content Include="Content\2012.1.214\Forest\treeview-line.png" />
+    <Content Include="Content\2012.1.214\Forest\treeview-nodes-rtl.png" />
+    <Content Include="Content\2012.1.214\Forest\treeview-nodes.png" />
+    <Content Include="Content\2012.1.214\Hay\editor.png" />
+    <Content Include="Content\2012.1.214\Hay\imagebrowser.png" />
+    <Content Include="Content\2012.1.214\Hay\loading.gif" />
+    <Content Include="Content\2012.1.214\Hay\slider-h.gif" />
+    <Content Include="Content\2012.1.214\Hay\slider-v.gif" />
+    <Content Include="Content\2012.1.214\Hay\sprite-vertical.png" />
+    <Content Include="Content\2012.1.214\Hay\sprite.png" />
+    <Content Include="Content\2012.1.214\Hay\treeview-line.png" />
+    <Content Include="Content\2012.1.214\Hay\treeview-nodes-rtl.png" />
+    <Content Include="Content\2012.1.214\Hay\treeview-nodes.png" />
+    <Content Include="Content\2012.1.214\Metro\editor.png" />
+    <Content Include="Content\2012.1.214\Metro\imagebrowser.png" />
+    <Content Include="Content\2012.1.214\Metro\loading.gif" />
+    <Content Include="Content\2012.1.214\Metro\slider-h.gif" />
+    <Content Include="Content\2012.1.214\Metro\slider-v.gif" />
+    <Content Include="Content\2012.1.214\Metro\sprite.png" />
+    <Content Include="Content\2012.1.214\Office2007\editor.png" />
+    <Content Include="Content\2012.1.214\Office2007\imagebrowser.png" />
+    <Content Include="Content\2012.1.214\Office2007\loading.gif" />
+    <Content Include="Content\2012.1.214\Office2007\slider-h.gif" />
+    <Content Include="Content\2012.1.214\Office2007\slider-v.gif" />
+    <Content Include="Content\2012.1.214\Office2007\sprite-vertical.png" />
+    <Content Include="Content\2012.1.214\Office2007\sprite.png" />
+    <Content Include="Content\2012.1.214\Office2007\treeview-line.png" />
+    <Content Include="Content\2012.1.214\Office2007\treeview-nodes-rtl.png" />
+    <Content Include="Content\2012.1.214\Office2007\treeview-nodes.png" />
+    <Content Include="Content\2012.1.214\Office2010Black\editor.png" />
+    <Content Include="Content\2012.1.214\Office2010Black\imagebrowser.png" />
+    <Content Include="Content\2012.1.214\Office2010Black\loading.gif" />
+    <Content Include="Content\2012.1.214\Office2010Black\slider-h.gif" />
+    <Content Include="Content\2012.1.214\Office2010Black\slider-v.gif" />
+    <Content Include="Content\2012.1.214\Office2010Black\sprite-vertical.png" />
+    <Content Include="Content\2012.1.214\Office2010Black\sprite.png" />
+    <Content Include="Content\2012.1.214\Office2010Black\treeview-line.png" />
+    <Content Include="Content\2012.1.214\Office2010Black\treeview-nodes-rtl.png" />
+    <Content Include="Content\2012.1.214\Office2010Black\treeview-nodes.png" />
+    <Content Include="Content\2012.1.214\Office2010Blue\editor.png" />
+    <Content Include="Content\2012.1.214\Office2010Blue\gradient.png" />
+    <Content Include="Content\2012.1.214\Office2010Blue\imagebrowser.png" />
+    <Content Include="Content\2012.1.214\Office2010Blue\loading.gif" />
+    <Content Include="Content\2012.1.214\Office2010Blue\slider-h.gif" />
+    <Content Include="Content\2012.1.214\Office2010Blue\slider-v.gif" />
+    <Content Include="Content\2012.1.214\Office2010Blue\sprite-vertical.png" />
+    <Content Include="Content\2012.1.214\Office2010Blue\sprite.png" />
+    <Content Include="Content\2012.1.214\Office2010Silver\editor.png" />
+    <Content Include="Content\2012.1.214\Office2010Silver\gradient.png" />
+    <Content Include="Content\2012.1.214\Office2010Silver\imagebrowser.png" />
+    <Content Include="Content\2012.1.214\Office2010Silver\loading.gif" />
+    <Content Include="Content\2012.1.214\Office2010Silver\slider-h.gif" />
+    <Content Include="Content\2012.1.214\Office2010Silver\slider-v.gif" />
+    <Content Include="Content\2012.1.214\Office2010Silver\sprite-vertical.png" />
+    <Content Include="Content\2012.1.214\Office2010Silver\sprite.png" />
+    <Content Include="Content\2012.1.214\Outlook\editor.png" />
+    <Content Include="Content\2012.1.214\Outlook\imagebrowser.png" />
+    <Content Include="Content\2012.1.214\Outlook\loading.gif" />
+    <Content Include="Content\2012.1.214\Outlook\slider-h.gif" />
+    <Content Include="Content\2012.1.214\Outlook\slider-v.gif" />
+    <Content Include="Content\2012.1.214\Outlook\sprite-vertical.png" />
+    <Content Include="Content\2012.1.214\Outlook\sprite.png" />
+    <Content Include="Content\2012.1.214\Outlook\treeview-line.png" />
+    <Content Include="Content\2012.1.214\Outlook\treeview-nodes-rtl.png" />
+    <Content Include="Content\2012.1.214\Outlook\treeview-nodes.png" />
+    <Content Include="Content\2012.1.214\Simple\editor.png" />
+    <Content Include="Content\2012.1.214\Simple\imagebrowser.png" />
+    <Content Include="Content\2012.1.214\Simple\loading.gif" />
+    <Content Include="Content\2012.1.214\Simple\slider-h.gif" />
+    <Content Include="Content\2012.1.214\Simple\slider-v.gif" />
+    <Content Include="Content\2012.1.214\Simple\sprite.png" />
+    <Content Include="Content\2012.1.214\Simple\treeview-line.png" />
+    <Content Include="Content\2012.1.214\Simple\treeview-nodes-rtl.png" />
+    <Content Include="Content\2012.1.214\Simple\treeview-nodes.png" />
+    <Content Include="Content\2012.1.214\Sitefinity\editor.png" />
+    <Content Include="Content\2012.1.214\Sitefinity\imagebrowser.png" />
+    <Content Include="Content\2012.1.214\Sitefinity\loading.gif" />
+    <Content Include="Content\2012.1.214\Sitefinity\slider-h.gif" />
+    <Content Include="Content\2012.1.214\Sitefinity\slider-v.gif" />
+    <Content Include="Content\2012.1.214\Sitefinity\sprite-vertical.png" />
+    <Content Include="Content\2012.1.214\Sitefinity\sprite.png" />
+    <Content Include="Content\2012.1.214\Sitefinity\treeview-line.png" />
+    <Content Include="Content\2012.1.214\Sitefinity\treeview-nodes-rtl.png" />
+    <Content Include="Content\2012.1.214\Sitefinity\treeview-nodes.png" />
+    <Content Include="Content\2012.1.214\Sunset\editor.png" />
+    <Content Include="Content\2012.1.214\Sunset\imagebrowser.png" />
+    <Content Include="Content\2012.1.214\Sunset\loading.gif" />
+    <Content Include="Content\2012.1.214\Sunset\slider-h.gif" />
+    <Content Include="Content\2012.1.214\Sunset\slider-v.gif" />
+    <Content Include="Content\2012.1.214\Sunset\sprite-vertical.png" />
+    <Content Include="Content\2012.1.214\Sunset\sprite.png" />
+    <Content Include="Content\2012.1.214\Sunset\treeview-line.png" />
+    <Content Include="Content\2012.1.214\Sunset\treeview-nodes-rtl.png" />
+    <Content Include="Content\2012.1.214\Sunset\treeview-nodes.png" />
+    <Content Include="Content\2012.1.214\telerik.black.min.css" />
+    <Content Include="Content\2012.1.214\telerik.common.min.css" />
+    <Content Include="Content\2012.1.214\telerik.default.min.css" />
+    <Content Include="Content\2012.1.214\telerik.forest.min.css" />
+    <Content Include="Content\2012.1.214\telerik.hay.min.css" />
+    <Content Include="Content\2012.1.214\telerik.metro.min.css" />
+    <Content Include="Content\2012.1.214\telerik.office2007.min.css" />
+    <Content Include="Content\2012.1.214\telerik.office2010black.min.css" />
+    <Content Include="Content\2012.1.214\telerik.office2010blue.min.css" />
+    <Content Include="Content\2012.1.214\telerik.office2010silver.min.css" />
+    <Content Include="Content\2012.1.214\telerik.outlook.min.css" />
+    <Content Include="Content\2012.1.214\telerik.rtl.min.css" />
+    <Content Include="Content\2012.1.214\telerik.simple.min.css" />
+    <Content Include="Content\2012.1.214\telerik.sitefinity.min.css" />
+    <Content Include="Content\2012.1.214\telerik.sunset.min.css" />
+    <Content Include="Content\2012.1.214\telerik.telerik.min.css" />
+    <Content Include="Content\2012.1.214\telerik.transparent.min.css" />
+    <Content Include="Content\2012.1.214\telerik.vista.min.css" />
+    <Content Include="Content\2012.1.214\telerik.web20.min.css" />
+    <Content Include="Content\2012.1.214\telerik.webblue.min.css" />
+    <Content Include="Content\2012.1.214\telerik.windows7.min.css" />
+    <Content Include="Content\2012.1.214\Telerik\editor.png" />
+    <Content Include="Content\2012.1.214\Telerik\imagebrowser.png" />
+    <Content Include="Content\2012.1.214\Telerik\loading.gif" />
+    <Content Include="Content\2012.1.214\Telerik\slider-h.gif" />
+    <Content Include="Content\2012.1.214\Telerik\slider-v.gif" />
+    <Content Include="Content\2012.1.214\Telerik\sprite-vertical.png" />
+    <Content Include="Content\2012.1.214\Telerik\sprite.png" />
+    <Content Include="Content\2012.1.214\Telerik\treeview-line.png" />
+    <Content Include="Content\2012.1.214\Telerik\treeview-nodes-rtl.png" />
+    <Content Include="Content\2012.1.214\Telerik\treeview-nodes.png" />
+    <Content Include="Content\2012.1.214\Transparent\active.png" />
+    <Content Include="Content\2012.1.214\Transparent\editor.png" />
+    <Content Include="Content\2012.1.214\Transparent\gradient.png" />
+    <Content Include="Content\2012.1.214\Transparent\group.png" />
+    <Content Include="Content\2012.1.214\Transparent\hover.png" />
+    <Content Include="Content\2012.1.214\Transparent\imagebrowser.png" />
+    <Content Include="Content\2012.1.214\Transparent\loading.gif" />
+    <Content Include="Content\2012.1.214\Transparent\selected.png" />
+    <Content Include="Content\2012.1.214\Transparent\slider-h.gif" />
+    <Content Include="Content\2012.1.214\Transparent\slider-v.gif" />
+    <Content Include="Content\2012.1.214\Transparent\sprite-vertical.png" />
+    <Content Include="Content\2012.1.214\Transparent\sprite.png" />
+    <Content Include="Content\2012.1.214\Transparent\toolbar.png" />
+    <Content Include="Content\2012.1.214\Transparent\widget.png" />
+    <Content Include="Content\2012.1.214\Vista\editor.png" />
+    <Content Include="Content\2012.1.214\Vista\imagebrowser.png" />
+    <Content Include="Content\2012.1.214\Vista\loading.gif" />
+    <Content Include="Content\2012.1.214\Vista\slider-h.gif" />
+    <Content Include="Content\2012.1.214\Vista\slider-v.gif" />
+    <Content Include="Content\2012.1.214\Vista\sprite-vertical.png" />
+    <Content Include="Content\2012.1.214\Vista\sprite.png" />
+    <Content Include="Content\2012.1.214\Web20\editor.png" />
+    <Content Include="Content\2012.1.214\Web20\imagebrowser.png" />
+    <Content Include="Content\2012.1.214\Web20\loading.gif" />
+    <Content Include="Content\2012.1.214\Web20\slider-h.gif" />
+    <Content Include="Content\2012.1.214\Web20\slider-v.gif" />
+    <Content Include="Content\2012.1.214\Web20\sprite-vertical.png" />
+    <Content Include="Content\2012.1.214\Web20\sprite.png" />
+    <Content Include="Content\2012.1.214\Web20\treeview-line.png" />
+    <Content Include="Content\2012.1.214\Web20\treeview-nodes-rtl.png" />
+    <Content Include="Content\2012.1.214\Web20\treeview-nodes.png" />
+    <Content Include="Content\2012.1.214\WebBlue\editor.png" />
+    <Content Include="Content\2012.1.214\WebBlue\imagebrowser.png" />
+    <Content Include="Content\2012.1.214\WebBlue\loading.gif" />
+    <Content Include="Content\2012.1.214\WebBlue\slider-h.gif" />
+    <Content Include="Content\2012.1.214\WebBlue\slider-v.gif" />
+    <Content Include="Content\2012.1.214\WebBlue\sprite-vertical.png" />
+    <Content Include="Content\2012.1.214\WebBlue\sprite.png" />
+    <Content Include="Content\2012.1.214\WebBlue\treeview-line.png" />
+    <Content Include="Content\2012.1.214\WebBlue\treeview-nodes-rtl.png" />
+    <Content Include="Content\2012.1.214\WebBlue\treeview-nodes.png" />
+    <Content Include="Content\2012.1.214\Windows7\editor.png" />
+    <Content Include="Content\2012.1.214\Windows7\imagebrowser.png" />
+    <Content Include="Content\2012.1.214\Windows7\loading.gif" />
+    <Content Include="Content\2012.1.214\Windows7\slider-h.gif" />
+    <Content Include="Content\2012.1.214\Windows7\slider-v.gif" />
+    <Content Include="Content\2012.1.214\Windows7\sprite-vertical.png" />
+    <Content Include="Content\2012.1.214\Windows7\sprite.png" />
+    <Content Include="Content\black_calculator.css" />
+    <Content Include="Content\black_calculator_ie.css" />
+    <Content Include="Content\bootstrap-responsive.css" />
+    <Content Include="Content\bootstrap-responsive.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Gebo\bootstrap\css\bootstrap-responsive.css" />
+    <Content Include="Content\Gebo\bootstrap\css\bootstrap-responsive.min.css" />
+    <Content Include="Content\Gebo\bootstrap\css\bootstrap.css" />
+    <Content Include="Content\Gebo\bootstrap\css\bootstrap.min.css" />
+    <Content Include="Content\Gebo\bootstrap\img\glyphicons-halflings-white.png" />
+    <Content Include="Content\Gebo\bootstrap\img\glyphicons-halflings.png" />
+    <Content Include="Content\Gebo\css\blue.css" />
+    <Content Include="Content\Gebo\css\brown.css" />
+    <Content Include="Content\Gebo\css\dark.css" />
+    <Content Include="Content\Gebo\css\eastern_blue.css" />
+    <Content Include="Content\Gebo\css\green.css" />
+    <Content Include="Content\Gebo\css\ie.css" />
+    <Content Include="Content\Gebo\css\style.css" />
+    <Content Include="Content\Gebo\css\tamarillo.css" />
+    <Content Include="Content\Gebo\gallery\Image01.jpg" />
+    <Content Include="Content\Gebo\gallery\Image01_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image02.jpg" />
+    <Content Include="Content\Gebo\gallery\Image02_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image03.jpg" />
+    <Content Include="Content\Gebo\gallery\Image03_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image04.jpg" />
+    <Content Include="Content\Gebo\gallery\Image04_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image05.jpg" />
+    <Content Include="Content\Gebo\gallery\Image05_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image06.jpg" />
+    <Content Include="Content\Gebo\gallery\Image06_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image07.jpg" />
+    <Content Include="Content\Gebo\gallery\Image07_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image08.jpg" />
+    <Content Include="Content\Gebo\gallery\Image08_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image09.jpg" />
+    <Content Include="Content\Gebo\gallery\Image09_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image10.jpg" />
+    <Content Include="Content\Gebo\gallery\Image10_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image11.jpg" />
+    <Content Include="Content\Gebo\gallery\Image11_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image12.jpg" />
+    <Content Include="Content\Gebo\gallery\Image12_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image13.jpg" />
+    <Content Include="Content\Gebo\gallery\Image13_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image14.jpg" />
+    <Content Include="Content\Gebo\gallery\Image14_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image15.jpg" />
+    <Content Include="Content\Gebo\gallery\Image15_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image16.jpg" />
+    <Content Include="Content\Gebo\gallery\Image16_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image17.jpg" />
+    <Content Include="Content\Gebo\gallery\Image17_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image18.jpg" />
+    <Content Include="Content\Gebo\gallery\Image18_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image19.jpg" />
+    <Content Include="Content\Gebo\gallery\Image19_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image20.jpg" />
+    <Content Include="Content\Gebo\gallery\Image20_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image21.jpg" />
+    <Content Include="Content\Gebo\gallery\Image21_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image22.jpg" />
+    <Content Include="Content\Gebo\gallery\Image22_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image23.jpg" />
+    <Content Include="Content\Gebo\gallery\Image23_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image24.jpg" />
+    <Content Include="Content\Gebo\gallery\Image24_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image25.jpg" />
+    <Content Include="Content\Gebo\gallery\Image25_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image26.jpg" />
+    <Content Include="Content\Gebo\gallery\Image26_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image27.jpg" />
+    <Content Include="Content\Gebo\gallery\Image27_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image28.jpg" />
+    <Content Include="Content\Gebo\gallery\Image28_tn.jpg" />
+    <Content Include="Content\Gebo\gallery\Image29.jpg" />
+    <Content Include="Content\Gebo\gallery\Image29_tn.jpg" />
+    <Content Include="Content\Gebo\img\acc_icons.png" />
+    <Content Include="Content\Gebo\img\adt-icons.png" />
+    <Content Include="Content\Gebo\img\ajax_loader.gif" />
+    <Content Include="Content\Gebo\img\attach.png" />
+    <Content Include="Content\Gebo\img\bg_a.png" />
+    <Content Include="Content\Gebo\img\bg_b.png" />
+    <Content Include="Content\Gebo\img\bg_c.png" />
+    <Content Include="Content\Gebo\img\bg_d.png" />
+    <Content Include="Content\Gebo\img\bg_e.png" />
+    <Content Include="Content\Gebo\img\blank.gif" />
+    <Content Include="Content\Gebo\img\bullet_blue.png" />
+    <Content Include="Content\Gebo\img\bullet_green.png" />
+    <Content Include="Content\Gebo\img\bullet_orange.png" />
+    <Content Include="Content\Gebo\img\bullet_red.png" />
+    <Content Include="Content\Gebo\img\details_close.png" />
+    <Content Include="Content\Gebo\img\details_open.png" />
+    <Content Include="Content\Gebo\img\error_big.png" />
+    <Content Include="Content\Gebo\img\external_link.png" />
+    <Content Include="Content\Gebo\img\flags\flags.css" />
+    <Content Include="Content\Gebo\img\flags\flags.png" />
+    <Content Include="Content\Gebo\img\gCons\add-item.png" />
+    <Content Include="Content\Gebo\img\gCons\addressbook.png" />
+    <Content Include="Content\Gebo\img\gCons\agent.png" />
+    <Content Include="Content\Gebo\img\gCons\apple.png" />
+    <Content Include="Content\Gebo\img\gCons\arrow-round.png" />
+    <Content Include="Content\Gebo\img\gCons\badge.png" />
+    <Content Include="Content\Gebo\img\gCons\bar-chart-02.png" />
+    <Content Include="Content\Gebo\img\gCons\bar-chart.png" />
+    <Content Include="Content\Gebo\img\gCons\battery-full.png" />
+    <Content Include="Content\Gebo\img\gCons\bird.png" />
+    <Content Include="Content\Gebo\img\gCons\boat.png" />
+    <Content Include="Content\Gebo\img\gCons\bookmark.png" />
+    <Content Include="Content\Gebo\img\gCons\briefcase.png" />
+    <Content Include="Content\Gebo\img\gCons\calculator.png" />
+    <Content Include="Content\Gebo\img\gCons\calendar.png" />
+    <Content Include="Content\Gebo\img\gCons\cassette.png" />
+    <Content Include="Content\Gebo\img\gCons\chain.png" />
+    <Content Include="Content\Gebo\img\gCons\chat-.png" />
+    <Content Include="Content\Gebo\img\gCons\chat-02.png" />
+    <Content Include="Content\Gebo\img\gCons\cloud-filled.png" />
+    <Content Include="Content\Gebo\img\gCons\cloud-outline.png" />
+    <Content Include="Content\Gebo\img\gCons\computer.png" />
+    <Content Include="Content\Gebo\img\gCons\configuration.png" />
+    <Content Include="Content\Gebo\img\gCons\configuration02.png" />
+    <Content Include="Content\Gebo\img\gCons\connected.png" />
+    <Content Include="Content\Gebo\img\gCons\connections.png" />
+    <Content Include="Content\Gebo\img\gCons\container.png" />
+    <Content Include="Content\Gebo\img\gCons\copy-item.png" />
+    <Content Include="Content\Gebo\img\gCons\database.png" />
+    <Content Include="Content\Gebo\img\gCons\delete-item.png" />
+    <Content Include="Content\Gebo\img\gCons\disc.png" />
+    <Content Include="Content\Gebo\img\gCons\dollar.png" />
+    <Content Include="Content\Gebo\img\gCons\download.png" />
+    <Content Include="Content\Gebo\img\gCons\edit.png" />
+    <Content Include="Content\Gebo\img\gCons\email.png" />
+    <Content Include="Content\Gebo\img\gCons\fan.png" />
+    <Content Include="Content\Gebo\img\gCons\fancy-globe.png" />
+    <Content Include="Content\Gebo\img\gCons\female-user.png" />
+    <Content Include="Content\Gebo\img\gCons\fire.png" />
+    <Content Include="Content\Gebo\img\gCons\first-aid.png" />
+    <Content Include="Content\Gebo\img\gCons\flag.png" />
+    <Content Include="Content\Gebo\img\gCons\flower.png" />
+    <Content Include="Content\Gebo\img\gCons\full-screen.png" />
+    <Content Include="Content\Gebo\img\gCons\glasses.png" />
+    <Content Include="Content\Gebo\img\gCons\globe.png" />
+    <Content Include="Content\Gebo\img\gCons\happy-face.png" />
+    <Content Include="Content\Gebo\img\gCons\headphone.png" />
+    <Content Include="Content\Gebo\img\gCons\heart.png" />
+    <Content Include="Content\Gebo\img\gCons\home.png" />
+    <Content Include="Content\Gebo\img\gCons\ID.png" />
+    <Content Include="Content\Gebo\img\gCons\ipod.png" />
+    <Content Include="Content\Gebo\img\gCons\lab.png" />
+    <Content Include="Content\Gebo\img\gCons\lady.png" />
+    <Content Include="Content\Gebo\img\gCons\lamp.png" />
+    <Content Include="Content\Gebo\img\gCons\leaves.png" />
+    <Content Include="Content\Gebo\img\gCons\light.png" />
+    <Content Include="Content\Gebo\img\gCons\line-globe.png" />
+    <Content Include="Content\Gebo\img\gCons\lock.png" />
+    <Content Include="Content\Gebo\img\gCons\lookup.png" />
+    <Content Include="Content\Gebo\img\gCons\male-user.png" />
+    <Content Include="Content\Gebo\img\gCons\microphone.png" />
+    <Content Include="Content\Gebo\img\gCons\mobile.png" />
+    <Content Include="Content\Gebo\img\gCons\mobile2.png" />
+    <Content Include="Content\Gebo\img\gCons\mouse.png" />
+    <Content Include="Content\Gebo\img\gCons\multi-agents.png" />
+    <Content Include="Content\Gebo\img\gCons\music-node.png" />
+    <Content Include="Content\Gebo\img\gCons\network-pc.png" />
+    <Content Include="Content\Gebo\img\gCons\network.png" />
+    <Content Include="Content\Gebo\img\gCons\next-item.png" />
+    <Content Include="Content\Gebo\img\gCons\phone.png" />
+    <Content Include="Content\Gebo\img\gCons\pie-chart.png" />
+    <Content Include="Content\Gebo\img\gCons\pin.png" />
+    <Content Include="Content\Gebo\img\gCons\plane.png" />
+    <Content Include="Content\Gebo\img\gCons\print.png" />
+    <Content Include="Content\Gebo\img\gCons\processing-02.png" />
+    <Content Include="Content\Gebo\img\gCons\processing.png" />
+    <Content Include="Content\Gebo\img\gCons\push-pin.png" />
+    <Content Include="Content\Gebo\img\gCons\recycle-empty.png" />
+    <Content Include="Content\Gebo\img\gCons\recycle-full.png" />
+    <Content Include="Content\Gebo\img\gCons\reload.png" />
+    <Content Include="Content\Gebo\img\gCons\rss.png" />
+    <Content Include="Content\Gebo\img\gCons\satellite.png" />
+    <Content Include="Content\Gebo\img\gCons\save.png" />
+    <Content Include="Content\Gebo\img\gCons\scale.png" />
+    <Content Include="Content\Gebo\img\gCons\Scissors.png" />
+    <Content Include="Content\Gebo\img\gCons\screen.png" />
+    <Content Include="Content\Gebo\img\gCons\search.png" />
+    <Content Include="Content\Gebo\img\gCons\server.png" />
+    <Content Include="Content\Gebo\img\gCons\shield.png" />
+    <Content Include="Content\Gebo\img\gCons\shut-down.png" />
+    <Content Include="Content\Gebo\img\gCons\star.png" />
+    <Content Include="Content\Gebo\img\gCons\tag.png" />
+    <Content Include="Content\Gebo\img\gCons\tap.png" />
+    <Content Include="Content\Gebo\img\gCons\tree.png" />
+    <Content Include="Content\Gebo\img\gCons\umbrella.png" />
+    <Content Include="Content\Gebo\img\gCons\unlock.png" />
+    <Content Include="Content\Gebo\img\gCons\usb.png" />
+    <Content Include="Content\Gebo\img\gCons\van.png" />
+    <Content Include="Content\Gebo\img\gCons\wifi.png" />
+    <Content Include="Content\Gebo\img\gCons\world.png" />
+    <Content Include="Content\Gebo\img\main_bg.gif" />
+    <Content Include="Content\Gebo\img\main_bg_right.gif" />
+    <Content Include="Content\Gebo\img\poster.jpg" />
+    <Content Include="Content\Gebo\img\sidebar_switch.png" />
+    <Content Include="Content\Gebo\img\spinner_arrows.gif" />
+    <Content Include="Content\Gebo\img\splashy\splashy.css" />
+    <Content Include="Content\Gebo\img\splashy\splashy.png" />
+    <Content Include="Content\Gebo\img\vid_local.png" />
+    <Content Include="Content\Gebo\img\vid_vimeo.png" />
+    <Content Include="Content\Gebo\img\vid_yt.png" />
+    <Content Include="Content\Gebo\img\vimeo.png" />
+    <Content Include="Content\ie.css" />
+    <Content Include="Content\images\bg-comment.gif" />
+    <Content Include="Content\images\bg-content.gif" />
+    <Content Include="Content\images\bg-menu-left-curve.gif" />
+    <Content Include="Content\images\bg-menu.gif" />
+    <Content Include="Content\images\bg-search.gif" />
+    <Content Include="Content\images\bottom-shadow.gif" />
+    <Content Include="Content\images\boys.jpg" />
+    <Content Include="Content\images\button-check.gif" />
+    <Content Include="Content\images\check.jpg" />
+    <Content Include="Content\images\check2.jpg" />
+    <Content Include="Content\images\discussing.jpg" />
+    <Content Include="Content\images\discussing2.jpg" />
+    <Content Include="Content\images\flags2.jpg" />
+    <Content Include="Content\images\globe.jpg" />
+    <Content Include="Content\images\globe2.jpg" />
+    <Content Include="Content\images\glyphicons-halflings-white.png" />
+    <Content Include="Content\images\glyphicons-halflings.png" />
+    <Content Include="Content\images\graph.jpg" />
+    <Content Include="Content\images\graph2.jpg" />
+    <Content Include="Content\images\input.gif" />
+    <Content Include="Content\images\login-box-backg.png" />
+    <Content Include="Content\images\login-btn.png" />
+    <Content Include="Content\images\logo.jpg" />
+    <Content Include="Content\images\logoPrincipal.jpg" />
+    <Content Include="Content\images\meeting2.jpg" />
+    <Content Include="Content\images\professionals.jpg" />
+    <Content Include="Content\images\shake-hands.jpg" />
+    <Content Include="Content\images\spotlight.gif" />
+    <Content Include="Content\images\template.jpg" />
+    <Content Include="Content\images\tools.jpg" />
+    <Content Include="Content\images\tools2.jpg" />
+    <Content Include="Content\login-box.css" />
+    <Content Include="Content\PIE.htc" />
+    <Content Include="Content\style.css" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\jquery.ui.accordion.css" />
+    <Content Include="Content\themes\base\jquery.ui.all.css" />
+    <Content Include="Content\themes\base\jquery.ui.autocomplete.css" />
+    <Content Include="Content\themes\base\jquery.ui.base.css" />
+    <Content Include="Content\themes\base\jquery.ui.button.css" />
+    <Content Include="Content\themes\base\jquery.ui.core.css" />
+    <Content Include="Content\themes\base\jquery.ui.datepicker.css" />
+    <Content Include="Content\themes\base\jquery.ui.dialog.css" />
+    <Content Include="Content\themes\base\jquery.ui.progressbar.css" />
+    <Content Include="Content\themes\base\jquery.ui.resizable.css" />
+    <Content Include="Content\themes\base\jquery.ui.selectable.css" />
+    <Content Include="Content\themes\base\jquery.ui.slider.css" />
+    <Content Include="Content\themes\base\jquery.ui.tabs.css" />
+    <Content Include="Content\themes\base\jquery.ui.theme.css" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="obj\Debug\ControleCaixaWeb.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\Debug\ControleCaixaWeb.dll" />
+    <Content Include="obj\Debug\ControleCaixaWeb.pdb" />
+    <Content Include="obj\Debug\CSAutoParameterize.parameters.xml" />
+    <Content Include="Scripts\2012.1.214\jquery-1.7.1.min.js" />
+    <Content Include="Scripts\2012.1.214\jquery.validate.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.all.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.autocomplete.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.calendar.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.chart.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.combobox.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.common.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.datepicker.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.datetimepicker.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.draganddrop.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.editor.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.grid.editing.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.grid.filtering.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.grid.grouping.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.grid.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.grid.reordering.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.grid.resizing.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.imagebrowser.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.list.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.menu.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.panelbar.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.slider.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.splitter.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.tabstrip.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.textbox.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.timepicker.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.treeview.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.upload.min.js" />
+    <Content Include="Scripts\2012.1.214\telerik.window.min.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\BuscaFormaPagamentoAjax.js" />
+    <Content Include="Scripts\funcao.js" />
+    <Content Include="Scripts\Gebo\bootstrap\js\bootstrap.js" />
+    <Content Include="Scripts\Gebo\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Scripts\Gebo\js\bootstrap.plugins.js" />
+    <Content Include="Scripts\Gebo\js\bootstrap.plugins.min.js" />
+    <Content Include="Scripts\Gebo\js\forms\jquery.autosize.js" />
+    <Content Include="Scripts\Gebo\js\forms\jquery.autosize.min.js" />
+    <Content Include="Scripts\Gebo\js\forms\jquery.counter.min.js" />
+    <Content Include="Scripts\Gebo\js\forms\jquery.inputmask.min.js" />
+    <Content Include="Scripts\Gebo\js\forms\jquery.progressbar.anim.js" />
+    <Content Include="Scripts\Gebo\js\forms\jquery.spinners.min.js" />
+    <Content Include="Scripts\Gebo\js\forms\jquery.ui.touch-punch.min.js" />
+    <Content Include="Scripts\Gebo\js\gebo_btns.js" />
+    <Content Include="Scripts\Gebo\js\gebo_calendar.js" />
+    <Content Include="Scripts\Gebo\js\gebo_charts.js" />
+    <Content Include="Scripts\Gebo\js\gebo_chat.js" />
+    <Content Include="Scripts\Gebo\js\gebo_common.js" />
+    <Content Include="Scripts\Gebo\js\gebo_dashboard.js" />
+    <Content Include="Scripts\Gebo\js\gebo_datatables.js" />
+    <Content Include="Scripts\Gebo\js\gebo_explorer.js" />
+    <Content Include="Scripts\Gebo\js\gebo_floating_header.js" />
+    <Content Include="Scripts\Gebo\js\gebo_forms.js" />
+    <Content Include="Scripts\Gebo\js\gebo_gallery.js" />
+    <Content Include="Scripts\Gebo\js\gebo_icons.js" />
+    <Content Include="Scripts\Gebo\js\gebo_mailbox.js" />
+    <Content Include="Scripts\Gebo\js\gebo_maps.js" />
+    <Content Include="Scripts\Gebo\js\gebo_notifications.js" />
+    <Content Include="Scripts\Gebo\js\gebo_search.js" />
+    <Content Include="Scripts\Gebo\js\gebo_tables.js" />
+    <Content Include="Scripts\Gebo\js\gebo_user_profile.js" />
+    <Content Include="Scripts\Gebo\js\gebo_user_static.js" />
+    <Content Include="Scripts\Gebo\js\gebo_validation.js" />
+    <Content Include="Scripts\Gebo\js\gebo_widgets.js" />
+    <Content Include="Scripts\Gebo\js\gebo_wizard.js" />
+    <Content Include="Scripts\Gebo\js\gmap3.min.js" />
+    <Content Include="Scripts\Gebo\js\ie\html5.js" />
+    <Content Include="Scripts\Gebo\js\ie\respond.min.js" />
+    <Content Include="Scripts\Gebo\js\ios-orientationchange-fix.js" />
+    <Content Include="Scripts\Gebo\js\jquery.actual.min.js" />
+    <Content Include="Scripts\Gebo\js\jquery.cookie.min.js" />
+    <Content Include="Scripts\Gebo\js\jquery.debouncedresize.min.js" />
+    <Content Include="Scripts\Gebo\js\jquery.easing.1.3.min.js" />
+    <Content Include="Scripts\Gebo\js\jquery.imagesloaded.min.js" />
+    <Content Include="Scripts\Gebo\js\jquery.mediaTable.js" />
+    <Content Include="Scripts\Gebo\js\jquery.mediaTable.min.js" />
+    <Content Include="Scripts\Gebo\js\jquery.min.js" />
+    <Content Include="Scripts\Gebo\js\jquery.peity.min.js" />
+    <Content Include="Scripts\Gebo\js\jquery.wookmark.js" />
+    <Content Include="Scripts\Gebo\validarLogin.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\adapters\mootools-adapter.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\adapters\mootools-adapter.src.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\adapters\prototype-adapter.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\adapters\prototype-adapter.src.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\highcharts.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\highcharts.src.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\modules\canvas-tools.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\modules\canvas-tools.src.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\modules\exporting.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\modules\exporting.src.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\themes\dark-blue.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\themes\dark-green.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\themes\gray.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\themes\grid.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\themes\skies.js" />
+    <Content Include="Scripts\jquery-1.5.1-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.5.1.js" />
+    <Content Include="Scripts\jquery-1.5.1.min.js" />
+    <Content Include="Scripts\jquery-1.7.2.min.js" />
+    <Content Include="Scripts\jquery-ui-1.8.11.js" />
+    <Content Include="Scripts\jquery-ui-1.8.11.min.js" />
+    <Content Include="Scripts\jquery.1.7.min.js" />
+    <Content Include="Scripts\jquery.blackcalculator.beta.min.js" />
+    <Content Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\modernizr-1.7.js" />
+    <Content Include="Scripts\modernizr-1.7.min.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\MicrosoftAjax.js" />
+    <Content Include="Scripts\MicrosoftAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Areas\Administracao\Models\" />
+    <Folder Include="Areas\Escritorio\Models\Relatorio\" />
+    <Folder Include="Areas\OperadorCaixa\Models\" />
+    <Folder Include="obj\Debug\CSAutoParameterize\original\" />
+    <Folder Include="obj\Debug\Database\" />
+    <Folder Include="obj\Debug\TempPE\" />
+    <Folder Include="obj\Debug\TransformWebConfig\transformed\Areas\Administracao\Views\" />
+    <Folder Include="obj\Debug\TransformWebConfig\transformed\Areas\Escritorio\Views\" />
+    <Folder Include="obj\Debug\TransformWebConfig\transformed\Areas\OperadorCaixa\Views\" />
+    <Folder Include="obj\Debug\TransformWebConfig\transformed\Views\" />
+    <Folder Include="Views\Shared\EditorTemplates\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Administracao\Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Escritorio\Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\OperadorCaixa\Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Administracao\Views\Configuracao\Index.cshtml" />
+    <Content Include="Areas\Administracao\Views\Configuracao\TrocarSenha.cshtml" />
+    <Content Include="Areas\Administracao\Views\Configuracao\TrocaSenhaSucesso.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Escritorio\Views\Configuracao\Index.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Configuracao\TrocarSenha.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Configuracao\TrocaSenhaSucesso.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Escritorio\Views\ContaCorrente\AlterarContaCorrente.cshtml" />
+    <Content Include="Areas\Escritorio\Views\ContaCorrente\CadastrarContaCorrente.cshtml" />
+    <Content Include="Areas\Escritorio\Views\ContaCorrente\Detalhes.cshtml" />
+    <Content Include="Areas\Escritorio\Views\ContaCorrente\ExcluirContaCorrente.cshtml" />
+    <Content Include="Areas\Escritorio\Views\ContaCorrente\ListarContaCorrente.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\OperadorCaixa\Views\Configuracao\Index.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\Configuracao\TrocarSenha.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\Configuracao\TrocaSenhaSucesso.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\OperadorCaixa\Views\FecharCaixa\AlterarFechamentoCaixa.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\FecharCaixa\Detalhes.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\FecharCaixa\ExcluirFechamentoCaixa.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\FecharCaixa\Index.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\FecharCaixa\LancarFechamentoCaixa.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\FecharCaixa\ListaDosFechamentosCaixa.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\FecharCaixa\VerMeuCaixa.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\FecharCaixa\VerNestaData.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\OperadorCaixa\Views\Home\Index.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\Home\Sucesso.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\OperadorCaixa\Views\OperacaoCaixa\AlterarLancamentoOperacaoCaixa.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\OperacaoCaixa\ExcluirLancamentoCaixa.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\OperacaoCaixa\Index.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\OperacaoCaixa\LancamentoIndividual.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\OperacaoCaixa\LancamentoOperacaoCaixa.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\OperacaoCaixa\LancamentosNaData.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\OperacaoCaixa\SangriaOperacaoCaixa.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\OperacaoCaixa\TodosLancamentos.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Administracao\Views\ContaCorrente\AlterarContaCorrente.cshtml" />
+    <Content Include="Areas\Administracao\Views\ContaCorrente\CadastrarContaCorrente.cshtml" />
+    <Content Include="Areas\Administracao\Views\ContaCorrente\Detalhes.cshtml" />
+    <Content Include="Areas\Administracao\Views\ContaCorrente\ExcluirContaCorrente.cshtml" />
+    <Content Include="Areas\Administracao\Views\ContaCorrente\ListarContaCorrente.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Administracao\Views\Estabelecimento\AlterarEstabelecimento.cshtml" />
+    <Content Include="Areas\Administracao\Views\Estabelecimento\CadastrarEstabelecimento.cshtml" />
+    <Content Include="Areas\Administracao\Views\Estabelecimento\Detalhes.cshtml" />
+    <Content Include="Areas\Administracao\Views\Estabelecimento\ExcluirEstabelecimento.cshtml" />
+    <Content Include="Areas\Administracao\Views\Estabelecimento\ListadeContas.cshtml" />
+    <Content Include="Areas\Administracao\Views\Estabelecimento\ListarEstabelecimento.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Administracao\Views\FormaPagamento\AlterarFormaPagamento.cshtml" />
+    <Content Include="Areas\Administracao\Views\FormaPagamento\CadastrarFormaPagamento.cshtml" />
+    <Content Include="Areas\Administracao\Views\FormaPagamento\Detalhes.cshtml" />
+    <Content Include="Areas\Administracao\Views\FormaPagamento\ExcluirFormaPagamento.cshtml" />
+    <Content Include="Areas\Administracao\Views\FormaPagamento\ListarFormaPagamento.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Administracao\Views\Funcionario\AlterarFuncionario.cshtml" />
+    <Content Include="Areas\Administracao\Views\Funcionario\CadastrarFuncionario.cshtml" />
+    <Content Include="Areas\Administracao\Views\Funcionario\Detalhes.cshtml" />
+    <Content Include="Areas\Administracao\Views\Funcionario\ExcluirFuncionario.cshtml" />
+    <Content Include="Areas\Administracao\Views\Funcionario\ListarFuncionario.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Administracao\Views\Home\Index.cshtml" />
+    <Content Include="Areas\Administracao\Views\Home\Sucesso.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Escritorio\Views\Estabelecimento\AlterarEstabelecimento.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Estabelecimento\CadastrarEstabelecimento.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Estabelecimento\Detalhes.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Estabelecimento\ExcluirEstabelecimento.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Estabelecimento\ListadeContas.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Estabelecimento\ListarEstabelecimento.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Escritorio\Views\Favorecido\AlterarFavorecido.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Favorecido\CadastrarFavorecido.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Favorecido\Detalhes.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Favorecido\ExcluirFavorecido.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Favorecido\Index.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Favorecido\ListaFavorecidos.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Escritorio\Views\FecharCaixa\AlterarFechamentoCaixa.cshtml" />
+    <Content Include="Areas\Escritorio\Views\FecharCaixa\Detalhes.cshtml" />
+    <Content Include="Areas\Escritorio\Views\FecharCaixa\ExcluirFechamentoCaixa.cshtml" />
+    <Content Include="Areas\Escritorio\Views\FecharCaixa\Index.cshtml" />
+    <Content Include="Areas\Escritorio\Views\FecharCaixa\ListaDosFechamentosCaixa.cshtml" />
+    <Content Include="Areas\Escritorio\Views\FecharCaixa\VerMeuCaixa.cshtml" />
+    <Content Include="Areas\Escritorio\Views\FecharCaixa\VerNestaData.cshtml" />
+    <Content Include="Areas\Escritorio\Views\FormaPagamento\AlterarFormaPagamento.cshtml" />
+    <Content Include="Areas\Escritorio\Views\FormaPagamento\CadastrarFormaPagamento.cshtml" />
+    <Content Include="Areas\Escritorio\Views\FormaPagamento\Detalhes.cshtml" />
+    <Content Include="Areas\Escritorio\Views\FormaPagamento\ExcluirFormaPagamento.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Funcionario\AlterarFuncionario.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Funcionario\CadastrarFuncionario.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Funcionario\Detalhes.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Funcionario\ExcluirFuncionario.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Funcionario\ListarFuncionario.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Home\Index.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Home\Sucesso.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoCaixa\AlterarOperacaoCaixa.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoCaixa\CadastrarOperacaoCaixa.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoCaixa\Detalhes.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoCaixa\Index.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoCaixa\SaidaOperacaoCaixa.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Pagamentos\AlterarPagamento.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Pagamentos\Detalhes.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Pagamentos\ExcluirPagamento.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Pagamentos\FazerPagamento.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Pagamentos\Index.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Pagamentos\PagamentoFavorecido.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Relatorio\Index.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Relatorio\PorFormaPagamento.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Relatorio\PorUsuario.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Relatorio\TodosLancamentos.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Relatorio\VerDataOperacao.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Administracao\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Administracao\Views\Shared\_LogOnPartial.cshtml" />
+    <Content Include="Areas\Administracao\Views\Shared\Error.cshtml" />
+    <Content Include="Areas\Administracao\Views\Pagamentos\Index.cshtml">
+      <SubType>
+      </SubType>
+    </Content>
+    <Content Include="Areas\Administracao\Views\Pagamentos\AlterarPagamento.cshtml" />
+    <Content Include="Areas\Administracao\Views\Pagamentos\Detalhes.cshtml" />
+    <Content Include="Areas\Administracao\Views\Pagamentos\ExcluirPagamento.cshtml" />
+    <Content Include="Areas\Administracao\Views\Pagamentos\FazerPagamento.cshtml" />
+    <Content Include="Areas\Administracao\Views\Relatorio\ListaPagamento.cshtml" />
+    <Content Include="Areas\Administracao\Views\Relatorio\ListaPagamentos.cshtml" />
+    <Content Include="Areas\Administracao\Views\Pagamentos\PagamentoFavorecido.cshtml" />
+    <Content Include="Areas\Administracao\Views\Relatorio\Index.cshtml">
+      <SubType>
+      </SubType>
+    </Content>
+    <Content Include="Areas\Escritorio\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Shared\_LogOnPartial.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Shared\Error.cshtml" />
+    <Content Include="Areas\Administracao\Views\OperacaoCaixa\Index.cshtml" />
+    <Content Include="Areas\Administracao\Views\OperacaoCaixa\AlterarOperacaoCaixa.cshtml" />
+    <Content Include="Areas\Administracao\Views\OperacaoCaixa\CadastrarOperacaoCaixa.cshtml" />
+    <Content Include="Areas\Administracao\Views\Relatorio\PorFormaPagamento.cshtml" />
+    <Content Include="Areas\Administracao\Views\Relatorio\PorUsuario.cshtml" />
+    <Content Include="Areas\Administracao\Views\Relatorio\TodosLancamentos.cshtml" />
+    <Content Include="Areas\Administracao\Views\Relatorio\VerDataOperacao.cshtml" />
+    <Content Include="Areas\Administracao\Views\OperacaoContaCorrente\DepositoOperacaoCaixa.cshtml" />
+    <Content Include="Areas\Administracao\Views\OperacaoContaCorrente\Index.cshtml" />
+    <Content Include="Areas\Administracao\Views\OperacaoContaCorrente\AlterarDeposito.cshtml" />
+    <Content Include="Areas\Administracao\Views\OperacaoContaCorrente\ListaOperacaoContaCorrente.cshtml" />
+    <Content Include="Areas\Administracao\Views\OperacaoContaCorrente\ExcluirDeposito.cshtml" />
+    <Content Include="Areas\Administracao\Views\OperacaoContaCorrente\Detalhes.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoCaixa\ExcluirOperacaoCaixa.cshtml" />
+    <Content Include="Areas\Administracao\Views\OperacaoCaixa\ListaDasOperacaoes.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoCaixa\OperacoesNestaData.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoCaixa\VerUsuario.cshtml" />
+    <Content Include="Areas\Administracao\Views\OperacaoCaixa\ExcluirOperacaoCaixa.cshtml" />
+    <Content Include="Areas\Administracao\Views\OperacaoCaixa\OperacoesNestaData.cshtml" />
+    <Content Include="Areas\Administracao\Views\OperacaoCaixa\VerUsuario.cshtml" />
+    <Content Include="Areas\Administracao\Views\OperacaoCaixa\VerPorFormaPagamento.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoCaixa\VerPorFormaPagamento.cshtml" />
+    <Content Include="Areas\Administracao\Views\OperacaoCaixa\TodosLancamentos.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoCaixa\TodosLancamentos.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Pagamentos\ListaPagamento.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Pagamentos\PagamentosNaData.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoCaixa\ListaDasOperacaoes.cshtml" />
+    <Content Include="obj\Debug\CSAutoParameterize\transformed\Areas\Administracao\Views\Web.config" />
+    <Content Include="obj\Debug\CSAutoParameterize\transformed\Areas\Escritorio\Views\Web.config" />
+    <Content Include="obj\Debug\CSAutoParameterize\transformed\Areas\OperadorCaixa\Views\Web.config" />
+    <Content Include="obj\Debug\CSAutoParameterize\transformed\Views\Web.config" />
+    <Content Include="obj\Debug\CSAutoParameterize\transformed\Web.config" />
+    <Content Include="WebnaWeb.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="WebnaWeb.Debug.config">
+      <DependentUpon>WebnaWeb.config</DependentUpon>
+    </Content>
+    <Content Include="WebnaWeb.Release.config">
+      <DependentUpon>WebnaWeb.config</DependentUpon>
+    </Content>
+    <Content Include="Areas\Administracao\Views\Favorecido\AlterarFavorecido.cshtml" />
+    <Content Include="Areas\Administracao\Views\Favorecido\CadastrarFavorecido.cshtml" />
+    <Content Include="Areas\Administracao\Views\Favorecido\Detalhes.cshtml" />
+    <Content Include="Areas\Administracao\Views\Favorecido\ExcluirFavorecido.cshtml" />
+    <Content Include="Areas\Administracao\Views\Favorecido\Index.cshtml" />
+    <Content Include="Areas\Administracao\Views\Favorecido\ListaFavorecidos.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\Shared\_LogOnPartial.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\Shared\Error.cshtml" />
+    <Content Include="Areas\Administracao\Views\OperacaoCaixa\ListaEstabelecimento.cshtml" />
+    <Content Include="Areas\Administracao\Views\OperacaoCaixa\ListaEstabelecimentoNumaData.cshtml" />
+    <Content Include="Areas\Administracao\Views\Pagamentos\ListaPagamentos.cshtml" />
+    <Content Include="Areas\Administracao\Views\Pagamentos\PagamentoPorData.cshtml" />
+    <Content Include="Areas\Administracao\Views\DespejoOperacaoCaixa\Index.cshtml" />
+    <Content Include="Areas\Administracao\Views\DespejoOperacaoCaixa\Detalhes.cshtml" />
+    <Content Include="Areas\Administracao\Views\DespejoOperacaoCaixa\AdicionarDespejoOperacaoCaixa.cshtml" />
+    <Content Include="Areas\Administracao\Views\DespejoOperacaoCaixa\AlterarDespejoOperacaoCaixa.cshtml" />
+    <Content Include="Areas\Administracao\Views\DespejoOperacaoCaixa\ExcluirDespejoOperacaoCaixa.cshtml" />
+    <Content Include="Areas\Administracao\Views\DespejoOperacaoCaixa\ListaDespejoAjax.cshtml" />
+    <Content Include="Areas\Administracao\Views\DespejoOperacaoCaixa\ListaDespejo.cshtml" />
+    <Content Include="Areas\Administracao\Views\DespejoOperacaoCaixa\DespejoPorForma.cshtml" />
+    <Content Include="Areas\Administracao\Views\DespejoOperacaoCaixa\DespejoPorUsuário.cshtml" />
+    <Content Include="Areas\Administracao\Views\DespejoOperacaoCaixa\DespejoEstabelecimento.cshtml" />
+    <Content Include="Areas\Escritorio\Views\DespejoOperacaoCaixa\AdicionarDespejoOperacaoCaixa.cshtml" />
+    <Content Include="Areas\Escritorio\Views\DespejoOperacaoCaixa\AlterarDespejoOperacaoCaixa.cshtml" />
+    <Content Include="Areas\Escritorio\Views\DespejoOperacaoCaixa\DespejoEstabelecimento.cshtml" />
+    <Content Include="Areas\Escritorio\Views\DespejoOperacaoCaixa\DespejoPorForma.cshtml" />
+    <Content Include="Areas\Escritorio\Views\DespejoOperacaoCaixa\DespejoPorUsuário.cshtml" />
+    <Content Include="Areas\Escritorio\Views\DespejoOperacaoCaixa\Detalhes.cshtml" />
+    <Content Include="Areas\Escritorio\Views\DespejoOperacaoCaixa\ExcluirDespejoOperacaoCaixa.cshtml" />
+    <Content Include="Areas\Escritorio\Views\DespejoOperacaoCaixa\Index.cshtml" />
+    <Content Include="Areas\Escritorio\Views\DespejoOperacaoCaixa\ListaDespejo.cshtml" />
+    <Content Include="Areas\Escritorio\Views\DespejoOperacaoCaixa\ListaDespejoAjax.cshtml" />
+    <Content Include="Areas\Escritorio\Views\FormaPagamento\ListarFormaPagamento.cshtml" />
+    <Content Include="Areas\Escritorio\Views\FecharCaixa\LancarFechamentoCaixa.cshtml" />
+    <Content Include="Areas\Escritorio\Views\DespejoOperacaoCaixa\FazerDespejo.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Funcionario\ErroFuncionario.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoCaixa\Lancamentos.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoCaixa\TodasSaidas.cshtml" />
+    <Content Include="Areas\Escritorio\Views\DespejoOperacaoCaixa\FazerDespejoAutomatico.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoCaixa\ErroOperacao.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Pagamentos\PagamentosNoMes.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoCaixa\LancamentosData.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoCaixa\SaidasData.cshtml" />
+    <Content Include="Areas\Escritorio\Views\FecharCaixa\FechamentoCaixaData.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Pagamentos\PagamentosData.cshtml" />
+    <Content Include="Areas\Escritorio\Views\DespejoOperacaoCaixa\DespejosData.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\OperacaoCaixa\LancamentosData.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\FecharCaixa\FechamentoCaixaData.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\OperacaoCaixa\LancamentoOperacaoCaixa1.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\OperacaoCaixa\LancamentosHoje.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Shared\Calculadora.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Pagamentos\ErroOperacao.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoContaCorrente\Index.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoContaCorrente\FazerDeposito.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoContaCorrente\ErroOperacao.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoContaCorrente\AlterarDeposito.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoContaCorrente\ListaDepositoPorData.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoContaCorrente\DetalhesDeposito.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoContaCorrente\DepositosData.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoContaCorrente\ExcluirDeposito.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoCaixa\EstabelecimentoReceptor.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoCaixa\ErroOPeracaoDespejo.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoContaCorrente\UsuarioSemPermissao.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Shared\_LayoutIndex.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Graficos\Index.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Graficos\ChartPizzaEstabelecimento.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoCaixa\OPeracaoConferida.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoCaixa\MostrarOperacaoConferida.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoCaixa\RelatoriosCartoesPorData.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoCaixa\CartoesPorData.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Configuracao\Create.cshtml" />
+    <Content Include="Areas\Escritorio\Views\Configuracao\Edit.cshtml" />
+    <None Include="Areas\OperadorCaixa\Views\Shared\Calculadora.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\Shared\_LayoutIndex.cshtml" />
+    <None Include="Content\images\logoPrincipal.gbl" />
+    <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <Content Include="obj\Debug\TransformWebConfig\original\Web.config" />
+    <Content Include="obj\Debug\TransformWebConfig\transformed\Web.config" />
+    <Content Include="Views\ContaUsuario\Entrar.cshtml" />
+    <Content Include="Views\ContaUsuario\TrocaSenhaSucesso.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Shared\_LogOnPartial.cshtml" />
+    <Content Include="Views\LogOn.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_LayoutPrincipal.cshtml" />
+    <Content Include="Views\Home\CadastrarData.cshtml" />
+    <Content Include="Views\Shared\_LayoutLogin.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\UploadLocalization.zh-CN.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>UploadLocalization.zh-CN.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\UploadLocalization.ru-RU.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>UploadLocalization.ru-RU.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\UploadLocalization.pt-PT.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>UploadLocalization.pt-PT.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\UploadLocalization.pt-BR.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>UploadLocalization.pt-BR.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\UploadLocalization.pl-PL.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>UploadLocalization.pl-PL.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\UploadLocalization.nl-NL.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>UploadLocalization.nl-NL.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\UploadLocalization.fr-FR.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>UploadLocalization.fr-FR.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\UploadLocalization.en-US.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>UploadLocalization.en-US.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\UploadLocalization.da-DK.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>UploadLocalization.da-DK.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\UploadLocalization.bg-BG.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>UploadLocalization.bg-BG.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.zh-CN.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.zh-CN.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.uk-UA.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.uk-UA.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.ru-RU.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.ru-RU.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.pt-PT.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.pt-PT.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.pt-BR.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.pt-BR.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.pl-PL.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.pl-PL.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.nl-NL.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.nl-NL.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.fr-FR.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.fr-FR.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.es-ES.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.es-ES.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.en-US.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.en-US.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.de-DE.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.de-DE.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.da-DK.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.da-DK.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.bg-BG.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.bg-BG.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\EditorLocalization.zh-CN.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>EditorLocalization.zh-CN.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\EditorLocalization.uk-UA.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>EditorLocalization.uk-UA.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\EditorLocalization.ru-RU.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>EditorLocalization.ru-RU.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\EditorLocalization.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>EditorLocalization.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\EditorLocalization.pt-PT.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>EditorLocalization.pt-PT.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\EditorLocalization.pt-BR.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>EditorLocalization.pt-BR.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\EditorLocalization.pl-PL.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>EditorLocalization.pl-PL.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\EditorLocalization.nl-NL.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>EditorLocalization.nl-NL.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\EditorLocalization.fr-FR.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>EditorLocalization.fr-FR.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\EditorLocalization.en-US.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>EditorLocalization.en-US.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\EditorLocalization.de-DE.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>EditorLocalization.de-DE.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\EditorLocalization.da-DK.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>EditorLocalization.da-DK.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\EditorLocalization.bg-BG.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>EditorLocalization.bg-BG.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>3637</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

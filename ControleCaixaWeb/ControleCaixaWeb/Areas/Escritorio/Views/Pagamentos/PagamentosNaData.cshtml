@@ -1,0 +1,68 @@
+﻿@model IEnumerable<ControleCaixaWeb.Models.Pagamento>
+
+@{
+    ViewBag.Title = "PagamentosNaData";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Pagamentos Na Data</h3>
+<h2>Soma dos Valores: R$ @Model.Sum(model => model.Valor)</h2>
+
+
+<p>
+    @Html.ActionLink("Fazer Pagamentos", "FazerPagamento")
+</p>
+<table class="table table-bordered">
+    <tr>
+        
+        <th>
+            Data Pagamento:
+        </th>
+        <th>
+            Valor:
+        </th>
+        <th>
+            Observação:
+        </th>
+        <th>
+           Data/Usuário/Computador:
+        </th>
+         <th>
+           Favorecido:
+        </th>
+         <th>
+           Forma Pagamento:
+        </th>
+        
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+       
+        <td>
+            @Html.DisplayFor(modelItem => item.DataPagamento)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Valor)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Observacao)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UsuarioQueAlterouEDataEComputador)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FavorecidoPagamento.NomeFavorecido)
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.FormaPagamento.NomeTipoFormaPagamento)
+        </td>
+        <td>
+            @Html.ActionLink("Alterar", "AlterarPagamento", new {  id=item.Codigo }) |
+            @Html.ActionLink("Detalhes", "Detalhes", new { id=item.Codigo }) |
+            @Html.ActionLink("Exluir", "ExcluirPagamento", new { id=item.Codigo })
+        </td>
+    </tr>
+}
+
+</table>

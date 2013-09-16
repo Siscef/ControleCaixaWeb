@@ -1,0 +1,63 @@
+﻿@model FormaPagamentoEstabelecimento
+
+@{
+    ViewBag.Title = "CadastrarFormaPagamento";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Cadastrar FormaPagamento</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Cadastrar FormaPagamento</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.NomeTipoFormaPagamento,"Nome Forma Pagamento:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.NomeTipoFormaPagamento, new { @class = "input-xlarge" })<p>Nome da Forma Pagamento</p>
+            @Html.ValidationMessageFor(model => model.NomeTipoFormaPagamento)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.TaxaFormaPagamento,"Taxa:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.TaxaFormaPagamento, new { @class = "input-xlarge" })<p>9,99</p>
+            @Html.ValidationMessageFor(model => model.TaxaFormaPagamento)
+        </div>
+
+         <div class="editor-label">
+            @Html.LabelFor(model => model.DiasRecebimento,"Prazo:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.DiasRecebimento, new { @class = "input-xlarge" })<p>9,99</p>
+            @Html.ValidationMessageFor(model => model.DiasRecebimento)
+        </div>
+
+         <div class="editor-label">
+            @Html.LabelFor(model => model.ContaCorrenteFormaPagamento,"Conta Corrente:")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.ContaCorrenteFormaPagamento.Codigo, (IEnumerable<SelectListItem>)ViewBag.ContaCorrenteForma, "Selecione Conta Corrente")@Html.ActionLink("Cadastrar Conta Corrente", "CadastrarContaCorrente", "ContaCorrente")
+            @Html.ValidationMessageFor(model => model.ContaCorrenteFormaPagamento)
+        </div>
+		<div class="editor-label">
+			@Html.LabelFor(model => model.DespejoAutomatico,"Despejo Automático?:")
+		</div>
+		<div class="editor-field">
+			@Html.EditorFor(model => model.DespejoAutomatico, new { @class = "input-xlarge" })<p>
+				Se Marcado: Sim</p>
+			@Html.ValidationMessageFor(model => model.DespejoAutomatico)
+		</div>
+		<p>
+            <input class ="btn btn-success" type="submit" value="Cadastar" />
+            <input class="btn btn-warning" type="reset" value="Limpar" />
+        </p>
+    </fieldset>
+}
+
+<div>
+   @Html.ActionLink("Página Inicial", "Index", "Home")
+</div>

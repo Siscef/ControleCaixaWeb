@@ -1,0 +1,122 @@
+﻿@model CadastrarUsuario
+
+@{
+    ViewBag.Title = "AlterarFuncionario";
+    Layout = "~/Areas/Administracao/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Alterar Funcionário</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Alterar Dados Funcionário</legend>
+         <div class="editor-label">
+            @Html.HiddenFor(model => model.Codigo)
+        </div>
+        <div class="editor-field">
+            @Html.HiddenFor(model => model.Codigo)
+            @Html.ValidationMessageFor(model => model.Codigo)
+        </div>
+
+        
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Nome,"Nome:")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Nome, new { @class = "input-xlarge" })<p>Nome Funcionário</p>
+            @Html.ValidationMessageFor(model => model.Nome)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Email,"Email:")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Email, new { @class = "input-xlarge" })<p>emailfuncionário</p>
+            @Html.ValidationMessageFor(model => model.Email)
+        </div>     
+        
+          <div class="editor-label">
+            @Html.LabelFor(model => model.Telefone,"Telefone:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Telefone, new { @class = "input-xlarge" })<p>88250896</p>
+            @Html.ValidationMessageFor(model => model.Telefone)
+        </div>
+        
+          <div class="editor-label">
+            @Html.LabelFor(model => model.EnderecoUsuario.NomeRua,"Endereço:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.EnderecoUsuario.NomeRua, new { @class = "input-xlarge" })<p>Nome da rua,número</p>
+            @Html.ValidationMessageFor(model => model.EnderecoUsuario.NomeRua)
+        </div>
+
+         <div class="editor-label">
+            @Html.LabelFor(model => model.EnderecoUsuario.Complemento,"Complemento:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.EnderecoUsuario.Complemento, new { @class = "input-xlarge" })<p>Próximo a rua tal</p>
+            @Html.ValidationMessageFor(model => model.EnderecoUsuario.Complemento)
+        </div>
+
+         <div class="editor-label">
+            @Html.LabelFor(model => model.EnderecoUsuario.CEP,"CEP:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.EnderecoUsuario.CEP, new { @class = "input-xlarge" })<p>58015650</p>
+            @Html.ValidationMessageFor(model => model.EnderecoUsuario.CEP)
+        </div>
+
+         <div class="editor-label">
+            @Html.LabelFor(model => model.EnderecoUsuario.Bairro,"Bairro:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.EnderecoUsuario.Bairro, new { @class = "input-xlarge" })<p>Bairro do funcionário</p>
+            @Html.ValidationMessageFor(model => model.EnderecoUsuario.Bairro)
+        </div>
+         <div class="editor-label">
+            @Html.LabelFor(model => model.EnderecoUsuario.Cidade,"Cidade:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.EnderecoUsuario.Cidade, new { @class = "input-xlarge" })<p>Nome da cidade</p>
+            @Html.ValidationMessageFor(model => model.EnderecoUsuario.Cidade)
+        </div>
+
+         <div class="editor-label">
+            @Html.LabelFor(model => model.EnderecoUsuario.Estado,"Estado:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.EnderecoUsuario.Estado, new { @class = "input-xlarge" })<p>Nome do estado</p>
+            @Html.ValidationMessageFor(model => model.EnderecoUsuario.Estado)
+        </div> 
+         <div class="editor-label">
+            @Html.LabelFor(model => model.EstabelecimentoTrabalho, "Estabelecimento:")
+        </div>
+
+          <div class="editor-field">
+            @Html.DropDownListFor(model => model.EstabelecimentoTrabalho.Codigo, (IEnumerable<SelectListItem>)ViewBag.Estabelecimento, "Selecione Estabelecimento")@Html.ActionLink("Adicionar Estabelecimento", "CadastrarEstabelecimento", "Estabelecimento")
+            @Html.ValidationMessageFor(model => model.EstabelecimentoTrabalho)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.NomeFuncao, "Função:")
+        </div>
+
+          <div class="editor-field">
+            @Html.DropDownListFor(model => model.NomeFuncao.Codigo, (IEnumerable<SelectListItem>)ViewBag.Papel, "Selecione Funcao")
+            @Html.ValidationMessageFor(model => model.NomeFuncao)
+        </div>
+
+       
+
+        <p>
+            <input class="btn btn-warning" type="submit" value="Salvar Alterações" />
+          
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Página Inicial", "Index","Home")
+</div>

@@ -1,0 +1,32 @@
+﻿@model FormaPagamentoEstabelecimento
+
+@{
+    ViewBag.Title = "Detalhes";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detalhes</h2>
+
+<fieldset>
+    <legend>Detalhes Forma de Pagamento</legend>
+       <div class="display-label">Nome:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.NomeTipoFormaPagamento)
+    </div>
+    <div class="display-label">Taxa:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TaxaFormaPagamento)
+    </div>
+
+    <div class="display-label">Dias Prazo:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DiasRecebimento)
+    </div>
+
+      
+
+</fieldset>
+<p>
+    @Html.ActionLink("Alterar", "AlterarFormaPagamento", new {  id=Model.Codigo }) |
+     @Html.ActionLink("Página Inicial", "Index", "Home")
+</p>

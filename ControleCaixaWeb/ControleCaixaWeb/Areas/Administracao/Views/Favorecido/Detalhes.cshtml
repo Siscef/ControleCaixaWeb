@@ -1,0 +1,27 @@
+﻿@model ControleCaixaWeb.Models.Favorecido
+
+@{
+    ViewBag.Title = "Detalhes";
+    Layout = "~/Areas/Administracao/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detalhes do Favorecido </h2>
+
+<fieldset>
+    <legend>Favorecido</legend>
+    
+
+    <div class="display-label">Nome Favorecido:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.NomeFavorecido)
+    </div>
+
+    <div class="display-label">Observação:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Observacao)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Alterar", "AlterarFavorecido", new {  id=Model.Codigo }) |
+    @Html.ActionLink("Página Inicial", "Index","Home")
+</p>

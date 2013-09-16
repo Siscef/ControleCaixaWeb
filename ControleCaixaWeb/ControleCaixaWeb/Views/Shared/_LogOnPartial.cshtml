@@ -1,0 +1,26 @@
+﻿@if (Request.IsAuthenticated)
+{
+    <text>Bem Vindo: <strong>@User.Identity.Name  </strong> <br />
+      @if (Roles.IsUserInRole("Administrador"))
+     {
+         <strong>Você é Administrador</strong>
+     }
+      @if (Roles.IsUserInRole("Escritorio"))
+     {
+         <strong>Você é Responsável Pelo Recolhimento</strong>
+     }
+     
+     @if (Roles.IsUserInRole("OperadorCaixa"))
+     {
+         <strong>Você é Operador Caixa</strong>
+     }
+    
+    </text>
+}
+   
+ 
+   
+
+        
+
+

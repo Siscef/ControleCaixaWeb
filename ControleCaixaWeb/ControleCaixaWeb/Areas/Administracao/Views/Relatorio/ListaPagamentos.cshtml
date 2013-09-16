@@ -1,0 +1,79 @@
+﻿@model IList<Pagamento>
+@{
+    ViewBag.Title = "ListaPagamentos.cshtml";
+    Layout = "~/Areas/Administracao/Views/Shared/_Layout.cshtml";
+}
+
+@(Html.Telerik( ).Grid<Pagamento>( ).Name("Nomegrid").DataBinding(bin => bin.Ajax().Select("ListaPagamentos","Relatorio"))
+.Pageable( )
+.Sortable( )
+.Scrollable( )
+.Groupable( )
+.Filterable( )
+.KeyboardNavigation( )
+)
+
+@*<p>
+    @Html.ActionLink("Fazer Novo Pagamento", "FazerPagamento","Pagamentos")
+</p>
+<table class="table table-bordered">
+    <tr>
+        
+        <th>
+            DataPagamento:
+        </th>
+         <th>
+            Usuário:
+        </th>
+         <th>
+            Estabelecimento:
+        </th>
+         <th>
+            Favorecido:
+        </th>
+        <th>
+            Valor:
+        </th>
+        <th>
+            Observacao:
+        </th>
+        <th>
+            Usuário/Data/Computador:
+        </th>
+       
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DataPagamento)
+        </td>
+      <td>
+            @Html.DisplayFor(modelItem => item.UsuarioQueLancou.Nome)
+        </td>
+      <td>
+            @Html.DisplayFor(modelItem => item.EstabelecimentoQuePagou.RazaoSocial)
+        </td>
+      <td>
+            @Html.DisplayFor(modelItem => item.FavorecidoPagamento.NomeFavorecido)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Valor)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Observacao)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UsuarioQueAlterouEDataEComputador)
+        </td>
+        <td>
+            @Html.ActionLink("Alterar", "AlterarPagamento", new {  id=item.Codigo }) |
+            @Html.ActionLink("Ver Detalhes", "Detalhes", new { id=item.Codigo }) |
+            @Html.ActionLink("Excluir", "ExcluirPagamento", new {  id=item.Codigo })|
+            @Html.ActionLink("Deste Favorecido","PagamentoFavorecido",new {id =item.FavorecidoPagamento.NomeFavorecido})
+        </td>
+    </tr>
+}
+
+</table>
+*@

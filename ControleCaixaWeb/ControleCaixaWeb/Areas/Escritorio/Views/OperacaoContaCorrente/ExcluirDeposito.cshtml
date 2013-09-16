@@ -1,0 +1,69 @@
+﻿@model ControleCaixaWeb.Models.OperacaoFinanceiraContaCorrente
+
+@{
+    ViewBag.Title = "ExcluirDeposito";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Excluir Depósito</h2>
+
+<h3>@User.Identity.Name, Você tem certeza que deseja excluir esse registro?</h3>
+@using (Html.BeginForm()) {
+    <fieldset>
+    <legend>Exclusão de Depósito</legend>
+
+     <div class="display-label">Código:</div>
+    <div class="display-field">
+        @Html.HiddenFor(model => model.Codigo)
+    </div>
+    @Html.HiddenFor(x => x.FormaPagamento.Codigo)
+    @Html.HiddenFor(x => x.ContaLancamento.Codigo)
+
+    <div class="display-label">Data:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Data)
+    </div>
+
+    <div class="display-label">Valor:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Valor)
+    </div>
+
+    <div class="display-label">Descrição:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Descricao)
+    </div>
+    <div class="display-label">Forma de Pagamento:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.FormaPagamento.NomeTipoFormaPagamento)
+    </div>
+    <div class="display-label">Estabelecimento da Conta:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ContaLancamento.EstabelecimentoDaConta.RazaoSocial)
+    </div>
+    <div class="display-label">Número Conta Corrente:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ContaLancamento.Numero)
+    </div>
+    <div class="display-label">Agência Conta Corrente:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ContaLancamento.Agencia)
+    </div>
+
+
+    <div class="display-label">Usuário/Data/Hora/Inserção:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UsuarioDataHoraInsercao)
+    </div>
+
+    <div class="display-label">Data/Hora/Inserção:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DataHoraInsercao)
+    </div>
+</fieldset>
+
+   <p>
+        <input class = " btn btn-danger" type="submit" value="Excluir "  /> |
+        @Html.ActionLink("Página Incial", "Index","Home")
+    </p>
+}

@@ -1,0 +1,86 @@
+﻿@model ControleCaixaWeb.Models.OperacaoFinanceiraContaCorrente
+
+@{
+    ViewBag.Title = "AlterarDeposito";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Alterar Deposito</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Operação Financeira Conta Corrente</legend>
+
+       
+        <div class="editor-field">
+            @Html.HiddenFor(model => model.Codigo)
+            @Html.ValidationMessageFor(model => model.Codigo)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Data,"Data Lançamento:")
+        </div>
+        <div class="editor-field">
+            @Html.Telerik().DatePickerFor(model => model.Data)
+            @Html.ValidationMessageFor(model => model.Data)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Valor,"Valor:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Valor, new { @class = "input-xlarge" })
+            @Html.ValidationMessageFor(model => model.Valor)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Descricao,"Descrição Lançamento:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Descricao, new { @class = "input-xlarge" })
+            @Html.ValidationMessageFor(model => model.Descricao)
+        </div>
+         <div class="editor-label">
+            @Html.LabelFor(model => model.FormaPagamento,"Forma Pagamento:")
+        </div>
+
+         <div class="editor-field">
+            @Html.DropDownListFor(model => model.FormaPagamento.Codigo,(IEnumerable<SelectListItem>)ViewBag.FormaPagamentoUtilizada,"Selecione a Forma Pagamento")
+            @Html.ValidationMessageFor(model => model.FormaPagamento)
+        </div>
+
+         <div class="editor-label">
+            @Html.LabelFor(model => model.ContaLancamento,"Conta Corrente:")
+        </div>
+
+         <div class="editor-field">
+            @Html.DropDownListFor(model => model.ContaLancamento.Codigo,(IEnumerable<SelectListItem>)ViewBag.ContaCorrente,"Selecione a Conta Corrente")
+            @Html.ValidationMessageFor(model => model.ContaLancamento)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.UsuarioDataHoraInsercao,"Usuário/Data/Hora Lançamento:")
+        </div>
+        <div class="editor-field">
+            @Html.DisplayFor(model => model.UsuarioDataHoraInsercao)
+            @Html.ValidationMessageFor(model => model.UsuarioDataHoraInsercao)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DataHoraInsercao,"Data/Hora:")
+        </div>
+        <div class="editor-field">
+            @Html.DisplayFor(model => model.DataHoraInsercao)
+            @Html.ValidationMessageFor(model => model.DataHoraInsercao)
+        </div>
+
+        <p>
+              <input class="btn btn-warning" type="submit" value="Salvar Alterações" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Página Inicial", "Index")
+</div>

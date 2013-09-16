@@ -1,0 +1,41 @@
+﻿@model ControleCaixaWeb.Models.Favorecido
+
+@{
+    ViewBag.Title = "CadastrarFavorecido";
+    Layout = "~/Areas/Administracao/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Cadastrar Favorecido</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Favorecido</legend>
+      
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.NomeFavorecido,"Nome Do Favorecido:")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.NomeFavorecido, new { @class = "input-xlarge" })<p>Nome Favorecido</p>
+            @Html.ValidationMessageFor(model => model.NomeFavorecido)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Observacao,"Observação:")
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Observacao, new { @class = "input-xlarge" })<p>Opcional</p>
+            @Html.ValidationMessageFor(model => model.Observacao)
+        </div>
+
+        <p>
+             <input class ="btn btn-success" type="submit" value="Cadastar" />
+            <input class="btn btn-warning" type="reset" value="Limpar" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Página Inicial", "Index", "Home")
+</div>

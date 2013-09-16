@@ -1,0 +1,45 @@
+﻿@model ControleCaixaWeb.Models.DespejoOPeracaoCaixa
+@{
+	ViewBag.Title = "Detalhes";
+	Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+<h2>
+	Detalhes da Operação Caixa</h2>
+
+<fieldset>
+	<legend>Despejo OPeração Caixa</legend>
+	<div class="display-label">
+		Data Lançamento:</div>
+	<div class="display-field">
+		@Html.DisplayFor(model => model.DataLancamento)
+	</div>
+	<div class="display-label">
+		Forma Pagamento:</div>
+	<div class="display-field">
+		@Html.DisplayFor(model => model.FormaPagamentoUtilizada.NomeTipoFormaPagamento)
+	</div>
+	<div class="display-label">
+		Estabelecimento:</div>
+	<div class="display-field">
+		@Html.DisplayFor(model => model.EstabelecimentoOperacao.RazaoSocial)
+	</div>
+	<div class="display-label">
+		Valor:</div>
+	<div class="display-field">
+		@Html.DisplayFor(model => model.Valor)
+	</div>
+	<div class="display-label">
+		Descrição</div>
+	<div class="display-field">
+		@Html.DisplayFor(model => model.Descricao)
+	</div>
+	<div class="display-label">
+		Observação:</div>
+	<div class="display-field">
+		@Html.DisplayFor(model => model.Observacao)
+	</div>
+</fieldset>
+<p>
+	@Html.ActionLink("Alterar", "AlterarDespejoOperacaoCaixa", new { id = Model.Codigo }) |
+	@Html.ActionLink("Página Inicial", "Index", "Home")
+</p>

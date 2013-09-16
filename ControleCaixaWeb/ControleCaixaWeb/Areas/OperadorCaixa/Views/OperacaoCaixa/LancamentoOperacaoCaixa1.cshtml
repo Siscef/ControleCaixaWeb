@@ -1,0 +1,57 @@
+﻿@model OperacaoCaixa
+
+@{
+    ViewBag.Title = "LancamentoOperacaoCaixa";
+    Layout = "~/Areas/OperadorCaixa/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lançamento Das Vendas</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Operacao Caixa</legend>       
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DataLancamento,"Data Lançamento:")
+        </div>
+        <div class="editor-field">
+            @Html.Telerik( ).DatePickerFor(model => model.DataLancamento).Name("dataLancamento")
+            @Html.ValidationMessageFor(model => model.DataLancamento)
+        </div>
+
+
+         <div class="editor-label">
+            @Html.LabelFor(model => model.FormaPagamentoUtilizada,"Forma Pagamento:")
+        </div>
+          <div class="editor-field">
+            @Html.DropDownListFor(model => model.FormaPagamentoUtilizada.Codigo,(IEnumerable<SelectListItem>)ViewBag.FormaPagamentoUtilizada, "Selecione Plano Pagamento")<p>Escolha Um Plano de Pagamento</p>
+            @Html.ValidationMessageFor(model => model.FormaPagamentoUtilizada)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Valor,"Valor:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Valor)<p>Informe O Valor</p>
+            @Html.ValidationMessageFor(model => model.Valor)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Observacao,"Observação:")
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Observacao)<p>Digite Uma Breve Descrição</p>
+            @Html.ValidationMessageFor(model => model.Observacao)
+        </div>
+
+        <p>
+            <input class ="btn btn-success" type="submit" value="Cadastar" />
+            <input class="btn btn-warning" type="reset" value="Limpar" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Página Inicial", "Index","Home")
+</div>

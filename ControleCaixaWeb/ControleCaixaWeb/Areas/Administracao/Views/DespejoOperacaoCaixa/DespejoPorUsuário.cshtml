@@ -1,0 +1,73 @@
+﻿@model IEnumerable<ControleCaixaWeb.Models.DespejoOPeracaoCaixa>
+
+@{
+    ViewBag.Title = "DespejoPorUsuário";
+    Layout = "~/Areas/Administracao/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Despejo Por Usuário</h2>
+<h3>
+	Soma dos Valores: @Model.Sum(model => model.Valor)
+</h3>
+<p>
+	@Html.ActionLink("Adicionar Novo", "AdicionarDespejoOperacaoCaixa")
+</p>
+<table class="table table-bordered">
+	<tr>
+		<th>
+			Data Lançamento:
+		</th>
+		<th>
+			Estabelecimento:
+		</th>
+		<th>
+			Usuário:
+		</th>
+		<th>
+			Forma Pagamento:
+		</th>
+		<th>
+			Valor:
+		</th>
+		<th>
+			Descrição:
+		</th>
+		<th>
+			Observação:
+		</th>
+		<th>
+			Operações:
+		</th>
+	</tr>
+	@foreach (var item in Model) {
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.DataLancamento)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.EstabelecimentoOperacao.RazaoSocial)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.UsuarioQueLancou.Nome)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.FormaPagamentoUtilizada.NomeTipoFormaPagamento)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Valor)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Descricao)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Observacao)
+			</td>
+			<td>
+				@Html.ActionLink("Alterar", "AlterarDespejoOperacaoCaixa", new {  id=item.Codigo})|				|
+				@Html.ActionLink("Detalhes", "Details", new {  id=item.Codigo }) |
+				@Html.ActionLink("Excluir", "ExcluirDespejoOperacaoCaixa", new { id=item.Codigo })|
+				
+			</td>
+		</tr>
+}
+</table>

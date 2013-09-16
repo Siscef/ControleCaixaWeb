@@ -1,0 +1,47 @@
+﻿@model ControleCaixaWeb.Models.OperacaoFinanceiraContaCorrente
+
+@{
+    ViewBag.Title = "Detalhes";
+    Layout = "~/Areas/Administracao/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detalhes da Operação Financeira</h2>
+
+<fieldset>
+    <legend>Operação Financeira Conta Corrente</legend>
+
+    <div class="display-label">Codigo:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Codigo)
+    </div>
+
+    <div class="display-label">Data:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Data)
+    </div>
+
+    <div class="display-label">Valor:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Valor)
+    </div>
+
+    <div class="display-label">Descrição:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Descricao)
+    </div>
+
+       <div class="display-label">Forma Pagamento:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.FormaPagamento.NomeTipoFormaPagamento)
+    </div>
+
+     <div class="display-label">Conta Corrente:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ContaLancamento.Numero)
+    </div>
+
+</fieldset>
+<p>
+    @Html.ActionLink("Alterar", "AlterarDeposito", new { id=Model.Codigo }) |
+    @Html.ActionLink("Página Inicial", "Index","Home")
+</p>

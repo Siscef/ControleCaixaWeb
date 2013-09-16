@@ -1,0 +1,29 @@
+﻿@model IEnumerable<OperacaoCaixa>
+@{
+	ViewBag.Title = "Lancamentos";
+	Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+<h2>
+	Lançamentos</h2>
+@(Html.Telerik( ).Grid<OperacaoCaixa>( ).Name("Grid").DataBinding(binfing => binfing.Ajax( ).Select("_Lancamentos", "OperacaoCaixa"))
+.Columns(
+ colunas =>
+ {
+
+	 colunas.Bound(c => c.DataLancamento).Title("Data:").Width("16,66%");	 
+	 colunas.Bound(c => c.FormaPagamentoUtilizada).Title("Forma:").Width("16,66%");
+	 colunas.Bound(c => c.Valor).Title("Valor").Width("16,66%");
+	 colunas.Bound(c => c.Descricao).Title("Descrição:").Width("16,66%");
+	 colunas.Bound(c => c.UsuarioQueLancou).Title("Usuário").Width("16,66%");
+
+ }
+ )
+
+.Pageable(paginas => paginas.PageSize(40))
+.Scrollable( )
+.Sortable( )
+.Selectable( )
+.Groupable( )
+.Filterable( )
+.Resizable(paginas => paginas.Columns(true))
+)

@@ -1,0 +1,68 @@
+﻿@model IEnumerable<ControleCaixaWeb.Models.FechamentoCaixa>
+@{
+	ViewBag.Title = "VisualizacaoFechamentoCaixa";
+	Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+<p>
+	@Html.ActionLink("Fazer Novo Lançamento", "LancarFechamentoCaixa", "FecharCaixa")
+</p>
+<h3>Fechamento de Caixa Estabelecimento: @ViewBag.Loja</h3>
+<br />
+<h4>
+	Soma Caixa de Abertura: R$ @Model.Sum(x => x.CaixaAbertura)</h4>
+<br />
+<h4>
+	Soma Fechamento de Caixa: R$ @Model.Sum(x => x.CaixaFechamento)</h4>
+<br />
+<h4>
+	Soma Faturamento: R$ @Model.Sum(x => x.Faturamento)</h4>
+<br />
+<h5>
+	Lista dos lançamentos entre: @ViewBag.DataInicio e @ViewBag.DataFim
+</h5>
+
+<table class="table table-bordered">
+	<tr>
+		<th>
+			Data Lançamento:
+		</th>
+		<th>
+			Usuário:
+		</th>
+		<th>
+			Caixa Abertura:
+		</th>
+		<th>
+			Caixa Fechamento:
+		</th>
+		<th>
+			Faturamento:
+		</th>
+	</tr>
+	@foreach (var item in Model)
+ {
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.DataLancamento)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.FaturamentoUsuario.Nome)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.CaixaAbertura)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.CaixaFechamento)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Faturamento)
+			</td>
+			<td>
+				@Html.ActionLink("Alterar", "AlterarFechamentoCaixa", new { id = item.Codigo }) |
+				@Html.ActionLink("Detalhes", "Detalhes", new { id = item.Codigo }) |
+				@Html.ActionLink("Excluir", "ExcluirFechamentoCaixa", new { id = item.Codigo })|
+				@Html.ActionLink("Ver Este Usuário", "VerNestaData", new { id = item.DataLancamento.Date.ToString("yyyy-MM-dd"), id2 = item.FaturamentoUsuario.Codigo })
+			</td>
+		</tr>
+ }
+</table>

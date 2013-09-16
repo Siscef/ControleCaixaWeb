@@ -1,0 +1,47 @@
+﻿@model ControleCaixaWeb.Models.Favorecido
+
+@{
+    ViewBag.Title = "AlterarFavorecido";
+    Layout = "~/Areas/Administracao/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Alterar Favorecido</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Favorecido:</legend>
+
+        <div class="editor-label">
+            @Html.HiddenFor(model => model.Codigo)
+        </div>
+        <div class="editor-field">
+            @Html.HiddenFor(model => model.Codigo)
+            @Html.ValidationMessageFor(model => model.Codigo)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.NomeFavorecido,"Nome Favorecido:")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.NomeFavorecido, new { @class = "input-xlarge" })
+            @Html.ValidationMessageFor(model => model.NomeFavorecido)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Observacao,"Observação:")
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Observacao, new { @class = "input-xlarge" })
+            @Html.ValidationMessageFor(model => model.Observacao)
+        </div>
+
+      <p>
+              <input class="btn btn-warning" type="submit" value="Salvar Alterações" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Página Inicial", "Index","Home")
+</div>

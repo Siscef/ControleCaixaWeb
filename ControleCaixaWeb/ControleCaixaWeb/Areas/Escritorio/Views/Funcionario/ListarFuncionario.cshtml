@@ -1,0 +1,53 @@
+﻿@model IEnumerable<ControleCaixaWeb.Models.CadastrarUsuario>
+
+@{
+    ViewBag.Title = "Lista Funcionarios Cadastrados";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+ }
+<h2>Lista Dos Funcionários Cadastrados</h2>
+
+<p>
+    @Html.ActionLink("Adicionar Novo", "CadastrarFuncionario")
+</p>
+<table class="table table-bordered">
+    <tr>
+       
+        <th>
+            Nome:
+        </th>
+        <th>
+            Email:
+        </th>
+           <th>
+        Telefone:
+        </th>
+          <th>
+            Operações:
+        </th>
+      
+        
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+       
+        <td>
+            @Html.DisplayFor(modelItem => item.Nome)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+          <td>
+        @Html.DisplayFor(modelItem => item.Telefone)
+        </td>
+      
+      
+        <td>
+            @Html.ActionLink("Alterar", "AlterarFuncionario", new {  id=item.Codigo }) |
+            @Html.ActionLink("Ver Detalhes", "Detalhes", new {  id=item.Codigo }) |
+            @Html.ActionLink("Excluir", "ExcluirFuncionario", new {  id=item.Codigo })
+        </td>
+    </tr>
+}
+
+</table>

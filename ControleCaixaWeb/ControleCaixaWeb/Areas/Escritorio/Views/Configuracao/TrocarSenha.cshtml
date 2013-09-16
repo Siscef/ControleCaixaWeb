@@ -1,0 +1,55 @@
+﻿@model TrocarSenha
+
+@{
+    ViewBag.Title = "Trocar Senha";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Trocar A Senha</h2>
+<p>
+    Utilize o formulário abaixo para alterar sua senha. 
+</p>
+<p>
+    Novas senhas são obrigados a ter um mínimo de @Membership.MinRequiredPasswordLength caracteres de comprimento.
+</p>
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true, "Alteração de senha foi vencida. Por favor, corrija os erros e tente novamente.")
+    <div>
+        <fieldset>
+            <legend>Informações da  Conta</legend>
+
+            <div class="editor-label">
+                @Html.LabelFor(m => m.SenhaAtual,"Senha Atual:")
+            </div>
+            <div class="editor-field">
+                @Html.PasswordFor(m => m.SenhaAtual, new { @class = "input-xlarge" })<p>Sua senha atual</p>
+                @Html.ValidationMessageFor(m => m.SenhaAtual)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(m => m.NovaSenha,"Nova Senha:")
+            </div>
+            <div class="editor-field">
+                @Html.PasswordFor(m => m.NovaSenha, new { @class = "input-xlarge" })
+                @Html.ValidationMessageFor(m => m.NovaSenha)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(m => m.ConfirmaSenha,"Confirmar Senha:")
+            </div>
+            <div class="editor-field">
+                @Html.PasswordFor(m => m.ConfirmaSenha, new { @class = "input-xlarge" })
+                @Html.ValidationMessageFor(m => m.ConfirmaSenha)
+            </div>
+
+          <p>
+                 <input class ="btn btn-success" type="submit" value="Trocar Senha" />
+            <input class="btn btn-warning" type="reset" value="Limpar" />
+            </p>
+        </fieldset>
+    </div>
+}

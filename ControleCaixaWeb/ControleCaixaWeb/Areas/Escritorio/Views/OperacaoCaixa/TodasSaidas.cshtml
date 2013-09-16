@@ -1,0 +1,82 @@
+﻿@model IEnumerable<ControleCaixaWeb.Models.OperacaoCaixa>
+
+@{
+    ViewBag.Title = "TodasSaidas";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<p>
+	@Html.ActionLink("Nova Entrada", "CadastrarOperacaoCaixa", "OperacaoCaixa")<br />
+	@Html.ActionLink("Nova Saída", "SaidaOperacaoCaixa", "OperacaoCaixa")<br />
+</p>
+
+<h3>Saídas do estabelecimento: @ViewBag.Loja </h3><br/>
+<h3>Soma dos Recolhimentos: R$ @ViewBag.SomaSaida </h3>
+<h5>
+	Lista das saídas entre: @ViewBag.DataInicio e @ViewBag.DataFim
+</h5>
+<br />
+<h2>
+	Saldo: R$ @ViewBag.Saldo
+</h2>
+<table class="table table-bordered">
+	<tr>
+		<th>
+			Codigo:
+		</th>
+		<th>
+			Data Lançamento:
+		</th>
+		<th>
+			Usuário:
+		</th>
+		<th>
+			Descrição:
+		</th>
+		<th>
+			Forma Usada:
+		</th>
+       
+		<th>
+			Valor:
+		</th>
+		<th>
+			Observação:
+		</th>
+        <th>
+            Opções:
+        </th>
+		
+	</tr>
+	@foreach (var item in Model) {
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.Codigo)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.DataLancamento)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.UsuarioQueLancou.Nome)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Descricao)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.FormaPagamentoUtilizada.NomeTipoFormaPagamento)
+			</td>
+          
+			<td>
+				@Html.DisplayFor(modelItem => item.Valor)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Observacao)
+			</td>
+			<td>
+                @Html.ActionLink("Detalhes", "EstabelecimentoReceptor", new {id = item.Codigo })
+				
+			</td>
+            
+		</tr>
+}
+</table>

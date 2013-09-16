@@ -1,0 +1,64 @@
+﻿@model IEnumerable<ControleCaixaWeb.Models.OperacaoCaixa>
+@{
+	ViewBag.Title = "TodosLancamentos";
+	Layout = "~/Areas/OperadorCaixa/Views/Shared/_Layout.cshtml";
+}
+<h2>
+	Lançamentos de: @User.Identity.Name</h2>
+<br />
+<h5>Número de registro (s): @Model.Count()</h5>
+<br />
+<h5>
+	Lista dos lançamentos entre: @ViewBag.DataInicio e @ViewBag.DataFim
+</h5>
+<table class="table table-bordered">
+	<tr>
+		<th>
+			Data Lançamento:
+		</th>
+		<th>
+			Valor:
+		</th>
+		<th>
+			Descrição:
+		</th>
+		<th>
+			Nome Forma:
+		</th>
+		<th>
+			Observação:
+		</th>
+		<th>
+		Operações: 
+		</th>
+	</tr>
+	@foreach (var item in Model)
+ {
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.DataLancamento.Date)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Valor)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Descricao)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.FormaPagamentoUtilizada.NomeTipoFormaPagamento)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Observacao)
+			</td>
+			<td>
+				@Html.ActionLink("Alterar", "AlterarLancamentoOperacaoCaixa", new { id = item.Codigo })
+				|
+				@Html.ActionLink("Ver Data", "LancamentosNaData", new { id = item.DataLancamento.Date.ToString("yyyy-MM-dd") })
+				|
+				@Html.ActionLink("Excluir", "ExcluirLancamentoCaixa", new { id = item.Codigo })
+			</td>
+		</tr>
+ }
+	<h2>
+		Soma dos Lançamentos: @Model.Sum(model => model.Valor)</h2>
+</table>

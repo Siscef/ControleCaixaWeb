@@ -1,0 +1,45 @@
+﻿@model IEnumerable<ControleCaixaWeb.Models.Favorecido>
+
+@{
+    ViewBag.Title = "ListaFavorecidos";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lista dos Favorecidos</h2>
+
+<p>
+    @Html.ActionLink("Adicionar Novo", "CadastrarFavorecido","Favorecido")
+</p>
+<table class="table table-bordered">
+    <tr>
+        
+        <th>
+            Nome Favorecido:
+        </th>
+        <th>
+            Observação:
+        </th>
+         <th>
+            Operações:
+        </th>
+        
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+       
+        <td>
+            @Html.DisplayFor(modelItem => item.NomeFavorecido)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Observacao)
+        </td>
+        <td>
+            @Html.ActionLink("Alterar", "AlterarFavorecido", new { id=item.Codigo }) |
+            @Html.ActionLink("Detalhes", "Detalhes", new { id=item.Codigo }) |
+            @Html.ActionLink("Excluir", "ExcluirFavorecido", new {  id=item.Codigo })
+        </td>
+    </tr>
+}
+
+</table>

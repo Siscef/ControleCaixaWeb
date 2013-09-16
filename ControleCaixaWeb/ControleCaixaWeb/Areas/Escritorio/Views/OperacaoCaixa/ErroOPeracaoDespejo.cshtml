@@ -1,0 +1,15 @@
+﻿
+
+@{
+    ViewBag.Title = "ErroOPeracaoDespejo";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Atenção! @User.Identity.Name, O valor da retirada do caixa fará com que o saldo da forma de pagamento fique  negativo.<br />
+    <h3>Consulte o saldo e faça um despejo manual, se for o caso.</h3>
+   
+</h2>
+
+
+<br />
+@Html.ActionLink("Fazer Despejo","AdicionarDespejoOperacaoCaixa","DespejoOperacaoCaixa")

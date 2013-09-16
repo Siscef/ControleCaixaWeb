@@ -1,0 +1,51 @@
+﻿@model IEnumerable<ControleCaixaWeb.Models.FormaPagamentoEstabelecimento>
+
+@{
+    ViewBag.Title = "ListarFormaPagamento";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lista das Formas de Pagamentos</h2>
+
+<p>
+    @Html.ActionLink("Adicionar Nova", "CadastrarFormaPagamento")
+</p>
+<table class="table table-bordered">
+    <tr>
+       
+        <th>
+            Forma Pagamento:
+        </th>
+        <th>
+            Taxa:
+        </th>
+		<th>
+			Despejo?:
+		</th>
+		<th>
+			Operações:
+		</th>
+        
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.NomeTipoFormaPagamento)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TaxaFormaPagamento)
+        </td>
+		<td>
+			@Html.DisplayFor(modelItem => item.DespejoAutomatico)
+		</td>
+        <td>
+            @Html.ActionLink("Alterar", "AlterarFormaPagamento", new {  id=item.Codigo }) |
+            @Html.ActionLink("Detalhes", "Detalhes", new { id=item.Codigo }) |
+            @Html.ActionLink("Excluir", "ExcluirFormaPagamento", new { id = item.Codigo })
+        </td>
+    </tr>
+}
+
+</table>

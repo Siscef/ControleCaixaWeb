@@ -1,0 +1,51 @@
+﻿@model OperacaoCaixa
+
+@{
+    ViewBag.Title = "Sangria";
+    Layout = "~/Areas/OperadorCaixa/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Sangria</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Sangria</legend>
+            
+       
+             <div class="editor-label">
+            @Html.LabelFor(model => model.FormaPagamentoUtilizada,"Nome Forma Pagamento:")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.FormaPagamentoUtilizada.Codigo, (IEnumerable<SelectListItem>)ViewBag.NomeForma,"Selecione Forma Pagamento")
+            @Html.ValidationMessageFor(model => model.FormaPagamentoUtilizada)
+        </div> 
+
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Valor,"Valor:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Valor)<p>Informe O Valor da Sangria</p>
+
+            @Html.ValidationMessageFor(model => model.Valor)
+        </div>     
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Observacao,"Observação:")
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Observacao)
+            @Html.ValidationMessageFor(model => model.Observacao)
+        </div>
+
+        <p>
+           <input class ="btn btn-success" type="submit" value="Cadastar" />
+            <input class="btn btn-warning" type="reset" value="Limpar" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Página Inicial", "Index","Home")
+</div>

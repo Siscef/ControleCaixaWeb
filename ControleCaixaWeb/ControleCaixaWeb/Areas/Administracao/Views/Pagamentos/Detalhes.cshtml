@@ -1,0 +1,47 @@
+﻿@model ControleCaixaWeb.Models.Pagamento
+
+@{
+    ViewBag.Title = "Detalhes";
+    Layout = "~/Areas/Administracao/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detalhes do Pagamento</h2>
+
+<fieldset>
+    <legend>Pagamento:</legend>  
+
+    <div class="display-label">Data Pagamento:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DataPagamento)
+    </div>
+     <div class="display-label">Quem Pagou:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UsuarioQueLancou.Nome)
+    </div>
+
+      <div class="display-label">Estabelecimento:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.EstabelecimentoQuePagou.RazaoSocial)
+    </div>
+
+    <div class="display-label">Valor:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Valor)
+    </div>
+
+    <div class="display-label">Observação:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Observacao)
+    </div>
+
+    <div class="display-label">Usuário/Data/Computador:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UsuarioQueAlterouEDataEComputador)
+    </div>
+</fieldset>
+<p>
+            @Html.ActionLink("Alterar", "AlterarPagamento", new {  id=Model.Codigo }) |
+            @Html.ActionLink("Ver Detalhes", "Detalhes", new {  id=Model.Codigo }) |
+            @Html.ActionLink("Excluir", "ExcluirPagamento", new { id = Model.Codigo }) <br />
+            @Html.ActionLink("Página Inicial", "Index","Home")
+</p>

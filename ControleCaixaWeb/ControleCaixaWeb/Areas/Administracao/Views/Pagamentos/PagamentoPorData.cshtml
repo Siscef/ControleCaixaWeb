@@ -1,0 +1,60 @@
+﻿@model IEnumerable<ControleCaixaWeb.Models.Pagamento>
+
+@{
+    ViewBag.Title = "PagamentoPorData";
+    Layout = "~/Areas/Administracao/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Pagamento Por Data</h2>
+
+<p>
+    @Html.ActionLink("Fazer Novo Pagamento", "FazerPagamento","Pagamentos")
+</p>
+<table class="table table-bordered">
+    <tr>
+       
+        <th>
+            DataPagamento:
+        </th>
+        <th>
+            Valor:
+        </th>
+        <th>
+            Observacao:
+        </th>
+        <th>
+            Usuário/Data/Computador:
+        </th>
+          <th>
+            Operações:
+        </th>
+        
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.DataPagamento)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Valor)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Observacao)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UsuarioQueAlterouEDataEComputador)
+        </td>
+        <td>
+            @Html.ActionLink("Alterar", "AlterarPagamento", new {  id=item.Codigo }) |
+            @Html.ActionLink("Ver Detalhes", "Detalhes", new { id=item.Codigo }) |
+            @Html.ActionLink("Excluir", "ExcluirPagamento", new {  id=item.Codigo })|
+          
+        </td>
+    </tr>
+}
+
+<h2>Soma Dos Pagamentos: @Model.Sum(model => model.Valor)
+</h2>
+</table>

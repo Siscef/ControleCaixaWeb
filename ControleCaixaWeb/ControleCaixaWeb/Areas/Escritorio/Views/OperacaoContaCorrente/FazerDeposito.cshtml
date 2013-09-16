@@ -1,0 +1,79 @@
+﻿@model ControleCaixaWeb.Models.OperacaoFinanceiraContaCorrente
+
+@{
+    ViewBag.Title = "FazerDeposito";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Fazer Depósito</h2>
+<br />
+ <h4>@ViewBag.DataErradaOntem</h4>
+<br />
+<h4>@ViewBag.DataErradaAmanha </h4>
+<br />
+<h4>@ViewBag.Mensagem</h4>
+<br />
+<h4>@ViewBag.MensagemPermissao</h4>
+
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Depósito em Conta Corrente</legend>
+
+        
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Data,"Data Lançamento:")
+        </div>
+        <div class="editor-field">
+            @Html.Telerik().DatePickerFor(model => model.Data)
+            @Html.ValidationMessageFor(model => model.Data)
+        </div>
+
+         <div class="editor-label">
+            @Html.LabelFor(model => model.FormaPagamento,"Forma Pagamento:")
+        </div>
+
+         <div class="editor-field">
+            @Html.DropDownListFor(model => model.FormaPagamento.Codigo,(IEnumerable<SelectListItem>)ViewBag.FormaPagamentoUtilizada,"Selecione a Forma Pagamento")
+            @Html.ValidationMessageFor(model => model.FormaPagamento)
+        </div>
+
+         <div class="editor-label">
+            @Html.LabelFor(model => model.ContaLancamento,"Conta Corrente:")
+        </div>
+
+         <div class="editor-field">
+            @Html.DropDownListFor(model => model.ContaLancamento.Codigo,(IEnumerable<SelectListItem>)ViewBag.ContaCorrente,"Selecione a Conta Corrente")
+            @Html.ValidationMessageFor(model => model.ContaLancamento)
+        </div>
+
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Valor,"Valor:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Valor, new { @class = "input-xlarge" })
+            @Html.ValidationMessageFor(model => model.Valor)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Descricao,"Descrição:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Descricao, new { @class = "input-xlarge" })
+            @Html.ValidationMessageFor(model => model.Descricao)
+        </div>
+       
+
+
+     <p>
+            <input class ="btn btn-success" type="submit" value="Cadastar" />
+            <input class="btn btn-warning" type="reset" value="Limpar" />
+        </p>
+    </fieldset>
+}
+
+<div>
+   @Html.ActionLink("Página Inicial", "Index", "Home")
+</div>

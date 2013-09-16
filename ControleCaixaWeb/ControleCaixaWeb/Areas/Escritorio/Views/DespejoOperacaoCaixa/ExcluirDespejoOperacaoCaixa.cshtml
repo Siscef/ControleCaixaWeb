@@ -1,0 +1,66 @@
+﻿@model ControleCaixaWeb.Models.DespejoOPeracaoCaixa
+@{
+	ViewBag.Title = "ExcluirDespejoOperacaoCaixa";
+	Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+<h2>
+	Excluir Despejo Operação Caixa</h2>
+<h3>@User.Identity.Name, Você tem certeza que deseja excluir esse registro?</h3>
+<h4>
+	Excluindo esse registro esse valor irá voltar para o seu caixa como saldo positivo</h4>
+@using (Html.BeginForm( ))
+{
+	<fieldset>
+		<legend>Despejo Operação Caixa</legend>
+		<div class="display-field">
+			@Html.HiddenFor(model => model.Codigo)
+			@Html.HiddenFor(model => model.OperacaoCaixaOrigem.Codigo)
+			@Html.HiddenFor(model => model.EstabelecimentoOperacao.Codigo)
+			@Html.HiddenFor(model => model.FormaPagamentoUtilizada.Codigo)
+			@Html.HiddenFor(model => model.UsuarioQueLancou.Codigo)
+			
+		</div>
+		<div class="display-label">
+			Data Lançamento:</div>
+		<div class="display-field">
+			@Html.DisplayFor(model => model.DataLancamento)
+		</div>
+		<div class="display-label">
+			Forma Pagamento:</div>
+		<div class="display-field">
+			@Html.DisplayFor(model => model.FormaPagamentoUtilizada.NomeTipoFormaPagamento)
+		</div>
+		<div class="display-label">
+			Estabelecimento:</div>
+		<div class="display-field">
+			@Html.DisplayFor(model => model.EstabelecimentoOperacao.RazaoSocial)
+		</div>
+		<div class="display-label">
+			Usuário:</div>
+		<div class="display-field">
+			@Html.DisplayFor(model => model.UsuarioQueLancou.Nome)
+		</div> 
+
+		<div class="display-label">
+			Valor:</div>
+		<div class="display-field">
+			@Html.DisplayFor(model => model.Valor)
+		</div>
+		<div class="display-label">
+			Descrição:</div>
+		<div class="display-field">
+			@Html.DisplayFor(model => model.Descricao)
+		</div>
+		<div class="display-label">
+			Observação:</div>
+		<div class="display-field">
+			@Html.DisplayFor(model => model.Observacao)
+		</div>
+	</fieldset>
+
+	<p>
+		<input class=" btn btn-danger" type="submit" value="Excluir " />
+		|
+		@Html.ActionLink("Página Inicial", "Index", "Home")
+	</p>
+}

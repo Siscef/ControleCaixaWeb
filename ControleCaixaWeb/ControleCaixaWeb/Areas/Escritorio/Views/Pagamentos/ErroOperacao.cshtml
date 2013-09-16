@@ -1,0 +1,13 @@
+﻿@{
+    ViewBag.Title = "ErroOperacao";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    ViewBag.Title = "ErroOperacao";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Atenção! @User.Identity.Name, O valor da retirada do caixa é maior que o saldo atual: R$ @ViewBag.Saldo </h2>
+</br>
+@Html.ActionLink("Fazer Pagamento","FazerPagamento")

@@ -1,0 +1,10 @@
+﻿@model ControleCaixaWeb.Models.OperacaoFinanceiraContaCorrente
+
+@{
+    ViewBag.Title = "UsuarioSemPermissao";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Usuário Sem Permissão</h2>
+<br />
+<h4>Atenção!  @User.Identity.Name, Você não tem permissão para executar essa operação. </h4>

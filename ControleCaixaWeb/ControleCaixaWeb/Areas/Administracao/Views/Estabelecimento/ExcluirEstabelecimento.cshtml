@@ -1,0 +1,40 @@
+﻿@model ControleCaixaWeb.Models.Estabelecimento
+
+@{
+    ViewBag.Title = "Excluir Estabelecimento";
+    Layout = "~/Areas/Administracao/Views/Shared/_Layout.cshtml";
+}
+
+<h2>ExcluirEstabelecimento</h2>
+
+<h3>@User.Identity.Name, Você tem certeza que deseja excluir esse registro?</h3>
+@using (Html.BeginForm()) {
+<fieldset>
+    <legend>Excluir Estabelecimento</legend>
+
+    
+    <div class="display-field">
+        @Html.HiddenFor(model => model.Codigo)
+    </div>
+
+    <div class="display-label">Razão Social:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.RazaoSocial)
+    </div>
+
+    <div class="display-label">CNPJ:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CNPJ)
+    </div>
+
+    <div class="display-label">Inscricão Estadual:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.InscricaoEstadual)
+    </div>
+</fieldset>
+
+    <p>
+         <input class = " btn btn-danger" type="submit" value="Excluir "  /> |
+       @Html.ActionLink("Página Inicial", "Index", "Home")
+    </p>
+}

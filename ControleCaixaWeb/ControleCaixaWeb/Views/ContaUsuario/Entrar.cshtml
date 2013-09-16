@@ -1,0 +1,54 @@
+﻿@model Usuario
+@{
+    ViewBag.Title = "Entrar Sistema";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+    }
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+<h4>@Html.ValidationSummary(true, "Entrar Não teve sucesso. Por favor, corrija os erros e tente novamente.")</h4>
+
+@using (Html.BeginForm("Entrar", "ContaUsuario", FormMethod.Post))
+{
+    <div style="padding: 70px 0 0 250px;">
+        <div id="login-box">
+
+            <h2>Login</h2>
+            <div class="login-box-name" style="margin-top: 20px;">
+                @Html.LabelFor(m => m.Nome, "Informe Seu Nome:")
+            </div>
+            <div class="login-box-field" style="margin-top: 20px;">
+                @Html.TextBoxFor(m => m.Nome, new { name = "q", @class = "form-login", title = "Seu Nome", value = "", size = "30", maxlength = "2048" })
+                @Html.ValidationMessageFor(m => m.Nome,"Verifique o nome")
+            </div>
+
+            <div class="login-box-name">
+                @Html.LabelFor(m => m.Senha, "Informe Sua Senha:")
+            </div>
+            <div class="login-box-field">
+                @Html.PasswordFor(m => m.Senha, new { name = "q", @class = "form-login", title = "Sua Senha", value = "", size = "30", maxlength = "2048" })
+                @Html.ValidationMessageFor(m => m.Senha, "Verifique a senha")
+            </div>
+
+            <div class="editor-label">
+                <p>
+                    @Html.LabelFor(m => m.Lembrar, "Lembre-se de Mim:")
+                    @Html.CheckBoxFor(m => m.Lembrar)
+                </p>
+            </div>
+
+            <p>
+                <input class="btn btn-primary" type="submit" value="Entrar" />
+                <input class="btn btn-warning" type="reset" value="Limpar" />
+            </p>
+
+
+
+
+        </div>
+
+    </div>   
+
+
+}

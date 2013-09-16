@@ -1,0 +1,51 @@
+﻿@model IEnumerable<ControleCaixaWeb.Models.Estabelecimento>
+
+@{
+    ViewBag.Title = "ListarEstabelecimento";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lista dos Estabelecimentos</h2>
+
+<p>
+    @Html.ActionLink("Adicionar Novo", "CadastrarEstabelecimento")
+</p>
+<table class="table table-bordered">
+    <tr>
+        
+        <th>
+            Razão Social:
+        </th>
+        <th>
+            CNPJ:
+        </th>
+        <th>
+            Inscrição Estadual:
+        </th>
+         <th>
+            Operações:
+        </th>
+        
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+       
+        <td>
+            @Html.DisplayFor(modelItem => item.RazaoSocial)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CNPJ)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.InscricaoEstadual)
+        </td>
+        <td>
+            @Html.ActionLink("Alterar", "AlterarEstabelecimento", new {  id=item.Codigo }) |
+            @Html.ActionLink("Detalhes", "Detalhes", new {  id=item.Codigo }) |
+            @Html.ActionLink("Excluir", "ExcluirEstabelecimento", new {  id=item.Codigo })
+        </td>
+    </tr>
+}
+
+</table>

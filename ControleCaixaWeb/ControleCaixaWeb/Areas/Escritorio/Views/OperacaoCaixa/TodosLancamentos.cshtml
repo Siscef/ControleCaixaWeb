@@ -1,0 +1,98 @@
+﻿@model IEnumerable<ControleCaixaWeb.Models.OperacaoCaixa>
+@{
+	ViewBag.Title = "Lancamentos";
+	Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<p>
+	@Html.ActionLink("Nova Entrada", "CadastrarOperacaoCaixa", "OperacaoCaixa")<br />
+	@Html.ActionLink("Nova Saída", "SaidaOperacaoCaixa", "OperacaoCaixa")<br />
+</p>
+<h5>
+	Lista dos lançamentos entre: @ViewBag.DataInicio e @ViewBag.DataFim
+</h5>
+<br/>
+  <h4> Valor das Entradas: R$ @ViewBag.Entrada </h4>
+  <br/>
+<h4>
+	Valor das Saídas: R$ @ViewBag.Saida
+</h4>
+<br/>
+
+<h2> Saldo Estabelecimento: @ViewBag.Loja  R$ @ViewBag.Saldo </h2>
+<br />
+<h3>Soma do Intervalo(Entradas - Saidas): @Model.Sum(model => model.Valor) </h3>
+	
+<table class="table table-bordered">
+	<tr>
+		<th>
+			Codigo:
+		</th>
+		<th>
+			Data Lançamento:
+		</th>
+		<th>
+			Usuário:
+		</th>
+		<th>
+			Descrição:
+		</th>
+		<th>
+			Forma Usada:
+		</th>
+		<th>
+			Valor Entrada:
+		</th>
+		<th>
+			Valor Saída:
+		</th>
+		<th>
+			Observação:
+		</th>
+		<th>
+			Operações:
+		</th>
+	</tr>
+	@foreach (var item in Model)
+ {
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.Codigo)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.DataLancamento)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.UsuarioQueLancou.Nome)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Descricao)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.FormaPagamentoUtilizada.NomeTipoFormaPagamento)
+			</td>
+			<td>
+				@if (item.Valor >= 0)
+				{
+					@Html.DisplayFor(modelItem => item.Valor)
+				}
+			</td>
+			<td>
+				@if (item.Valor <= 0)
+				{
+	   
+					@Html.DisplayFor(modelItem => item.Valor)
+				}
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Observacao)
+			</td>
+			<td>
+				@Html.ActionLink("Ver Data", "OperacoesNestaData", new { id = item.DataLancamento.Date.ToString("yyyy-MM-dd") })|
+				@Html.ActionLink("Por FormaPagamento", "VerPorFormaPagamento", new { forma = item.FormaPagamentoUtilizada.Codigo, data = item.DataLancamento.Date.ToString("yyyy-MM-dd") })|
+				@Html.ActionLink("Por Usuario", "VerUsuario", new { id = item.UsuarioQueLancou.Codigo, data = item.DataLancamento.Date.ToString("yyyy-MM-dd") })|
+                @Html.ActionLink("Conferido?", "OPeracaoConferida", new { id = item.Codigo })
+			</td>
+		</tr>
+ }
+</table>

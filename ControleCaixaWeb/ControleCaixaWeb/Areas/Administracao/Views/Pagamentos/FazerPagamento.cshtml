@@ -1,0 +1,73 @@
+﻿@model ControleCaixaWeb.Models.Pagamento
+
+@{
+    ViewBag.Title = "FazerPagamento";
+    Layout = "~/Areas/Administracao/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Fazer Pagamentos:</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Fazer Pagamento:</legend>
+
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DataPagamento,"Data Pagamento:")
+        </div>
+        <div class="editor-field">
+            @Html.Telerik().DatePickerFor(model => model.DataPagamento)
+            @Html.ValidationMessageFor(model => model.DataPagamento)
+        </div>
+
+         <div class="editor-label">
+            @Html.LabelFor(model => model.EstabelecimentoQuePagou,"Estabelecimento:")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.EstabelecimentoQuePagou.Codigo,(IEnumerable<SelectListItem>)ViewBag.Estabelecimento,"Selecione Estabelecimento")
+            @Html.ValidationMessageFor(model => model.EstabelecimentoQuePagou)
+        </div>
+
+
+         <div class="editor-label">
+            @Html.LabelFor(model => model.FavorecidoPagamento,"Nome Recebedor:")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.FavorecidoPagamento.Codigo,(IEnumerable<SelectListItem>)ViewBag.Favorecido,"Selecione Favorecido")
+            @Html.ValidationMessageFor(model => model.FavorecidoPagamento)
+        </div>
+         <div class="editor-label">
+            @Html.LabelFor(model => model.FormaPagamento,"Forma Pagamento:")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.FormaPagamento.Codigo,(IEnumerable<SelectListItem>)ViewBag.Forma,"Selecione Forma Pagamento")
+            @Html.ValidationMessageFor(model => model.FormaPagamento)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Valor,"Valor:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Valor, new { @class = "input-xlarge" })
+            @Html.ValidationMessageFor(model => model.Valor)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Observacao,"Observação:")
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Observacao, new { @class = "input-xlarge" })
+            @Html.ValidationMessageFor(model => model.Observacao)
+        </div>     
+
+        <p>
+             <input class ="btn btn-success" type="submit" value="Cadastar" />
+            <input class="btn btn-warning" type="reset" value="Limpar" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Página Inicial", "Index", "Home")
+</div>

@@ -1,0 +1,80 @@
+﻿@model OperacaoCaixa
+
+@{
+    ViewBag.Title = "CadastrarOperacaoCaixa";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lançar Entrada No Caixa</h2>
+<br />
+@ViewBag.Mensagem
+<br />
+<h4>@ViewBag.DataErradaAmanha</h4>
+<br />
+<h4>@ViewBag.DataErradaOntem</h4>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Lançamento Caixa</legend>
+
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DataLancamento,"Data Lançamento:")
+        </div>
+        <div class="editor-field">
+            @Html.Telerik().DatePickerFor(model => model.DataLancamento).Name("DataLancamento")<p>Informe a Data Lançamento</p>
+            @Html.ValidationMessageFor(model => model.DataLancamento)
+        </div>
+
+           <div class="editor-label">
+            @Html.LabelFor(model => model.FormaPagamentoUtilizada,"Plano Pagamento:")
+        </div>
+          <div class="editor-field">
+            @Html.DropDownListFor(model => model.FormaPagamentoUtilizada.Codigo,(IEnumerable<SelectListItem>)ViewBag.FormaPagamentoUtilizada, "Selecione Plano Pagamento")@Html.ActionLink("Adicionar Plano Pagamento","CadastrarFormaPagamento","FormaPagamento")<p>Escolha uma forma de pagamento</p>
+            @Html.ValidationMessageFor(model => model.FormaPagamentoUtilizada)
+        </div>
+
+          <div class="editor-label">
+            @Html.LabelFor(model => model.UsuarioQueLancou,"Usuario Origem:")
+        </div>
+          <div class="editor-field">
+            @Html.DropDownListFor(model => model.UsuarioQueLancou.Codigo, (IEnumerable<SelectListItem>)ViewBag.UsuarioQueLancou, "Selecione Usuario")@Html.ActionLink("Adicionar Usuario","CadastrarFuncionario","Funcionario")<p>Escolha Funcionário Emitiu o Comprovante</p>
+            @Html.ValidationMessageFor(model => model.UsuarioQueLancou)
+        </div>
+
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Valor,"Valor:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Valor, new { @class = "input-xlarge" })<p>Informe o Valor da Entrada</p>
+            @Html.ValidationMessageFor(model => model.Valor)
+        </div>       
+
+          <div class="editor-label">
+            @Html.LabelFor(model => model.Descricao,"Descrição:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Descricao, new { @class = "input-xlarge" })<p>Digite Uma Breve Descrição</p>
+            @Html.ValidationMessageFor(model => model.Descricao)
+        </div>       
+       
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Observacao,"Observação:")
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Observacao, new { @class = "input-xlarge" })<p>Digite Uma Observação</p>
+            @Html.ValidationMessageFor(model => model.Observacao)
+        </div>
+
+        <p>
+             <input class ="btn btn-success" type="submit" value="Cadastar" />
+            <input class="btn btn-warning" type="reset" value="Limpar" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Página Inicial","Index","Home")
+</div>

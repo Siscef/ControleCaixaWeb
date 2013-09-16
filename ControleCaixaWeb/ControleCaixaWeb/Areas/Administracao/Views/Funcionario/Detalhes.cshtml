@@ -1,0 +1,31 @@
+﻿@model ControleCaixaWeb.Models.CadastrarUsuario
+
+@{
+    ViewBag.Title = "Detalhes";
+    Layout = "~/Areas/Administracao/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detalhes do Usuário</h2>
+
+<fieldset>
+    <legend>Detalhes do Usuário</legend>
+
+   
+
+    <div class="display-label">Nome:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Nome)
+    </div>
+
+    <div class="display-label">Email:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Email)
+        </div>
+
+   
+       
+</fieldset>
+<p>
+    @Html.ActionLink("Alterar", "AlterarFuncionario", new {  id=Model.Codigo }) |
+    @Html.ActionLink("Página Inicial", "Index","Home")
+</p>

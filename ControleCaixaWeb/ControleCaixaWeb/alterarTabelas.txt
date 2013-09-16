@@ -1,0 +1,26 @@
+ALTER TABLE controlecaixaweb_despejooperacaocaixa DROP COLUMN datahorainsercao;
+
+ALTER TABLE controlecaixaweb_despejooperacaocaixa ADD COLUMN datahorainsercao timestamp without time zone;
+
+--
+ALTER TABLE controlecaixaweb_operacaocaixa DROP COLUMN datahorainsercao;
+
+ALTER TABLE controlecaixaweb_operacaocaixa ADD COLUMN datahorainsercao timestamp without time zone;
+
+---
+ALTER TABLE controlecaixaweb_fechamentocaixa DROP COLUMN datahorainsercao;
+
+ALTER TABLE controlecaixaweb_fechamentocaixa ADD COLUMN datahorainsercao timestamp without time zone;
+
+--
+ALTER TABLE controlecaixaweb_operacaofinanceira DROP COLUMN datahorainsercao;
+
+ALTER TABLE controlecaixaweb_operacaofinanceira ADD COLUMN datahorainsercao timestamp without time zone;
+
+--
+ALTER TABLE controlecaixaweb_pagamento DROP COLUMN datahorainsercao;
+
+ALTER TABLE controlecaixaweb_pagamento ADD COLUMN datahorainsercao timestamp without time zone;
+
+
+

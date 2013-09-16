@@ -1,0 +1,61 @@
+﻿@model IEnumerable<ControleCaixaWeb.Models.OperacaoCaixa>
+
+@{
+    ViewBag.Title = "LancamentoIndividual";
+    Layout = "~/Areas/OperadorCaixa/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lancamento Por Data</h2>
+
+<p>
+    @Html.ActionLink("Página Incial","Index","Home")
+</p>
+<table class="table table-bordered">
+    <tr>       
+        <th>
+            Data Lançamento:
+        </th>
+        <th>
+            Valor:
+        </th>
+        <th>
+            Descrição:
+        </th>
+         <th>
+            Forma Pagamento:
+        </th>
+        <th>
+            Observação:
+        </th>
+         <th>
+            Operações:
+        </th>
+        
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+       
+        <td>
+            @Html.DisplayFor(modelItem => item.DataLancamento)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Valor)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Descricao)
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.FormaPagamentoUtilizada.NomeTipoFormaPagamento)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Observacao)
+        </td>
+        <td>
+            @Html.ActionLink("Alterar", "ExcluirLancamentoCaixa", new { id = item.Codigo }) |            
+            @Html.ActionLink("Excluir", "AlterarLancamentoOperacaoCaixa", new { id = item.Codigo })
+        </td>
+    </tr>
+}
+
+</table>

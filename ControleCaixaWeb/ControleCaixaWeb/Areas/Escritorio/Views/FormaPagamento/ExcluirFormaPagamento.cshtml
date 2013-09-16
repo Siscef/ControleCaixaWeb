@@ -1,0 +1,30 @@
+﻿@model FormaPagamentoEstabelecimento
+
+@{
+    ViewBag.Title = "ExcluirFormaPagamento";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Excluir Forma Pagamento</h2>
+
+<h3>Você tem certeza que deseja excluir esse registro?</h3>
+@using (Html.BeginForm()) {
+<fieldset>
+    <legend>Forma Pagamento Estabelecimento</legend>
+
+    
+    <div class="display-field">
+        @Html.HiddenFor(model => model.Codigo)
+    </div>
+
+    <div class="display-label">Taxa:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TaxaFormaPagamento)
+    </div>
+</fieldset>
+
+    <p>
+         <input class = " btn btn-danger" type="submit" value="Excluir "  /> |
+        @Html.ActionLink("Página Inicial", "Index","Home")
+    </p>
+}

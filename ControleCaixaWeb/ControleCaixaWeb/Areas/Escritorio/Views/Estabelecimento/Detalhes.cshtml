@@ -1,0 +1,30 @@
+﻿@model Estabelecimento
+
+@{
+    ViewBag.Title = "Cadastrar Estabelecimento";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+<fieldset>
+    <legend>Detalhes Estabelecimento</legend>
+
+    
+    <div class="display-label">Razão Social:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.RazaoSocial)
+    </div>
+
+    <div class="display-label">CNPJ:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CNPJ)
+    </div>
+
+    <div class="display-label">Inscrição Estadual</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.InscricaoEstadual)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Alterar", "AlterarEstabelecimento", new { id=Model.Codigo }) |
+    @Html.ActionLink("Ver Conta Corrente","ListadeContas",new {id =Model.Codigo})
+    @Html.ActionLink("Página Inicial", "Index", "Home")
+</p>

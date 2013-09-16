@@ -1,0 +1,58 @@
+﻿@model ControleCaixaWeb.Models.ValidarData
+@{
+    ViewBag.Title = "CartoesPorData";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Relatório de Forma Pagamento Por Data</h3> 
+<br />
+@ViewBag.DataErrada
+
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Visualizar por datas</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DataInicial)
+        </div>
+        <div class="editor-field">
+            @Html.Telerik().DatePickerFor(model => model.DataInicial)
+            @Html.ValidationMessageFor(model => model.DataInicial)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DataFinal)
+        </div>
+        <div class="editor-field">
+            @Html.Telerik().DatePickerFor(model => model.DataFinal)
+            @Html.ValidationMessageFor(model => model.DataFinal)
+        </div>
+
+        <div class="editor-label">
+            Estabelecimento:
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("Loja", (IEnumerable<SelectListItem>)ViewBag.Estabelecimento, "Selecione Estabelecimento")
+
+        </div>
+
+        <div class="editor-label">
+            Forma Pagamento:
+        </div>
+        <div class="editor-field">          
+                @Html.DropDownList("FormaPagto", new SelectList("Value", "Text"), "Selecione Forma Pagamento")            
+            
+        </div>
+
+        <br />
+        <p>
+            <input class="btn btn-success" type="submit" value="Visualizar" />
+            <input class="btn btn-warning" type="reset" value="Limpar" />
+        </p>
+    </fieldset>
+}
+
+

@@ -1,0 +1,41 @@
+﻿@model ControleCaixaWeb.Models.FechamentoCaixa
+
+@{
+    ViewBag.Title = "Detalhes";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detalhes  do Fechamento Caixa</h2>
+
+<fieldset>
+    <legend>Fechamento Caixa</legend>
+
+     
+    <div class="display-field">
+        @Html.HiddenFor(model => model.Codigo)
+    </div>
+
+     <div class="display-label">Data Lançamento:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DataLancamento)
+    </div>
+
+    <div class="display-label">Caixa Abertura:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CaixaAbertura)
+    </div>
+
+    <div class="display-label">Caixa Fechamento:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CaixaFechamento)
+    </div>
+
+    <div class="display-label">Faturamento:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Faturamento)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Alterar", "AlterarFechamentoCaixa", new { id=Model.Codigo }) |
+    @Html.ActionLink("Página Inicial", "Index","Home")
+</p>

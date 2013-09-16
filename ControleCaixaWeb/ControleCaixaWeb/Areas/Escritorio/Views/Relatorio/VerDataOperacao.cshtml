@@ -1,0 +1,64 @@
+﻿@model IEnumerable<ControleCaixaWeb.Models.OperacaoCaixa>
+
+@{
+    ViewBag.Title = "LancamentosNaData";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lançamentos Na Data</h2>
+
+<p>
+  
+    @Html.ActionLink("Nova Entrada", "CadastrarOperacaoCaixa", "OperacaoCaixa")<br />
+     @Html.ActionLink("Nova Saída", "SaidaOperacaoCaixa", "OperacaoCaixa")<br />
+
+    @*<p>Soma dos Valores R$:@ViewBag.ValorSangria*@
+
+</p>
+<table class="table table-bordered">
+    <tr>
+        
+        <th>
+            Data Lançamento:
+        </th>
+        <th>
+            Valor:
+        </th>
+        <th>
+            Descrição:
+        </th>
+         <th>
+            Usuário:
+        </th>
+        <th>
+            Observação:
+        </th>
+        
+      
+    </tr>
+
+@foreach (var item in Model)
+{
+    <tr>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.DataLancamento)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Valor)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Descricao)
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.UsuarioQueLancou.Nome)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Observacao)
+        </td>
+      
+    </tr>
+}
+<h2>Soma dos Valores: @Model.Sum(mode => mode.Valor)</h2>
+
+</table>

@@ -1,0 +1,9 @@
+﻿@model IList<Pagamento>
+@{
+    ViewBag.Title = "ListaPagamento";
+    Layout = "~/Areas/Administracao/Views/Shared/_Layout.cshtml";
+}
+
+<h2>PagamentosFeitosParaUmFornecedor</h2>
+
+@(Html.Telerik( ).Grid<Pagamento>( ).Name("grid").DataBinding(binding => binding.Ajax( ).Select("PagamentosFeitosParaUmFornecedor", "Relatorio")))

@@ -1,0 +1,129 @@
+﻿@model CadastrarUsuario
+
+@{
+    ViewBag.Title = "Cadastrar Funcionario";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Cadastrar Funcionario</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Cadastrar Funcionário</legend>
+       
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Nome,"Nome:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Nome, new { @class = "input-xlarge" })<p>Nome Funcionário</p>
+            @Html.ValidationMessageFor(model => model.Nome)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Email,"Email:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Email, new { @class = "input-xlarge" })<p>Email do Funcionário</p>
+            @Html.ValidationMessageFor(model => model.Email)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Senha,"Senha:")
+        </div>
+        <div class="editor-field">
+            @Html.PasswordFor(model => model.Senha, new { @class = "input-xlarge" })<p>No mínimo seis caracteres</p>
+            @Html.ValidationMessageFor(model => model.Senha)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ConfirmeSenha,"Confirme:")
+        </div>
+        <div class="editor-field">
+            @Html.PasswordFor(model => model.ConfirmeSenha, new { @class = "input-xlarge" })
+            @Html.ValidationMessageFor(model => model.ConfirmeSenha)
+        </div>
+
+         <div class="editor-label">
+            @Html.LabelFor(model => model.Telefone,"Telefone:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Telefone, new { @class = "input-xlarge" })<p>32225678</p>
+            @Html.ValidationMessageFor(model => model.Telefone)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.EnderecoUsuario.NomeRua,"Endereço:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.EnderecoUsuario.NomeRua, new { @class = "input-xlarge" })<p>Nome da Rua, Número</p>
+            @Html.ValidationMessageFor(model => model.EnderecoUsuario.NomeRua)
+        </div>
+
+         <div class="editor-label">
+            @Html.LabelFor(model => model.EnderecoUsuario.Complemento,"Complemento:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.EnderecoUsuario.Complemento,new { @class = "input-xlarge" })<p>Próximo da rua tal</p>
+            @Html.ValidationMessageFor(model => model.EnderecoUsuario.Complemento)
+        </div>
+
+         <div class="editor-label">
+            @Html.LabelFor(model => model.EnderecoUsuario.CEP,"CEP:")<p>58087234</p>
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.EnderecoUsuario.CEP, new { @class = "input-xlarge" })<p>58087234</p>
+            @Html.ValidationMessageFor(model => model.EnderecoUsuario.CEP)
+        </div>
+
+         <div class="editor-label">
+            @Html.LabelFor(model => model.EnderecoUsuario.Bairro,"Bairro:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.EnderecoUsuario.Bairro, new { @class = "input-xlarge" })<p>Nome Do Bairro</p>
+            @Html.ValidationMessageFor(model => model.EnderecoUsuario.Bairro)
+        </div>
+         <div class="editor-label">
+            @Html.LabelFor(model => model.EnderecoUsuario.Cidade,"Cidade:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.EnderecoUsuario.Cidade, new { @class = "input-xlarge" })<p>Nome Cidade</p>
+            @Html.ValidationMessageFor(model => model.EnderecoUsuario.Cidade)
+        </div>
+
+         <div class="editor-label">
+            @Html.LabelFor(model => model.EnderecoUsuario.Estado,"Estado:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.EnderecoUsuario.Estado, new { @class = "input-xlarge" })<p>Nome Estado</p>
+            @Html.ValidationMessageFor(model => model.EnderecoUsuario.Estado)
+        </div>
+
+         <div class="editor-label">
+            @Html.LabelFor(model => model.EstabelecimentoTrabalho,"Estabelecimento:")
+        </div>
+
+          <div class="editor-field">
+            @Html.DropDownListFor(model => model.EstabelecimentoTrabalho.Codigo,(IEnumerable<SelectListItem>)ViewBag.Estabelecimento,"Selecione Estabelecimento")@Html.ActionLink("Adicionar Estabelecimento","CadastrarEstabelecimento","Estabelecimento")
+            @Html.ValidationMessageFor(model => model.EstabelecimentoTrabalho)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.NomeFuncao,"Função:")
+        </div>
+
+          <div class="editor-field">
+            @Html.DropDownListFor(model => model.NomeFuncao.Codigo,(IEnumerable<SelectListItem>)ViewBag.Papel,"Selecione Função")
+            @Html.ValidationMessageFor(model => model.NomeFuncao)
+        </div>
+
+        <p>
+             <input class ="btn btn-success" type="submit" value="Cadastar" />
+            <input class="btn btn-warning" type="reset" value="Limpar" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Página Inicial", "Index","Home")
+</div>

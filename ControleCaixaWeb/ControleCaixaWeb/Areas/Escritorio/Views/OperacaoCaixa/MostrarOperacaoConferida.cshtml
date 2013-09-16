@@ -1,0 +1,64 @@
+﻿@model ControleCaixaWeb.Models.OperacaoCaixa
+
+@{
+    ViewBag.Title = "MostrarOperacaoConferida";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Operação Conferida</h2>
+
+<fieldset>
+    <legend>Operação Caixa</legend>
+
+    <div class="display-label">Código:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Codigo)
+    </div>
+
+    <div class="display-label">Data Lançamento:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DataLancamento)
+    </div>
+
+    <div class="display-label">Valor:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Valor)
+    </div>
+     <div class="display-label">FormaPagamento:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.FormaPagamentoUtilizada.NomeTipoFormaPagamento)
+    </div>
+     <div class="display-label">Estabelecimento:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.EstabelecimentoOperacao.RazaoSocial)
+    </div>
+
+    <div class="display-label">Descrição:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Descricao)
+    </div>
+
+    <div class="display-label">Observação:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Observacao)
+    </div>
+
+    <div class="display-label">Usuário/Data/Hora/ Inserção:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UsuarioDataHoraInsercao)
+    </div>
+
+    <div class="display-label">Data/Hora/Inserção:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DataHoraInsercao)
+    </div>
+
+    <div class="display-label">Conferido?:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Conferido)
+    </div>
+</fieldset>
+<p>
+  
+    @Html.ActionLink("Página Inicial", "Index")
+</p>

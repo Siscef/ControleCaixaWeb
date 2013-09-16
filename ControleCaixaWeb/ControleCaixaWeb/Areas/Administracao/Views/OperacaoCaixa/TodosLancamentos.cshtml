@@ -1,0 +1,96 @@
+﻿@model IEnumerable<OperacaoCaixa>
+
+@{
+    ViewBag.Title = "TodosLancamentos";
+    Layout = "~/Areas/Administracao/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Todos Lancamentos</h2>
+
+<p>
+      @Html.ActionLink("Nova Entrada", "CadastrarOperacaoCaixa", "OperacaoCaixa")<br />
+     @Html.ActionLink("Nova Saída", "SaidaOperacaoCaixa", "OperacaoCaixa")<br />
+</p>
+<p> Saldo Do Estabelecimento R$:  @Convert.ToDecimal(ViewBag.Saldo)</p>
+
+@(Html.Telerik( ).Grid<OperacaoCaixa>( ).Name("gridOperacao").DataBinding(binding => binding.Ajax( ).Select("_TodosLancamentos", "Relatorio"))
+.Columns(
+colunas =>
+{
+    colunas.Bound(c => c.DataLancamento).Title("Data:");
+    colunas.Bound(c => c.Descricao).Title("Descricao:").Width(100);
+    colunas.Bound(c => c.Valor).Title("Valor");  
+    
+}
+)
+    .Pageable(paginas => paginas.PageSize(10))
+    .Scrollable( )
+    .Sortable( )
+    .Selectable( )
+    .Groupable( )
+    .Filterable( )
+    .Resizable(paginas => paginas.Columns(true))
+)
+
+@*<table class="table table-bordered">
+    <tr>
+        
+        <th>
+            DataLancamento:
+        </th>
+         <th>
+            Usuario:
+        </th>
+        <th>
+            Descricao:
+        </th>
+         <th>
+            FormaUsada:
+        </th>
+        <th>
+            Valor:
+        </th>
+       
+         <th>
+            Observação:
+        </th>
+         <th>
+            Operações:
+        </th>
+       
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+      
+        <td>
+            @Html.DisplayFor(modelItem => item.DataLancamento)
+        </td>
+            <td>
+            @Html.DisplayFor(modelItem => item.UsuarioQueLancou.Nome);
+        </td>
+           <td>
+            @Html.DisplayFor(modelItem => item.Descricao)
+        </td>
+          <td>
+            @Html.DisplayFor(modelItem => item.FormaPagamentoUtilizada.NomeTipoFormaPagamento)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Valor)
+        </td>
+     
+        <td>
+            @Html.DisplayFor(modelItem => item.Observacao)
+        </td>
+        <td>
+            @Html.ActionLink("Alterar", "AlterarOperacaoCaixa", new {  id=item.Codigo }) |
+            @Html.ActionLink("Ver Data", "VerDataOperacao", new { id = item.DataLancamento.Date.ToString("yyyy-MM-dd") }) |
+            @Html.ActionLink("Excluir", "ExcluirOperacaoCaixa", new {  id=item.Codigo })|
+            @Html.ActionLink("Por FormaPagamento", "PorFormaPagamento", new { forma = item.FormaPagamentoUtilizada.NomeTipoFormaPagamento.Trim(), id = item.DataLancamento.Date.ToString("yyyy-MM-dd") })|
+            @Html.ActionLink("Por Usuario","PorUsuario",new {usuario = item.UsuarioQueLancou.Nome.Trim(),data = item.DataLancamento.Date.ToString("yyyy-MM-dd")})
+        </td>
+    </tr>
+}
+
+</table>
+*@

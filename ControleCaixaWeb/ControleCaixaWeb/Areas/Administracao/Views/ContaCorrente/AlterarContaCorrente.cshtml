@@ -1,0 +1,62 @@
+﻿@model ContaCorrente
+
+@{
+    ViewBag.Title = "AlterarContaCorrente";
+    Layout = "~/Areas/Administracao/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Alterar ContaCorrente</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Alterar ContaCorrente</legend>
+
+        <div class="editor-label">
+            @Html.HiddenFor(model => model.Codigo)
+        </div>
+        <div class="editor-field">
+            @Html.HiddenFor(model => model.Codigo)
+            @Html.ValidationMessageFor(model => model.Codigo)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Banco,"Banco:")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Banco, new { @class = "input-xlarge" })<p>Nome banco</p>
+            @Html.ValidationMessageFor(model => model.Banco)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Agencia,"Agência:")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Agencia, new { @class = "input-xlarge" })<p>Agencia Nome</p>
+            @Html.ValidationMessageFor(model => model.Agencia)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Numero,"Número:")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Numero, new { @class = "input-xlarge" })<p>94-6</p>
+            @Html.ValidationMessageFor(model => model.Numero)
+        </div>
+          <div class="editor-label">
+            @Html.LabelFor(model => model.EstabelecimentoDaConta,"Estabelecimento:")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.EstabelecimentoDaConta.Codigo, (IEnumerable<SelectListItem>)ViewBag.Estabelecimento, "Selecione Estabelecimento")@Html.ActionLink("Adicionar Estabelecimento", "CadastrarEstabelecimento", "Estabelecimento")
+            @Html.ValidationMessageFor(model => model.EstabelecimentoDaConta)
+        </div>
+
+        <p>
+            <input class="btn btn-warning" type="submit" value="Salvar Alterações" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Página Inicial", "Index","Home")
+</div>

@@ -1,0 +1,56 @@
+﻿@model ControleCaixaWeb.Models.Configuracao
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Configuração</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Configuração</legend>
+
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CasasDecimais)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CasasDecimais, new { @class = "input-xlarge" })
+            @Html.ValidationMessageFor(model => model.CasasDecimais)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.FazerLancamentoContaCorrente)
+        </div>
+        <div class="editor-field">
+            @Html.CheckBoxFor(model => model.FazerLancamentoContaCorrente)
+            @Html.ValidationMessageFor(model => model.FazerLancamentoContaCorrente)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.EnviarEmailCaixaAlterado)
+        </div>
+        <div class="editor-field">
+            @Html.CheckBoxFor(model => model.EnviarEmailCaixaAlterado)
+            @Html.ValidationMessageFor(model => model.EnviarEmailCaixaAlterado)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.EstabelecimentoPadrao)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.EstabelecimentoPadrao.Codigo, (IEnumerable<SelectListItem>)@ViewBag.Loja, "Selecione Loja ")
+            @Html.ValidationMessageFor(model => model.EstabelecimentoPadrao)
+        </div>
+        <p>
+            <input class="btn btn-success" type="submit" value="Cadastar" />
+            <input class="btn btn-warning" type="reset" value="Limpar" />
+        </p>
+    </fieldset>
+}
+
+<div>
+@Html.ActionLink("Página Inicial", "Index", "Home")
+</div>

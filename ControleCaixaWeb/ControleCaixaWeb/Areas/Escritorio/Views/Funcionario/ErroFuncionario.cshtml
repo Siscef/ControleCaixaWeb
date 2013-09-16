@@ -1,0 +1,9 @@
+﻿@model ControleCaixaWeb.Models.CadastrarUsuario
+
+@{
+    ViewBag.Title = "ErroFuncionario";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>O nome do Usuário já existe, por favor tente outro nome e outro email.</h2> </br>
+@Html.ActionLink("Adicionar Novo", "CadastrarFuncionario")

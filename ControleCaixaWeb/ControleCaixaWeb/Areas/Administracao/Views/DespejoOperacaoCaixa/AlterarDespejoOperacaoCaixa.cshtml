@@ -1,0 +1,70 @@
+﻿@model ControleCaixaWeb.Models.DespejoOPeracaoCaixa
+@{
+	ViewBag.Title = "AlterarDespejoOperacaoCaixa";
+	Layout = "~/Areas/Administracao/Views/Shared/_Layout.cshtml";
+}
+<h2>
+	Alterar Despejo Operação Caixa</h2>
+@using (Html.BeginForm( ))
+{
+	@Html.ValidationSummary(true)
+	<fieldset>
+		<legend>Despejo OPeração Caixa</legend>
+		@Html.HiddenFor(model => model.Codigo)
+		@Html.HiddenFor(model => model.EstabelecimentoOperacao.Codigo)
+		@Html.HiddenFor(model => model.FormaPagamentoUtilizada.Codigo)
+		@Html.HiddenFor(model => model.UsuarioQueLancou.Codigo)
+		@Html.HiddenFor(model => model.OperacaoCaixaOrigem.Codigo)
+		<div class="editor-label">
+			@Html.LabelFor(model => model.DataLancamento, "Data Lançamento:")
+		</div>
+		<div class="editor-field">
+			@Html.Telerik( ).DatePickerFor(model => model.DataLancamento)<p>
+				Escolha uma data</p>
+			@Html.ValidationMessageFor(model => model.DataLancamento)
+		</div>
+		<div class="editor-label">
+			@Html.LabelFor(model => model.UsuarioQueLancou, "Usuário Origem:")
+		</div>
+		<div class="editor-field">
+			@Html.DropDownListFor(model => model.UsuarioQueLancou.Codigo, (IEnumerable<SelectListItem>)ViewBag.UsuarioQueLancou, "Selecione Usuario")@Html.ActionLink("Adicionar Usuario", "CadastrarFuncionario", "Funcionario")
+			@Html.ValidationMessageFor(model => model.UsuarioQueLancou)
+		</div>
+		<div class="editor-label">
+			@Html.LabelFor(model => model.FormaPagamentoUtilizada, "Plano Pagamento:")
+		</div>
+		<div class="editor-field">
+			@Html.DropDownListFor(model => model.FormaPagamentoUtilizada.Codigo, (IEnumerable<SelectListItem>)ViewBag.FormaPagamentoUtilizada, "Selecione Plano Pagamento")@Html.ActionLink("Adicionar Plano Pagamento", "CadastrarFormaPagamento", "FormaPagamento")
+			@Html.ValidationMessageFor(model => model.FormaPagamentoUtilizada)
+		</div>
+		<div class="editor-label">
+			@Html.LabelFor(model => model.Valor, "Valor:")
+		</div>
+		<div class="editor-field">
+			@Html.TextBoxFor(model => model.Valor, new { @class = "input-xlarge" })<p>
+				Informe o Valor</p>
+			@Html.ValidationMessageFor(model => model.Valor)
+		</div>
+		<div class="editor-label">
+			@Html.LabelFor(model => model.Descricao, "Descrição:")
+		</div>
+		<div class="editor-field">
+			@Html.TextBoxFor(model => model.Descricao, new { @class = "input-xlarge" })<p>
+				Digite Uma Breve Descrição</p>
+			@Html.ValidationMessageFor(model => model.Descricao)
+		</div>
+		<div class="editor-label">
+			@Html.LabelFor(model => model.Observacao, "Observação:")
+		</div>
+		<div class="editor-field">
+			@Html.EditorFor(model => model.Observacao)
+			@Html.ValidationMessageFor(model => model.Observacao)
+		</div>
+		<p>
+			<input class="btn btn-warning" type="submit" value="Salvar Alterações" />
+		</p>
+	</fieldset>
+}
+<div>
+	@Html.ActionLink("Página Inicial", "Index", "Home")
+</div>

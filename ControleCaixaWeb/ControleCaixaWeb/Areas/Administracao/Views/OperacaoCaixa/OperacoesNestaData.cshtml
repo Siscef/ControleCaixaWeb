@@ -1,0 +1,65 @@
+﻿@model IEnumerable<ControleCaixaWeb.Models.OperacaoCaixa>
+
+@{
+    ViewBag.Title = "OperacoesNestaData";
+    Layout = "~/Areas/Administracao/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lista Das Operações</h2>
+
+<p>
+    @Html.ActionLink("Fazer Novo Lançamento", "CadastrarOperacaoCaixa")
+</p>
+<h3>Soma do Valor Das Operações:R$ @Model.Sum(item => item.Valor)</h3>
+<table class="table table-bordered">
+    <tr>
+        
+        <th>
+            Data Lançamento:
+        </th>
+        <th>
+        Usuário:
+        </th>
+        <th>
+            Valor:
+        </th>
+        <th>
+            Descrição:
+        </th>
+        <th>
+            Forma Pagto:
+        </th>
+         <th>
+            Operações:
+        </th>
+        
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.DataLancamento)
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.UsuarioQueLancou.Nome)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Valor)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Descricao)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FormaPagamentoUtilizada.NomeTipoFormaPagamento)
+        </td>
+        <td>
+            @Html.ActionLink("Alterar", "AlterarOperacaoCaixa", new { id=item.Codigo }) |           
+            @Html.ActionLink("Excluir", "ExcluirOperacaoCaixa", new {  id=item.Codigo })|
+            @Html.ActionLink("Ver Usuário","VerUsuario",new {id =item.UsuarioQueLancou.Nome,data= item.DataLancamento.Date.ToString("yyyy-MM-dd")})|
+             @Html.ActionLink("Ver Forma Pagamento", "VerPorFormaPagamento", new { nomeForma = item.FormaPagamentoUtilizada.NomeTipoFormaPagamento, data = item.DataLancamento.Date.ToString("yyyy-MM-dd") })
+        </td>
+    </tr>
+}
+
+</table>

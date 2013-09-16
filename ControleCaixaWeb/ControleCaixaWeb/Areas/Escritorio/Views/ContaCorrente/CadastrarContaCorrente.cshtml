@@ -1,0 +1,56 @@
+﻿@model ControleCaixaWeb.Models.ContaCorrente
+
+@{
+    ViewBag.Title = "CadastrarContaCorrente";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Cadastrar Conta Corrente</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Cadastrar Conta Corrente</legend>
+       
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Banco,"Nome Banco:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Banco, new { @class = "input-xlarge" })<p>109-Nome Banco</p>
+            @Html.ValidationMessageFor(model => model.Banco)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Agencia,"Agência:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Agencia, new { @class = "input-xlarge" })<p>Nome Agência</p>
+            @Html.ValidationMessageFor(model => model.Agencia)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Numero,"Número:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Numero, new { @class = "input-xlarge" })<p>1708-5</p>
+            @Html.ValidationMessageFor(model => model.Numero)
+        </div>
+         <div class="editor-label">
+            @Html.LabelFor(model => model.EstabelecimentoDaConta,"Estabelecimento:")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.EstabelecimentoDaConta.Codigo, (IEnumerable<SelectListItem>)ViewBag.Estabelecimento, "Selecione Estabelecimento")@Html.ActionLink("Adicionar Estabelecimento", "CadastrarEstabelecimento", "Estabelecimento")
+            @Html.ValidationMessageFor(model => model.EstabelecimentoDaConta)
+        </div>
+
+        <p>
+             <input class ="btn btn-success" type="submit" value="Cadastar" />
+            <input class="btn btn-warning" type="reset" value="Limpar" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Página Inicial", "Index", "Home")
+</div>

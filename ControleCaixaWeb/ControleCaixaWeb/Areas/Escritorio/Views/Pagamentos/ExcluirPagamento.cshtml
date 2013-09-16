@@ -1,0 +1,50 @@
+﻿@model ControleCaixaWeb.Models.Pagamento
+
+@{
+    ViewBag.Title = "ExcluirPagamento";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>ExcluirPagamento</h2>
+
+<h3>@User.Identity.Name, tem certeza que deseja excluir esse registro?</h3>
+@using (Html.BeginForm()) {
+<fieldset>
+    <legend>Pagamento</legend>
+
+   
+    <div class="display-field">
+        @Html.HiddenFor(model => model.Codigo)
+    </div>
+
+    <div class="display-label">DataPagamento:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DataPagamento)
+    </div>
+
+    <div class="display-label">Valor:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Valor)
+    </div>
+    <div class="display-label">Forma:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.FormaPagamento.NomeTipoFormaPagamento)
+    </div>
+
+    <div class="display-label">Observação:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Observacao)
+    </div>
+
+    <div class="display-label">Usuario Que Alterou Data Computador:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UsuarioQueAlterouEDataEComputador)
+    </div>
+</fieldset>
+
+  
+    <p>
+        <input class = " btn btn-danger" type="submit" value="Excluir "  /> |
+        @Html.ActionLink("Página Incial", "Index","Home")
+    </p>
+}

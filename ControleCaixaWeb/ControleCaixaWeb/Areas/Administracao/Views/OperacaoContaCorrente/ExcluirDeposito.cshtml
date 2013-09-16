@@ -1,0 +1,42 @@
+﻿@model ControleCaixaWeb.Models.OperacaoFinanceiraContaCorrente
+
+@{
+    ViewBag.Title = "Excluir Deposito";
+    Layout = "~/Areas/Administracao/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Excluir Depósito</h2>
+
+<h3>@User.Identity.Name, Você realmente deseja excluir esse registro?</h3>
+@using (Html.BeginForm()) {
+<fieldset>
+    <legend>Operação Financeira Conta Corrente</legend>
+
+   
+    <div class="display-field">
+        @Html.HiddenFor(model => model.Codigo)
+    </div>
+
+    <div class="display-label">Data:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Data)
+    </div>
+
+    <div class="display-label">Valor:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Valor)
+    </div>
+
+    <div class="display-label">Descrição:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Descricao)
+    </div>
+</fieldset>
+
+   </fieldset>
+
+    <p>
+        <input class = " btn btn-danger" type="submit" value="Excluir "  /> |
+        @Html.ActionLink("Página Inicial", "Index","Home")
+    </p>
+}

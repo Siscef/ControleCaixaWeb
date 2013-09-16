@@ -1,0 +1,66 @@
+﻿@model IList<Pagamento>
+@{
+    ViewBag.Title = "PagamentoFavorecido";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<h2>Pagamento Favorecido</h2>
+<h2>Soma dos Valores: R$ @Model.Sum(model => model.Valor)</h2>
+<p>
+    @Html.ActionLink("Fazer Novo Pagamento", "FazerPagamento","Pagamentos")
+</p>
+<table class="table table-bordered">
+    <tr>
+       
+        <th>
+            Data Pagamento:
+        </th>
+		<th>
+			Favorecido:
+		</th>
+        <th>
+            Valor:
+        </th>
+        <th>
+            Observacao:
+        </th>
+        <th>
+            Usuário/Data/Computador:
+        </th>
+          <th>
+            Operações:
+        </th>
+        
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.DataPagamento)
+        </td>
+		<td>
+			@Html.DisplayFor(modelItem => item.FavorecidoPagamento.NomeFavorecido)
+		</td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Valor)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Observacao)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UsuarioQueAlterouEDataEComputador)
+        </td>
+        <td>
+            @Html.ActionLink("Alterar", "AlterarPagamento", new {  id=item.Codigo }) |
+            @Html.ActionLink("Ver Detalhes", "Detalhes", new { id=item.Codigo }) |
+            @Html.ActionLink("Excluir", "ExcluirPagamento", new {  id=item.Codigo })|
+           
+        </td>
+    </tr>
+}
+
+</table>

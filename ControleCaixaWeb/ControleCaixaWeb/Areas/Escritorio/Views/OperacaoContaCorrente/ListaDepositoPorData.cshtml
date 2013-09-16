@@ -1,0 +1,66 @@
+﻿@model IEnumerable<ControleCaixaWeb.Models.OperacaoFinanceiraContaCorrente>
+
+@{
+    ViewBag.Title = "ListaDepositoPordata";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lista de Depósitos Por data</h2>
+<h5>
+	Lista dos lançamentos entre: @ViewBag.DataInicio e @ViewBag.DataFim
+</h5>
+
+<p>
+    @Html.ActionLink("Fazer Novo Depósito", "FazerDeposito")
+</p>
+<br />
+<h2>Soma dos Depósitos:  @Model.Sum(model => model.Valor)</h2>
+<br />
+<table class="table table-bordered">
+    <tr>
+      
+        <th>
+            Data Lançamento:
+        </th>
+        <th>
+            Valor:
+        </th>
+        <th>
+            Descrição:
+        </th>
+        <th>
+            Usuario/Data/Hora/Inserção:
+        </th>
+        <th>
+            Data/Hora/Inserção:
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.Data)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Valor)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Descricao)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UsuarioDataHoraInsercao)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DataHoraInsercao)
+        </td>
+        <td>
+            @Html.ActionLink("Alterar", "AlterarDeposito", new { id=item.Codigo}) |
+            @Html.ActionLink("Detalhes", "DetalhesDeposito", new { id=item.Codigo }) |
+            @Html.ActionLink("Excluir", "ExcluirDeposito", new { id=item.Codigo })
+        </td>
+    </tr>
+}
+
+</table>

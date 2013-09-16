@@ -1,0 +1,62 @@
+﻿@model ControleCaixaWeb.Models.FechamentoCaixa
+
+@{
+    ViewBag.Title = "LancarFechamentoCaixa";
+    Layout = "~/Areas/OperadorCaixa/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lançar Fechamento do Caixa</h2> <br />
+<h3>@ViewBag.Mensagem</h3>
+
+@using (Html.BeginForm(new { @class = "well" }))
+{
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Fechamento do Caixa</legend>       
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DataLancamento,"Data Lançamento:")
+        </div>
+        <div class="editor-field">
+            @Html.Telerik().DatePickerFor(model => model.DataLancamento).Name("dataLancamento")<p>Informe Data Lançamento</p>
+
+            @Html.ValidationMessageFor(model => model.DataLancamento)
+        </div>
+
+         <div class="editor-label">
+            @Html.LabelFor(model => model.CaixaAbertura,"Caixa Abertura:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.CaixaAbertura, new { @class = "input-xlarge" })<p>Informe O Caixa de Abertura</p>
+            @Html.ValidationMessageFor(model => model.CaixaAbertura)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CaixaFechamento,"Caixa Fechamento:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.CaixaFechamento, new { @class = "input-xlarge" })<p>Informe O Caixa de Fechamento</p>
+            @Html.ValidationMessageFor(model => model.CaixaFechamento)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Faturamento,"Venda Líquida Redução Z:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Faturamento, new { @class = "input-xlarge" })<p>Informe Faturamento</p>
+            @Html.ValidationMessageFor(model => model.Faturamento)
+        </div>
+
+      
+
+
+        <p>
+            <input class ="btn btn-success" type="submit" value="Cadastar" />
+            <input class="btn btn-warning" type="reset" value="Limpar" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Página Inicial", "Index","Home")
+</div>

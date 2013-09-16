@@ -1,0 +1,72 @@
+﻿@model IEnumerable<ControleCaixaWeb.Models.FechamentoCaixa>
+
+@{
+    ViewBag.Title = "Fechamento de Caixa Por Data";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Visualizando caixa de:  @ViewBag.Caixa <br/> Referente ao dia: @ViewBag.DataCaixa  </h3> <br/>
+<h3>
+	Resultado do Caixa: R$ @if (ViewBag.listaParaResultadoFechamento != null)
+                        {
+                            @ViewBag.listaParaResultadoFechamento
+                        }
+                        else
+                        {
+                            @ViewBag.Vazio
+                        }
+	</h3>
+<p>
+    @Html.ActionLink("Fazer Novo Lançamento", "LancarFechamentoCaixa","FecharCaixa")
+</p>
+
+<table class="table table-bordered">
+    <tr>
+        
+        <th>
+            Data Lancamento:
+        </th>
+         <th>
+            Usuário:
+        </th>
+        <th>
+            Caixa Abertura:
+        </th>
+        <th>
+            Caixa Fechamento:
+        </th>
+        <th>
+            Faturamento:
+        </th>
+       
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+       
+        <td>
+            @Html.DisplayFor(modelItem => item.DataLancamento)
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.FaturamentoUsuario.Nome)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CaixaAbertura)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CaixaFechamento)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Faturamento)
+        </td>
+        <td>
+             @Html.ActionLink("Alterar", "AlterarFechamentoCaixa", new { id = item.Codigo }) |
+            @Html.ActionLink("Detalhes", "Detalhes", new { id = item.Codigo }) |
+            @Html.ActionLink("Excluir", "ExcluirFechamentoCaixa", new { id = item.Codigo })|
+        </td>
+    </tr>
+}
+
+
+
+</table>

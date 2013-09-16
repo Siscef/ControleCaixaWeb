@@ -1,0 +1,80 @@
+﻿@model IEnumerable<ControleCaixaWeb.Models.OperacaoCaixa>
+@{
+	ViewBag.Title = "ListaDasOperacaoes";
+	Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+<p>
+	@Html.ActionLink("Lançar Entrada", "CadastrarOperacaoCaixa")
+</p>
+<h3>
+	Todos lançamentos do estabelecimento: @ViewBag.Loja</h3>
+<h2>
+	Soma dos Valores: R$ @Model.Sum(model => model.Valor)</h2>
+<table class="table table-bordered">
+	<tr>
+		<th>
+			Data:
+		</th>
+		<th>
+			Usuário:
+		</th>
+		<th>
+			Descrição:
+		</th>
+		<th>
+			Forma:
+		</th>
+		<th>
+			Valor Entrada:
+		</th>
+		<th>
+		    Valor Saída:
+		</th>
+		<th>
+			Observação:
+		</th>
+		<th>
+			Operações:
+		</th>
+	</tr>
+	@foreach (var item in Model)
+ {
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.DataLancamento)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.UsuarioQueLancou.Nome)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Descricao)
+			</td>
+			
+			<td>
+				@Html.DisplayFor(modelItem => item.FormaPagamentoUtilizada.NomeTipoFormaPagamento)
+			</td>
+			<td>
+				@if (item.Valor >= 0)
+				{
+					@Html.DisplayFor(modelItem => item.Valor)
+				}
+			</td>
+			<td>
+				@if (item.Valor <= 0)
+				{
+	   
+					@Html.DisplayFor(modelItem => item.Valor)
+				}
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Observacao)
+			</td>
+			<td>
+
+				@Html.ActionLink("Alterar", "AlterarOperacaoCaixa", new { id = item.Codigo }) |
+				@Html.ActionLink("Detalhes", "Detalhes", new { id = item.Codigo }) |
+				@Html.ActionLink("Excluir", "ExcluirOperacaoCaixa", new { id = item.Codigo })
+			</td>
+		</tr>
+ }
+</table>
