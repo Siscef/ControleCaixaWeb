@@ -8,7 +8,7 @@ namespace ControleCaixaWeb.Models
     public enum EnumTipoOperacao
     {
 
-        Transferencia,       
+        Transferencia,
         Sangria,
         Recolhimento,
         Pagamento,

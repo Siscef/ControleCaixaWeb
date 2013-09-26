@@ -1,14 +1,15 @@
 ﻿@model ControleCaixaWeb.Models.ValidarData
-
 @{
     ViewBag.Title = "LancamentosData";
-	Layout = "~/Areas/OperadorCaixa/Views/Shared/_Layout.cshtml";
+    Layout = "~/Areas/OperadorCaixa/Views/Shared/_Layout.cshtml";
 }
 
-<h3>Por favor forneça um intervalo de datas</h3> </br>
-<h4> Atenção!, @User.Identity.Name @ViewBag.DataErrada</h4>
+<h3>Por favor forneça um intervalo de datas</h3>
+<br/>
+<h4>@ViewBag.DataErrada</h4>
 
-@using (Html.BeginForm()) {
+@using (Html.BeginForm())
+{
     @Html.ValidationSummary(true)
     <fieldset>
         <legend>Visualizar por datas</legend>
@@ -28,17 +29,16 @@
             @Html.Telerik().DatePickerFor(model => model.DataFinal)
             @Html.ValidationMessageFor(model => model.DataFinal)
         </div>
-		
-		  <br/>
-		<p>
-			<input class="btn btn-success" type="submit" value="Visualizar" />
-			<input class="btn btn-warning" type="reset" value="Limpar" />
-		</p>
-		
-		
+
+        <br />
+        <p>
+            <input class="btn btn-success" type="submit" value="Visualizar" />
+            <input class="btn btn-warning" type="reset" value="Limpar" />
+        </p>
+
+
     </fieldset>
 }
 
 <div>
-    
 </div>

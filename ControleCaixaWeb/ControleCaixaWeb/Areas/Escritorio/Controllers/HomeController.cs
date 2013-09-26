@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using ControleCaixaWeb.Models;
 using ControleCaixaWeb.Models.Context;
+using System.Web.Helpers;
 
 namespace ControleCaixaWeb.Areas.Escritorio.Controllers
 {
@@ -18,6 +19,8 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
 
         public ActionResult Index()
         {
+                      
+           
             using (IContextoDados ctc = new ContextoDadosNH())
             {
                 IList<Configuracao> ListVerifica = ctc.GetAll<Configuracao>()

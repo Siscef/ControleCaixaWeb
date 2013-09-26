@@ -19,6 +19,15 @@ namespace ControleCaixaWeb.Areas.Administracao.Controllers
             return View();
         }
 
+
+        public ActionResult Detalhes(int id)
+        {
+            OperacaoFinanceiraContaCorrente detalhesOperacao = _contextoOperacaoContaCorrente.Get<OperacaoFinanceiraContaCorrente>(id);
+            return View(detalhesOperacao);
+        }
+
+
+
         #region Deposito
         public ActionResult DepositoOperacaoCaixa( )
         {
@@ -131,19 +140,33 @@ namespace ControleCaixaWeb.Areas.Administracao.Controllers
             return RedirectToAction("Sucesso","Home" );
         }
 
-        public ActionResult Detalhes(int id)
-        {
-            OperacaoFinanceiraContaCorrente detalhesOperacao = _contextoOperacaoContaCorrente.Get<OperacaoFinanceiraContaCorrente>(id);
-            return View(detalhesOperacao);
-        }
+       
+        #endregion
+       
+
+        #region TransFerencia
 
         #endregion
 
 
-        #region TransFerencia
+        #region Consultas
+
+        public ActionResult VisualizarCartoes()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult VisualizarCartoes(ValidarData Datas, int? Forma, int? Loja)
+        {
+            return View();
+        }
 
 
-
+        public ActionResult ListaCartoesCredito()
+        {
+            return View();
+        }
         #endregion
 
     }

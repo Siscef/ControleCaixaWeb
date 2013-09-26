@@ -55,6 +55,14 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
                     return RedirectToAction("Sucesso", "Home");
 
                 }
+                else
+                {
+                    foreach (var item in ListVerifica)
+                    {
+                        Edit(item);
+                    }
+                    
+                }
 
 
             }
@@ -80,6 +88,7 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
             configuracaoEditada.EnviarEmailCaixaAlterado = configuracao.EnviarEmailCaixaAlterado;
             configuracaoEditada.FazerLancamentoContaCorrente = configuracao.FazerLancamentoContaCorrente;
             configuracaoEditada.EstabelecimentoPadrao = _contextoConfiguracao.Get<Estabelecimento>(configuracao.EstabelecimentoPadrao.Codigo);
+            TryUpdateModel<Configuracao>(configuracaoEditada);
             _contextoConfiguracao.SaveChanges();
             return RedirectToAction("Sucesso", "Home");
         }

@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using ControleCaixaWeb.Models;
 using ControleCaixaWeb.Models.Context;
+using System.Net.Mail;
 
 namespace ControleCaixaWeb.Areas.Escritorio.Controllers
 {
@@ -118,6 +119,41 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
 		public ActionResult AlterarFechamentoCaixa(FechamentoCaixa fechamentoCaixa)
 		{
 			FechamentoCaixa fecharCaixaAlterada = _contextoFecharCaixa.Get<FechamentoCaixa>(fechamentoCaixa.Codigo);
+            string nomeCaixa = (from c in _contextoFecharCaixa.GetAll<CadastrarUsuario>()
+                                .Where(x => x.Codigo == fechamentoCaixa.FaturamentoUsuario.Codigo)
+                                select c.Nome).FirstOrDefault();
+
+            Configuracao configuracao = (from c in _contextoFecharCaixa.GetAll<Configuracao>()
+                                         select c).FirstOrDefault();
+
+            if (configuracao.EnviarEmailCaixaAlterado == true)
+            {
+                MailMessage message = new MailMessage();
+                message.From = new MailAddress("supervisor@supaquariuscf.net");
+                message.To.Add(new MailAddress(configuracao.Email));
+                if (configuracao.Assunto == null)
+                {
+                    message.Subject = "Alteração de caixa";
+                }
+                else
+                {
+                    message.Subject = configuracao.Assunto;
+                }
+
+                message.Body = " Atenção o usuário :" + User.Identity.Name + " \n" +
+                               " Alterou o caixa de : " + nomeCaixa + " , confira os valores antes e depois  : " + " \n"
+                               + " Caixa Abertura Antes: " + fecharCaixaAlterada.CaixaAbertura + "\n"
+                               + "Caixa Fechamento Antes: " + fecharCaixaAlterada.CaixaFechamento + " \n"
+                               + "Faturamento Antes: " + fecharCaixaAlterada.Faturamento + "\n"
+                               + " Caixa Abertura Depois: " + fechamentoCaixa.CaixaAbertura + "\n"
+                               + "Caixa Fechamento Depois: " + fechamentoCaixa.CaixaFechamento + " \n"
+                               + "Faturamento Depois: " + fechamentoCaixa.Faturamento + "\n";
+
+                SmtpClient client = new SmtpClient();
+                client.Send(message);
+            }
+
+
             fecharCaixaAlterada.UsuarioDataHoraInsercao = "Alterado por: " + User.Identity.Name + " Data: " + DateTime.Now;
             fecharCaixaAlterada.DataHoraInsercao = DateTime.Now; 
 			TryUpdateModel(fecharCaixaAlterada);
@@ -200,7 +236,7 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
 		{
 			if (Datas.DataFinal < Datas.DataInicial)
 			{
-				ViewBag.DataErrada = "A data final não pode ser menor que a data inicial";
+                ViewBag.DataErrada = User.Identity.Name + ", a data final não pode ser menor que a data inicial!";
 			}
 			else
 			{

@@ -23,7 +23,7 @@
             @Html.LabelFor(model => model.DataLancamento,"Data Lançamento:")
         </div>
         <div class="editor-field">
-            @Html.Telerik().DatePickerFor(model => model.DataLancamento).Name("DataLancamento")<p>Informe a Data Lançamento</p>
+            @Html.Telerik().DateTimePickerFor(model => model.DataLancamento).Name("DataLancamento")<p>Informe a Data Lançamento</p>
             @Html.ValidationMessageFor(model => model.DataLancamento)
         </div>
 

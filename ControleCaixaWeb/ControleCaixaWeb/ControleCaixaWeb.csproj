@@ -46,7 +46,7 @@
     <PlatformTarget>Itanium</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>catalog.ico</ApplicationIcon>
+    <ApplicationIcon>Content\images\catalog.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DotNet.Highcharts">
@@ -369,7 +369,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="catalog.ico" />
+    <Content Include="Content\images\catalog.ico" />
     <Content Include="Content\2012.1.214\Black\editor.png" />
     <Content Include="Content\2012.1.214\Black\imagebrowser.png" />
     <Content Include="Content\2012.1.214\Black\loading.gif" />
@@ -1272,6 +1272,10 @@
     <Content Include="Areas\Escritorio\Views\OperacaoCaixa\CartoesPorData.cshtml" />
     <Content Include="Areas\Escritorio\Views\Configuracao\Create.cshtml" />
     <Content Include="Areas\Escritorio\Views\Configuracao\Edit.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\OperacaoCaixa\SangriaRapidaOperacaoCaixa.cshtml" />
+    <Content Include="Areas\Administracao\Views\OperacaoCaixa\VisualizarOperacoes.cshtml" />
+    <Content Include="Areas\Administracao\Views\Pagamentos\VisualizarPagamentos.cshtml" />
+    <Content Include="Areas\Administracao\Views\OperacaoContaCorrente\ListaCartoesCredito.cshtml" />
     <None Include="Areas\OperadorCaixa\Views\Shared\Calculadora.cshtml" />
     <Content Include="Areas\OperadorCaixa\Views\Shared\_LayoutIndex.cshtml" />
     <None Include="Content\images\logoPrincipal.gbl" />

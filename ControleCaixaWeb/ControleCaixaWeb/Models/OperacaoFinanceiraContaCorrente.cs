@@ -30,6 +30,11 @@ namespace ControleCaixaWeb.Models
         public virtual string UsuarioDataHoraInsercao { get; set; }
         [Display(Name = "Data/Hora:")]
         public virtual DateTime DataHoraInsercao { get; set; }
+        [Display(Name = "Dia recebimento:")]
+        public virtual DateTime DataRecebimento { get; set; }
+        [Display(Name = "Operação Origem:")]
+        public virtual OperacaoCaixa OperacaoCaixaOrigem { get; set; }
+
 
 
 

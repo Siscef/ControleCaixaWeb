@@ -1,7 +1,8 @@
 ﻿@model ControleCaixaWeb.Models.ValidarData
+
 @{
-    ViewBag.Title = "LancamentosData";
-    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "VisualizarPagamentos";
+    Layout = "~/Areas/Administracao/Views/Shared/_Layout.cshtml";
 }
 
 <h3>Por favor forneça um intervalo de datas</h3>
@@ -30,27 +31,24 @@
             @Html.ValidationMessageFor(model => model.DataFinal)
         </div>
 
-        @if (ViewBag.UsuarioPrevilegiado == true)
-        {
-            <div class="editor-label">
-                Estabelecimento:
-            </div>
-            <div class="editor-field">
-                @Html.DropDownList("Loja", (IEnumerable<SelectListItem>)ViewBag.Estabelecimento, "Selecione Estabelecimento")
 
-            </div>
-              
-        }
-        else
-        {
-            <div class="editor-label">
-                Operador Caixa:
-            </div>
-            <div class="editor-field">
-                @Html.DropDownList("OperadorCaixa", (IEnumerable<SelectListItem>)ViewBag.OperadorCaixa, "Selecione Operador Caixa")
+        <div class="editor-label">
+            Estabelecimento:
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("Loja", (IEnumerable<SelectListItem>)ViewBag.Loja, "Selecione Estabelecimento")
 
-            </div>
-        }
+        </div>
+
+
+        <div class="editor-label">
+            Favorecido:
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("Favorecido", (IEnumerable<SelectListItem>)ViewBag.Favorecido, "Selecione Favorecido")
+
+        </div>
+
 
 
 

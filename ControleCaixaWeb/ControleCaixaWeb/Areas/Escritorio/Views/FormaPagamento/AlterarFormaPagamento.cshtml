@@ -54,9 +54,18 @@
 			@Html.LabelFor(model => model.DespejoAutomatico,"Despejo Automático?:")
 		</div>
 		<div class="editor-field">
-			@Html.EditorFor(model => model.DespejoAutomatico, new { @class = "input-xlarge" })<p>
-				Se Marcado: Sim</p>
+			@Html.EditorFor(model => model.DespejoAutomatico, new { @class = "input-xlarge" })
+				
 			@Html.ValidationMessageFor(model => model.DespejoAutomatico)
+		</div>
+
+        <div class="editor-label">
+			@Html.LabelFor(model => model.Padrao,"Padrão?:")
+		</div>
+		<div class="editor-field">
+			@Html.EditorFor(model => model.Padrao, new { @class = "input-xlarge" })
+				
+			@Html.ValidationMessageFor(model => model.Padrao)
 		</div>
 		<p>
             <input class="btn btn-warning" type="submit" value="Salvar Alterações" />

@@ -21,7 +21,6 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
             return View();
         }
 
-
         public ActionResult Detalhes(int id)
         {
             OperacaoCaixa OperacaoCaixa = _contextoOperacao.Get<OperacaoCaixa>(id);
@@ -49,7 +48,7 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
             lock (_contextoOperacao)
             {
                 decimal Valor = (from c in _contextoOperacao.GetAll<OperacaoCaixa>()
-                                         .Where(x => x.FormaPagamentoUtilizada.Codigo == forma)
+                                 .Where(x => x.FormaPagamentoUtilizada.Codigo == forma)
                                  select c.Valor).Sum();
                 if (Valor > 0)
                 {
@@ -57,6 +56,7 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
                     string nomeUsuarioLogado = User.Identity.Name;
 
                     DespejoOPeracaoCaixa despejoOperacaoCaixa = new DespejoOPeracaoCaixa();
+
                     string HashOperacao = despejoOperacaoCaixa.GenerateId();
                     OperacaoCaixa operacaoCaixaDespejo = new OperacaoCaixa();
                     operacaoCaixaDespejo.DataLancamento = DateTime.Now;
@@ -149,15 +149,18 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
 
                     }
 
-
                 }
 
                 if (ModelState.IsValid)
                 {
 
                     IList<OperacaoCaixa> ListaVerificarLancamentoDuplicado = _contextoOperacao.GetAll<OperacaoCaixa>()
-                                                                       .Where(x => x.Valor == operacaoCaixa.Valor && x.Descricao == operacaoCaixa.Descricao)
-                                                                       .ToList();
+                                                                           .Where(x => x.Valor == operacaoCaixa.Valor && x.Descricao == operacaoCaixa.Descricao)
+                                                                           .ToList();
+                    bool seDeposita = VerificaSeSistemaDepositaAutomatico();
+                    decimal taxaFormaPagamento = ObtemTaxaFormaPagamento(operacaoCaixa.FormaPagamentoUtilizada.Codigo);
+                    double diasRecebimento = ObtemDiasRecebimentoFormaPagamento(operacaoCaixa.FormaPagamentoUtilizada.Codigo);
+
                     if (ListaVerificarLancamentoDuplicado.Count() >= 1)
                     {
                         foreach (var itemVerificaLancamentoDuplicado in ListaVerificarLancamentoDuplicado)
@@ -166,6 +169,7 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
                             {
                                 string nomeUsuario = User.Identity.Name;
                                 long codigoEstabelecimento = BuscaEstabelecimento(nomeUsuario);
+
 
                                 OperacaoCaixa PrimeiraOperacaoCaixaEntrada = new OperacaoCaixa();
 
@@ -201,6 +205,28 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
                                 PrimeiraOperacaoCaixaEntrada.TipoOperacao = EnumTipoOperacao.LancamentoCaixa;
                                 _contextoOperacao.Add<OperacaoCaixa>(PrimeiraOperacaoCaixaEntrada);
                                 _contextoOperacao.SaveChanges();
+
+
+                                if (seDeposita == true)
+                                {
+                                    OperacaoFinanceiraContaCorrente OperacaoDeposito = new OperacaoFinanceiraContaCorrente();
+                                    OperacaoDeposito.ContaLancamento = _contextoOperacao.Get<ContaCorrente>(ObtemNumeroContaCorrente(operacaoCaixa.FormaPagamentoUtilizada.Codigo));
+                                    OperacaoDeposito.Data = operacaoCaixa.DataLancamento;
+                                    OperacaoDeposito.DataHoraInsercao = DateTime.Now;
+                                    OperacaoDeposito.DataRecebimento = operacaoCaixa.DataLancamento.AddDays(diasRecebimento);
+                                    OperacaoDeposito.Descricao = "Simulação de depósito";
+                                    OperacaoDeposito.FormaPagamento = _contextoOperacao.Get<FormaPagamentoEstabelecimento>(operacaoCaixa.FormaPagamentoUtilizada.Codigo);
+                                    OperacaoDeposito.Taxa = taxaFormaPagamento;
+                                    OperacaoDeposito.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now;
+                                    OperacaoDeposito.Valor = operacaoCaixa.Valor;
+                                    OperacaoDeposito.ValorLiquido = OperacaoDeposito.Valor - ((OperacaoDeposito.Valor * taxaFormaPagamento) / 100);
+                                    OperacaoDeposito.Desconto = OperacaoDeposito.Valor - OperacaoDeposito.ValorLiquido;
+                                    OperacaoDeposito.OperacaoCaixaOrigem = _contextoOperacao.Get<OperacaoCaixa>(PrimeiraOperacaoCaixaEntrada.Codigo);
+                                    _contextoOperacao.Add<OperacaoFinanceiraContaCorrente>(OperacaoDeposito);
+                                    _contextoOperacao.SaveChanges();
+
+                                }
+
 
                                 //TODO:verificar se 
                                 if (VerificaSeFormaPagamentoDebitaAutomatico(PrimeiraOperacaoCaixaEntrada.FormaPagamentoUtilizada.Codigo) == true)
@@ -239,8 +265,6 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
                                     _contextoOperacao.SaveChanges();
 
                                     return RedirectToAction("Sucesso", "Home");
-
-
 
                                 }
 
@@ -300,6 +324,28 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
                                     _contextoOperacao.Add<OperacaoCaixa>(SegundaOperacaoCaixaEntrada);
                                     _contextoOperacao.SaveChanges();
 
+
+                                    if (seDeposita == true)
+                                    {
+                                        OperacaoFinanceiraContaCorrente OperacaoDeposito = new OperacaoFinanceiraContaCorrente();
+                                        OperacaoDeposito.ContaLancamento = _contextoOperacao.Get<ContaCorrente>(ObtemNumeroContaCorrente(operacaoCaixa.FormaPagamentoUtilizada.Codigo));
+                                        OperacaoDeposito.Data = operacaoCaixa.DataLancamento;
+                                        OperacaoDeposito.DataHoraInsercao = DateTime.Now;
+                                        OperacaoDeposito.DataRecebimento = operacaoCaixa.DataLancamento.AddDays(diasRecebimento);
+                                        OperacaoDeposito.Descricao = "Simulação de depósito";
+                                        OperacaoDeposito.FormaPagamento = _contextoOperacao.Get<FormaPagamentoEstabelecimento>(operacaoCaixa.FormaPagamentoUtilizada.Codigo);
+                                        OperacaoDeposito.Taxa = taxaFormaPagamento;
+                                        OperacaoDeposito.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now;
+                                        OperacaoDeposito.Valor = operacaoCaixa.Valor;
+                                        OperacaoDeposito.ValorLiquido = OperacaoDeposito.Valor - ((OperacaoDeposito.Valor * taxaFormaPagamento) / 100);
+                                        OperacaoDeposito.Desconto = OperacaoDeposito.Valor - OperacaoDeposito.ValorLiquido;
+                                        OperacaoDeposito.OperacaoCaixaOrigem = _contextoOperacao.Get<OperacaoCaixa>(SegundaOperacaoCaixaEntrada.Codigo);
+                                        _contextoOperacao.Add<OperacaoFinanceiraContaCorrente>(OperacaoDeposito);
+                                        _contextoOperacao.SaveChanges();
+
+                                    }
+
+
                                     if (VerificaSeFormaPagamentoDebitaAutomatico(SegundaOperacaoCaixaEntrada.FormaPagamentoUtilizada.Codigo) == true)
                                     {
                                         OperacaoCaixa SegundaOperacaoSaida = new OperacaoCaixa();
@@ -336,9 +382,6 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
                                         _contextoOperacao.SaveChanges();
 
                                         return RedirectToAction("Sucesso", "Home");
-
-
-
                                     }
 
                                     return RedirectToAction("Sucesso", "Home");
@@ -387,6 +430,28 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
                         _contextoOperacao.Add<OperacaoCaixa>(TerceiraOperacaoCaixaEntrada);
                         _contextoOperacao.SaveChanges();
 
+
+                        if (seDeposita == true)
+                        {
+                            OperacaoFinanceiraContaCorrente OperacaoDeposito = new OperacaoFinanceiraContaCorrente();
+                            OperacaoDeposito.ContaLancamento = _contextoOperacao.Get<ContaCorrente>(ObtemNumeroContaCorrente(operacaoCaixa.FormaPagamentoUtilizada.Codigo));
+                            OperacaoDeposito.Data = operacaoCaixa.DataLancamento;
+                            OperacaoDeposito.DataHoraInsercao = DateTime.Now;
+                            OperacaoDeposito.DataRecebimento = operacaoCaixa.DataLancamento.AddDays(diasRecebimento);
+                            OperacaoDeposito.Descricao = "Simulação de depósito";
+                            OperacaoDeposito.FormaPagamento = _contextoOperacao.Get<FormaPagamentoEstabelecimento>(operacaoCaixa.FormaPagamentoUtilizada.Codigo);
+                            OperacaoDeposito.Taxa = taxaFormaPagamento;
+                            OperacaoDeposito.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now;
+                            OperacaoDeposito.Valor = operacaoCaixa.Valor;
+                            OperacaoDeposito.ValorLiquido = OperacaoDeposito.Valor - ((OperacaoDeposito.Valor * taxaFormaPagamento) / 100);
+                            OperacaoDeposito.Desconto = OperacaoDeposito.Valor - OperacaoDeposito.ValorLiquido;
+                            OperacaoDeposito.OperacaoCaixaOrigem = _contextoOperacao.Get<OperacaoCaixa>(TerceiraOperacaoCaixaEntrada.Codigo);
+                            _contextoOperacao.Add<OperacaoFinanceiraContaCorrente>(OperacaoDeposito);
+                            _contextoOperacao.SaveChanges();
+
+                        }
+
+
                         if (VerificaSeFormaPagamentoDebitaAutomatico(TerceiraOperacaoCaixaEntrada.FormaPagamentoUtilizada.Codigo) == true)
                         {
                             OperacaoCaixa TerceiraOperacaoSaida = new OperacaoCaixa();
@@ -424,8 +489,6 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
 
                             return RedirectToAction("Sucesso", "Home");
 
-
-
                         }
                         return RedirectToAction("Sucesso", "Home");
                     }
@@ -441,16 +504,18 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
         }
 
 
-
         public ActionResult SaidaOperacaoCaixa()
         {
             string NomeUsuarioLogado = User.Identity.Name;
             long codigoEstabelecimento = BuscaEstabelecimento(NomeUsuarioLogado);
+            long codigoEstabelecimentoPadrao = (from c in _contextoOperacao.GetAll<Configuracao>()
+                                                select c.EstabelecimentoPadrao.Codigo).FirstOrDefault();
+
             if (VerificarUsuarioTemPermissao() == false)
             {
                 ViewBag.FormaPagamentoUtilizada = new SelectList(_contextoOperacao.GetAll<FormaPagamentoEstabelecimento>().Where(x => x.ContaCorrenteFormaPagamento.EstabelecimentoDaConta.Codigo == codigoEstabelecimento && x.DespejoAutomatico == false), "Codigo", "NomeTipoFormaPagamento");
 
-                ViewBag.Estabelecimento = new SelectList(_contextoOperacao.GetAll<Estabelecimento>().Where(x => x.RazaoSocial == "CAIXA GERAL"), "Codigo", "RazaoSocial");
+                ViewBag.Estabelecimento = new SelectList(_contextoOperacao.GetAll<Estabelecimento>().Where(x => x.Codigo == codigoEstabelecimentoPadrao), "Codigo", "RazaoSocial");
 
                 return View();
 
@@ -459,7 +524,7 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
             {
                 ViewBag.FormaPagamentoUtilizada = new SelectList(_contextoOperacao.GetAll<FormaPagamentoEstabelecimento>().Where(x => x.ContaCorrenteFormaPagamento.EstabelecimentoDaConta.Codigo != codigoEstabelecimento && x.DespejoAutomatico == false), "Codigo", "NomeTipoFormaPagamento");
 
-                ViewBag.Estabelecimento = new SelectList(_contextoOperacao.GetAll<Estabelecimento>().Where(x => x.RazaoSocial == "CAIXA GERAL"), "Codigo", "RazaoSocial");
+                ViewBag.Estabelecimento = new SelectList(_contextoOperacao.GetAll<Estabelecimento>().Where(x => x.Codigo == codigoEstabelecimentoPadrao), "Codigo", "RazaoSocial");
 
                 return View();
 
@@ -562,13 +627,7 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
                 OperacaoEntrada.TipoOperacao = EnumTipoOperacao.Recebimento;
                 _contextoOperacao.Add<OperacaoCaixa>(OperacaoEntrada);
                 _contextoOperacao.SaveChanges();
-
-
-
-
-
             }
-
 
             return RedirectToAction("Sucesso", "Home");
 
@@ -595,11 +654,12 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
             {
                 string NomeUsuarioLogado = User.Identity.Name;
                 long codigoEstabelecimento = BuscaEstabelecimento(NomeUsuarioLogado);
+                decimal taxaFormaPagamento = ObtemTaxaFormaPagamento(operacaoCaixa.FormaPagamentoUtilizada.Codigo);
+                double diasRecebimento = ObtemDiasRecebimentoFormaPagamento(operacaoCaixa.FormaPagamentoUtilizada.Codigo);
 
 
                 if (VerificaSeFormaPagamentoDebitaAutomatico(operacaoCaixa.FormaPagamentoUtilizada.Codigo) == false)
                 {
-
                     OperacaoCaixa operacaoAlterada = _contextoOperacao.Get<OperacaoCaixa>(operacaoCaixa.Codigo);
 
                     operacaoAlterada.DataLancamento = operacaoCaixa.DataLancamento.Date;
@@ -612,7 +672,26 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
                     operacaoAlterada.UsuarioDataHoraInsercao = "Alterado por: " + User.Identity.Name + " Data: " + DateTime.Now;
                     operacaoAlterada.DataHoraInsercao = DateTime.Now;
                     operacaoCaixa.TipoOperacao = operacaoAlterada.TipoOperacao;
-                    TryUpdateModel<OperacaoCaixa>(operacaoAlterada);
+
+                    OperacaoFinanceiraContaCorrente OperacaoDeposito = (from c in _contextoOperacao.GetAll<OperacaoFinanceiraContaCorrente>()
+                                                                        .Where(x => x.OperacaoCaixaOrigem.Codigo == operacaoAlterada.Codigo)
+                                                                        select c).FirstOrDefault();
+
+                    OperacaoDeposito.ContaLancamento = _contextoOperacao.Get<ContaCorrente>(ObtemNumeroContaCorrente(operacaoCaixa.FormaPagamentoUtilizada.Codigo));
+                    OperacaoDeposito.Data = operacaoCaixa.DataLancamento;
+                    OperacaoDeposito.DataHoraInsercao = DateTime.Now;
+                    OperacaoDeposito.DataRecebimento = operacaoCaixa.DataLancamento.AddDays(diasRecebimento);
+                    OperacaoDeposito.Descricao = "Simulação de depósito";
+                    OperacaoDeposito.FormaPagamento = _contextoOperacao.Get<FormaPagamentoEstabelecimento>(operacaoCaixa.FormaPagamentoUtilizada.Codigo);
+                    OperacaoDeposito.Taxa = taxaFormaPagamento;
+                    OperacaoDeposito.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now;
+                    OperacaoDeposito.Valor = operacaoCaixa.Valor;
+                    OperacaoDeposito.ValorLiquido = OperacaoDeposito.Valor - ((OperacaoDeposito.Valor * taxaFormaPagamento) / 100);
+                    OperacaoDeposito.Desconto = OperacaoDeposito.Valor - OperacaoDeposito.ValorLiquido;
+                    OperacaoDeposito.OperacaoCaixaOrigem = _contextoOperacao.Get<OperacaoCaixa>(operacaoAlterada.Codigo);
+                    _contextoOperacao.SaveChanges();
+
+
                     _contextoOperacao.SaveChanges();
                     return RedirectToAction("Sucesso", "Home");
                 }
@@ -666,6 +745,25 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
                     Despejo.Valor = OperacaoNegativa.Valor * -1;
                     _contextoOperacao.SaveChanges();
 
+
+                    OperacaoFinanceiraContaCorrente OperacaoDeposito = (from c in _contextoOperacao.GetAll<OperacaoFinanceiraContaCorrente>()
+                                                                        .Where(x => x.OperacaoCaixaOrigem.Codigo == OperacaoPositiva.Codigo)
+                                                                        select c).FirstOrDefault();
+
+                    OperacaoDeposito.ContaLancamento = _contextoOperacao.Get<ContaCorrente>(ObtemNumeroContaCorrente(operacaoCaixa.FormaPagamentoUtilizada.Codigo));
+                    OperacaoDeposito.Data = operacaoCaixa.DataLancamento;
+                    OperacaoDeposito.DataHoraInsercao = DateTime.Now;
+                    OperacaoDeposito.DataRecebimento = operacaoCaixa.DataLancamento.AddDays(diasRecebimento);
+                    OperacaoDeposito.Descricao = "Simulação de depósito";
+                    OperacaoDeposito.FormaPagamento = _contextoOperacao.Get<FormaPagamentoEstabelecimento>(operacaoCaixa.FormaPagamentoUtilizada.Codigo);
+                    OperacaoDeposito.Taxa = taxaFormaPagamento;
+                    OperacaoDeposito.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now;
+                    OperacaoDeposito.Valor = operacaoCaixa.Valor;
+                    OperacaoDeposito.ValorLiquido = OperacaoDeposito.Valor - ((OperacaoDeposito.Valor * taxaFormaPagamento) / 100);
+                    OperacaoDeposito.Desconto = OperacaoDeposito.Valor - OperacaoDeposito.ValorLiquido;
+                    OperacaoDeposito.OperacaoCaixaOrigem = _contextoOperacao.Get<OperacaoCaixa>(OperacaoPositiva.Codigo);
+                    _contextoOperacao.SaveChanges();
+
                 }
 
 
@@ -694,6 +792,13 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
                     _contextoOperacao.Delete<OperacaoCaixa>(operacao);
                     _contextoOperacao.SaveChanges();
 
+                    OperacaoFinanceiraContaCorrente OperacaoFinanceiraEquivalente = (from c in _contextoOperacao.GetAll<OperacaoFinanceiraContaCorrente>()
+                                                                                     .Where(x => x.OperacaoCaixaOrigem.Codigo == operacaoExcluida.Codigo)
+                                                                                     select c).FirstOrDefault();
+                    _contextoOperacao.Delete<OperacaoFinanceiraContaCorrente>(OperacaoFinanceiraEquivalente);
+                    _contextoOperacao.SaveChanges();
+
+
                 }
                 else
                 {
@@ -704,6 +809,11 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
                     DespejoOPeracaoCaixa Despejo = (from c in _contextoOperacao.GetAll<DespejoOPeracaoCaixa>()
                                                     .Where(x => x.OperacaoCaixaOrigem.Codigo == operacaoExcluida.Codigo)
                                                     select c).First();
+
+                    OperacaoFinanceiraContaCorrente OperacaoFinanceiraEquivalente = (from c in _contextoOperacao.GetAll<OperacaoFinanceiraContaCorrente>()
+                                                                                    .Where(x => x.OperacaoCaixaOrigem.Codigo == operacaoExcluida.Codigo)
+                                                                                     select c).FirstOrDefault();
+
                     _contextoOperacao.Delete<DespejoOPeracaoCaixa>(Despejo);
                     _contextoOperacao.SaveChanges();
 
@@ -711,6 +821,9 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
                     _contextoOperacao.SaveChanges();
 
                     _contextoOperacao.Delete<OperacaoCaixa>(OperacaoPositiva);
+                    _contextoOperacao.SaveChanges();
+
+                    _contextoOperacao.Delete<OperacaoFinanceiraContaCorrente>(OperacaoFinanceiraEquivalente);
                     _contextoOperacao.SaveChanges();
                 }
 
@@ -811,12 +924,14 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
                                          select c.Privilegiado).First();
             if (UsuarioEPrivilegiado == false)
             {
+                ViewBag.OperadorCaixa = new SelectList(_contextoOperacao.GetAll<CadastrarUsuario>().Where(x => x.EstabelecimentoTrabalho.Codigo == BuscaEstabelecimento(NomeUsuario)), "Codigo", "Nome");
                 return View();
 
             }
             else
             {
                 ViewBag.Estabelecimento = new SelectList(_contextoOperacao.GetAll<Estabelecimento>().Where(x => x.Codigo != 1), "Codigo", "RazaoSocial");
+                ViewBag.OperadorCaixa = new SelectList(_contextoOperacao.GetAll<CadastrarUsuario>().Where(x => x.EstabelecimentoTrabalho.Codigo == BuscaEstabelecimento(NomeUsuario)), "Codigo", "Nome");
                 ViewBag.UsuarioPrevilegiado = UsuarioEPrivilegiado;
                 return View();
             }
@@ -825,11 +940,11 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
         }
 
         [HttpPost]
-        public ActionResult LancamentosData(ValidarData Datas, int? Loja)
+        public ActionResult LancamentosData(ValidarData Datas, int? Loja, int? OperadorCaixa)
         {
             if (Datas.DataFinal < Datas.DataInicial)
             {
-                ViewBag.DataErrada = "A data final não pode ser menor que a data inicial";
+                ViewBag.DataErrada = User.Identity.Name + ", a data final não pode ser menor que a data inicial!";
             }
             else
             {
@@ -846,30 +961,37 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
 
                         IList<OperacaoCaixa> listaPorData = null;
                         IList<Pagamento> ListaPagtos = (from c in _contextoOperacao.GetAll<Pagamento>()
-                                             .Where(x => x.EstabelecimentoQuePagou.Codigo == codigoEstabelecimento)
+                                                        .Where(x => x.EstabelecimentoQuePagou.Codigo == codigoEstabelecimento)
                                                         join o in _contextoOperacao.GetAll<OperacaoCaixa>()
                                                         on c.CodigoOperacaoCaixa equals o.Codigo
                                                         select c).ToList();
                         var ListaPagamentosVazias = new HashSet<string>(ListaPagtos.Select(x => x.Codigo.ToString()));
-
-                        listaPorData = (from c in _contextoOperacao.GetAll<OperacaoCaixa>()
-                                         .Where(x => x.EstabelecimentoOperacao.Codigo == codigoEstabelecimento
+                        if (OperadorCaixa == null)
+                        {
+                            listaPorData = (from c in _contextoOperacao.GetAll<OperacaoCaixa>()
+                                        .Where(x => x.EstabelecimentoOperacao.Codigo == codigoEstabelecimento
                                         && x.DataLancamento.Date >= Datas.DataInicial && x.DataLancamento.Date <= Datas.DataFinal).OrderByDescending(X => X.DataLancamento)
+                                            select c).ToList();
 
-                                        select c).ToList();
+                        }
+                        else
+                        {
+                            listaPorData = (from c in _contextoOperacao.GetAll<OperacaoCaixa>()
+                                        .Where(x => x.EstabelecimentoOperacao.Codigo == codigoEstabelecimento && x.UsuarioQueLancou.Codigo == OperadorCaixa
+                                        && x.DataLancamento.Date >= Datas.DataInicial && x.DataLancamento.Date <= Datas.DataFinal).OrderByDescending(X => X.DataLancamento)
+                                            select c).ToList();
+                        }
+
+
 
                         IList<OperacaoCaixa> listaPorDataSemPagamento = listaPorData.Where(x => !ListaPagamentosVazias.Contains(x.Descricao)).ToList();
-
-
-
-
 
                         ViewBag.Saldo = (from c in _contextoOperacao.GetAll<OperacaoCaixa>()
                                         .Where(x => x.EstabelecimentoOperacao.Codigo == codigoEstabelecimento)
                                          select c.Valor).Sum();
 
                         if ((from c in _contextoOperacao.GetAll<OperacaoCaixa>()
-                                       .Where(x => x.EstabelecimentoOperacao.Codigo == codigoEstabelecimento)
+                             .Where(x => x.EstabelecimentoOperacao.Codigo == codigoEstabelecimento)
                              select c).Count() == 0)
                         {
                             ViewBag.Saldo = 0;
@@ -885,7 +1007,7 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
 
 
                         if ((from c in _contextoOperacao.GetAll<OperacaoCaixa>()
-                                      .Where(x => x.EstabelecimentoOperacao.Codigo == codigoEstabelecimento && x.Valor >= 0)
+                             .Where(x => x.EstabelecimentoOperacao.Codigo == codigoEstabelecimento && x.Valor >= 0)
                              select c).Count() == 0)
                         {
                             ViewBag.Entrada = 0;
@@ -894,13 +1016,13 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
                         else
                         {
                             ViewBag.Entrada = (from c in _contextoOperacao.GetAll<OperacaoCaixa>()
-                                            .Where(x => x.EstabelecimentoOperacao.Codigo == codigoEstabelecimento && x.Valor >= 0)
+                                              .Where(x => x.EstabelecimentoOperacao.Codigo == codigoEstabelecimento && x.Valor >= 0)
                                                select c.Valor).Sum();
 
                         }
 
                         if ((from c in _contextoOperacao.GetAll<OperacaoCaixa>()
-                                        .Where(x => x.EstabelecimentoOperacao.Codigo == codigoEstabelecimento && x.Valor <= 0)
+                             .Where(x => x.EstabelecimentoOperacao.Codigo == codigoEstabelecimento && x.Valor <= 0)
                              select c).ToList().Count() == 0)
                         {
                             ViewBag.Saida = 0;
@@ -925,7 +1047,7 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
                         IList<OperacaoCaixa> listaPorData = null;
 
                         IList<Pagamento> ListaPagtos = (from c in _contextoOperacao.GetAll<Pagamento>()
-                                             .Where(x => x.EstabelecimentoQuePagou.Codigo == Loja)
+                                                       .Where(x => x.EstabelecimentoQuePagou.Codigo == Loja)
                                                         join o in _contextoOperacao.GetAll<OperacaoCaixa>()
                                                         on c.CodigoOperacaoCaixa equals o.Codigo
                                                         select c).ToList();
@@ -934,7 +1056,7 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
 
 
                         listaPorData = (from c in _contextoOperacao.GetAll<OperacaoCaixa>()
-                                         .Where(x => x.EstabelecimentoOperacao.Codigo == Loja
+                                        .Where(x => x.EstabelecimentoOperacao.Codigo == Loja
                                         && x.DataLancamento.Date >= Datas.DataInicial && x.DataLancamento.Date <= Datas.DataFinal && x.Valor < 0 != x.Observacao.StartsWith("Pagamento") && x.FormaPagamentoUtilizada.DespejoAutomatico == false).OrderByDescending(X => X.DataLancamento)
                                         select c).ToList();
 
@@ -945,7 +1067,7 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
                                          select c.Valor).Sum();
 
                         if ((from c in _contextoOperacao.GetAll<OperacaoCaixa>()
-                                       .Where(x => x.EstabelecimentoOperacao.Codigo == Loja)
+                             .Where(x => x.EstabelecimentoOperacao.Codigo == Loja)
                              select c).Count() == 0)
                         {
                             ViewBag.Saldo = 0;
@@ -961,7 +1083,7 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
 
 
                         if ((from c in _contextoOperacao.GetAll<OperacaoCaixa>()
-                                      .Where(x => x.EstabelecimentoOperacao.Codigo == Loja && x.Valor >= 0)
+                             .Where(x => x.EstabelecimentoOperacao.Codigo == Loja && x.Valor >= 0)
                              select c).Count() == 0)
                         {
                             ViewBag.Entrada = 0;
@@ -976,7 +1098,7 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
                         }
 
                         if ((from c in _contextoOperacao.GetAll<OperacaoCaixa>()
-                                        .Where(x => x.EstabelecimentoOperacao.Codigo == Loja && x.Valor <= 0)
+                             .Where(x => x.EstabelecimentoOperacao.Codigo == Loja && x.Valor <= 0)
                              select c).ToList().Count() == 0)
                         {
                             ViewBag.Saida = 0;
@@ -1009,7 +1131,7 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
         {
             if (Datas.DataFinal < Datas.DataInicial)
             {
-                ViewBag.DataErrada = "A data final não pode ser menor que a data inicial";
+                ViewBag.DataErrada = User.Identity.Name + ", a data final não pode ser menor que a data inicial!";
             }
             else
             {
@@ -1028,13 +1150,13 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
                     IList<OperacaoCaixa> listaPorData = null;
 
                     listaPorData = _contextoOperacao.GetAll<OperacaoCaixa>()
-                        .Where(x => x.EstabelecimentoOperacao.Codigo == codigoEstabelecimento && x.Valor <= 0 != x.Descricao.ToUpper().StartsWith("DESPEJO DO CAIXA") != x.Observacao.StartsWith("Pagamento, retirada do caixa") && x.DataLancamento.Date >= Datas.DataInicial && x.DataLancamento.Date <= Datas.DataFinal).OrderByDescending(X => X.DataLancamento).ToList();
+                                  .Where(x => x.EstabelecimentoOperacao.Codigo == codigoEstabelecimento && x.Valor <= 0 && x.TipoOperacao == EnumTipoOperacao.Recolhimento && x.DataLancamento.Date >= Datas.DataInicial && x.DataLancamento.Date <= Datas.DataFinal).OrderByDescending(X => X.DataLancamento).ToList();
 
                     ViewBag.Saldo = (from c in _contextoOperacao.GetAll<OperacaoCaixa>()
                                      .Where(x => x.EstabelecimentoOperacao.Codigo == codigoEstabelecimento)
                                      select c.Valor).Sum();
                     ViewBag.SomaSaida = (from c in _contextoOperacao.GetAll<OperacaoCaixa>()
-                                         .Where(x => x.EstabelecimentoOperacao.Codigo == codigoEstabelecimento && x.Valor <= 0 != x.Descricao.ToUpper().StartsWith("DESPEJO DO CAIXA") != x.Observacao.StartsWith("Pagamento, retirada do caixa") && x.DataLancamento.Date >= Datas.DataInicial && x.DataLancamento.Date <= Datas.DataFinal).OrderByDescending(X => X.DataLancamento).ToList()
+                                         .Where(x => x.EstabelecimentoOperacao.Codigo == codigoEstabelecimento && x.Valor <= 0 && x.TipoOperacao == EnumTipoOperacao.Recolhimento && x.DataLancamento.Date >= Datas.DataInicial && x.DataLancamento.Date <= Datas.DataFinal).OrderByDescending(X => X.DataLancamento).ToList()
                                          select c.Valor).Sum();
 
 
@@ -1197,6 +1319,43 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
             }
             return false;
         }
+
+
+        private bool VerificaSeSistemaDepositaAutomatico()
+        {
+            bool seDeposita = (from c in _contextoOperacao.GetAll<Configuracao>()
+                               select c.FazerLancamentoContaCorrente).FirstOrDefault();
+            return seDeposita;
+        }
+
+
+        private long ObtemNumeroContaCorrente(long codigoFormaPagamento)
+        {
+            long codConta = (from c in _contextoOperacao.GetAll<FormaPagamentoEstabelecimento>()
+                             .Where(x => x.Codigo == codigoFormaPagamento)
+                             select c.ContaCorrenteFormaPagamento.Codigo).FirstOrDefault();
+            return codConta;
+        }
+
+
+        private decimal ObtemTaxaFormaPagamento(long codFormaPagamento)
+        {
+            decimal taxaFormaPagamento = (from c in _contextoOperacao.GetAll<FormaPagamentoEstabelecimento>()
+                                        .Where(x => x.Codigo == codFormaPagamento)
+                                          select c.TaxaFormaPagamento).FirstOrDefault();
+            return taxaFormaPagamento;
+
+        }
+
+        private double ObtemDiasRecebimentoFormaPagamento(long codFormaPagamento)
+        {
+            double numeroDiasRecebimento = (from c in _contextoOperacao.GetAll<FormaPagamentoEstabelecimento>()
+                                             .Where(x => x.Codigo == codFormaPagamento)
+                                            select c.DiasRecebimento).FirstOrDefault();
+
+            return numeroDiasRecebimento;
+        }
+
 
         #endregion
     }

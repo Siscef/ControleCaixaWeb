@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using ControleCaixaWeb.Models;
 using ControleCaixaWeb.Models.Context;
+using System.Net.Mail;
 
 namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
 {
@@ -83,13 +84,13 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
                             }
                             else
                             {
-                                TimeSpan diferenca =Convert.ToDateTime(DateTime.Now)- Convert.ToDateTime(itemListaVerificacao.DataHoraInsercao.ToString("yyyy/MM/dd HH:mm:ss"));
+                                TimeSpan diferenca = Convert.ToDateTime(DateTime.Now) - Convert.ToDateTime(itemListaVerificacao.DataHoraInsercao.ToString("yyyy/MM/dd HH:mm:ss"));
 
                                 if (diferenca.TotalMinutes <= 4)
                                 {
-                                    double TempoDecorrido = 4-Math.Round(diferenca.TotalMinutes, 0) ;
-                                    ViewBag.Mensagem = "Atenção! " + User.Identity.Name + " Faz: " + Math.Round(diferenca.TotalMinutes,0) + " minuto(s)" +
-                                                       " que você fez essa operação, se ela realmente existe tente daqui a: " + TempoDecorrido.ToString() + " minuto(s)"; 
+                                    double TempoDecorrido = 4 - Math.Round(diferenca.TotalMinutes, 0);
+                                    ViewBag.Mensagem = "Atenção! " + User.Identity.Name + " Faz: " + Math.Round(diferenca.TotalMinutes, 0) + " minuto(s)" +
+                                                       " que você fez essa operação, se ela realmente existe tente daqui a: " + TempoDecorrido.ToString() + " minuto(s)";
                                     return View();
 
                                 }
@@ -165,12 +166,44 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
         [HttpPost]
         public ActionResult AlterarFechamentoCaixa(FechamentoCaixa fechamentoCaixa)
         {
+            Configuracao configuracao = (from c in _contextoFecharCaixa.GetAll<Configuracao>()
+                                         select c).FirstOrDefault();
+
             FechamentoCaixa fecharCaixaAlterada = _contextoFecharCaixa.Get<FechamentoCaixa>(fechamentoCaixa.Codigo);
 
-            TryUpdateModel(fecharCaixaAlterada);
+            if (configuracao.EnviarEmailCaixaAlterado == true)
+            {
+                MailMessage message = new MailMessage();
+                message.From = new MailAddress("supervisor@supaquariuscf.net");
+                message.To.Add(new MailAddress(configuracao.Email));
+                if (configuracao.Assunto == null)
+                {
+                    message.Subject = "Alteração de caixa";
+                }
+                else
+                {
+                    message.Subject = configuracao.Assunto;
+                }
+
+                message.Body = " Atenção o usuário :" + User.Identity.Name + " \n" +
+                               " Alterou o caixa, confira os valores antes e depois  : " + " \n"
+                               + " Caixa Abertura Antes: " + fecharCaixaAlterada.CaixaAbertura + "\n"
+                               + "Caixa Fechamento Antes: " + fecharCaixaAlterada.CaixaFechamento + " \n"
+                               + "Faturamento Antes: " + fecharCaixaAlterada.Faturamento + "\n"
+                               + " Caixa Abertura Depois: " + fechamentoCaixa.CaixaAbertura + "\n"
+                               + "Caixa Fechamento Depois: " + fechamentoCaixa.CaixaFechamento + " \n"
+                               + "Faturamento Depois: " + fechamentoCaixa.Faturamento + "\n";
+
+                SmtpClient client = new SmtpClient();
+                client.Send(message);
+            }
+
+
             fecharCaixaAlterada.UsuarioDataHoraInsercao = "Alterado por: " + User.Identity.Name + " Data: " + DateTime.Now;
             fecharCaixaAlterada.DataHoraInsercao = DateTime.Now;
+            TryUpdateModel<FechamentoCaixa>(fecharCaixaAlterada);
             _contextoFecharCaixa.SaveChanges();
+
             return RedirectToAction("Sucesso", "Home");
         }
 
@@ -233,7 +266,7 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
         {
             if (Datas.DataFinal < Datas.DataInicial)
             {
-                ViewBag.DataErrada = "A data final não pode ser menor que a data inicial";
+                ViewBag.DataErrada = User.Identity.Name + ",a data final não pode ser menor que a data inicial";
             }
             else
             {
@@ -257,7 +290,7 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
             return View();
         }
 
-       
+
         private long BuscaEstabelecimento(string nomeUsuario)
         {
             long codEstabelecimento = (from c in _contextoFecharCaixa.GetAll<CadastrarUsuario>()

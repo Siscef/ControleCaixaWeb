@@ -32,27 +32,37 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.EnviarEmailCaixaAlterado)
+            @Html.LabelFor(model => model.Email)
         </div>
         <div class="editor-field">
-            @Html.CheckBoxFor(model => model.EnviarEmailCaixaAlterado)
-            @Html.ValidationMessageFor(model => model.EnviarEmailCaixaAlterado)
+            @Html.TextBoxFor(model => model.Email)
+            @Html.ValidationMessageFor(model => model.Email)
         </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Assunto)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Assunto)
+            @Html.ValidationMessageFor(model => model.Assunto)
+        </div>
+
+
         <div class="editor-label">
             @Html.LabelFor(model => model.EstabelecimentoPadrao)
         </div>
         <div class="editor-field">
-            @Html.DropDownListFor(model => model.EstabelecimentoPadrao.Codigo,(IEnumerable<SelectListItem>)@ViewBag.Loja,"Selecione Loja")
+            @Html.DropDownListFor(model => model.EstabelecimentoPadrao.Codigo, (IEnumerable<SelectListItem>)@ViewBag.Loja, "Selecione Loja")
             @Html.ValidationMessageFor(model => model.EstabelecimentoPadrao)
         </div>
 
 
-         <p>
+        <p>
             <input class="btn btn-success" type="submit" value="Salvar" />
             <input class="btn btn-warning" type="reset" value="Limpar" />
         </p>
     </fieldset>
 }
 <div>
-@Html.ActionLink("Página Inicial", "Index", "Home")
+    @Html.ActionLink("Página Inicial", "Index", "Home")
 </div>

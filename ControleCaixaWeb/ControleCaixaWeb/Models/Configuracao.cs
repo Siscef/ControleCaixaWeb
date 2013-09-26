@@ -17,7 +17,14 @@ namespace ControleCaixaWeb.Models
         public virtual Estabelecimento EstabelecimentoPadrao { get; set; }
         [Display(Name = "Lançamento em conta corrente:")]
         public virtual bool FazerLancamentoContaCorrente { get; set; }
-        [Display(Name="Enviar email para caixa alterado:")]
+        [Display(Name = "Enviar email para caixa alterado:")]
         public virtual bool EnviarEmailCaixaAlterado { get; set; }
+        [Display(Name="Email padrão:")]
+        public virtual string Email { get; set; }
+        [Display(Name="Assunto padrão:")]
+        public virtual string Assunto { get; set; }
+
+      
+
     }
 }

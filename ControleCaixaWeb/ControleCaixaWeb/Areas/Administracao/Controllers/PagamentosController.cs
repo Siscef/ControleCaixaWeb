@@ -147,6 +147,7 @@ namespace ControleCaixaWeb.Areas.Administracao.Controllers
             operacaoParaAlterar.UsuarioQueLancou = _contextoPagamento.GetAll<CadastrarUsuario>().Where(x => x.EstabelecimentoTrabalho.Codigo == codigoEstabelecimento).First();
             operacaoParaAlterar.UsuarioDataHoraInsercao = "Alterado por: " + User.Identity.Name + " Data: " + DateTime.Now;
             operacaoParaAlterar.DataHoraInsercao = DateTime.Now;
+            operacaoParaAlterar.TipoOperacao = EnumTipoOperacao.Pagamento;
             _contextoPagamento.SaveChanges();
 
 
@@ -176,10 +177,7 @@ namespace ControleCaixaWeb.Areas.Administracao.Controllers
                                          .Where(x => x.Codigo == pagamento.Codigo)
                                          select c.FormaPagamento.Codigo).First();
 
-
-
             Pagamento pagamentoExcluido = _contextoPagamento.Get<Pagamento>(pagamento.Codigo);
-
 
             OperacaoCaixa operacaoParaEstornar = new OperacaoCaixa();
 
@@ -190,7 +188,7 @@ namespace ControleCaixaWeb.Areas.Administracao.Controllers
             operacaoParaEstornar.Observacao = "Estorno de Pagamento";
             operacaoParaEstornar.Valor = pagamentoExcluido.Valor;
             operacaoParaEstornar.UsuarioQueLancou = _contextoPagamento.GetAll<CadastrarUsuario>().Where(x => x.EstabelecimentoTrabalho.Codigo == codigoEstabelecimento).First();
-
+            operacaoParaEstornar.TipoOperacao = EnumTipoOperacao.DevolucaoPagamento;
             _contextoPagamento.Add<OperacaoCaixa>(operacaoParaEstornar);
             _contextoPagamento.SaveChanges();
             _contextoPagamento.Delete<Pagamento>(pagamentoExcluido);
@@ -205,12 +203,72 @@ namespace ControleCaixaWeb.Areas.Administracao.Controllers
             IList<Pagamento> pagamentosDesteFavorecido = null;
             pagamentosDesteFavorecido = _contextoPagamento.GetAll<Pagamento>().Where(x => x.FavorecidoPagamento.Codigo == id).ToList();
 
-            return View(pagamentosDesteFavorecido);
+            return View(pagamentosDesteFavorecido);       
+        
+        }
+
+
+        public ActionResult VisualizarPagamentos()
+        {
+            ViewBag.Loja = new SelectList(_contextoPagamento.GetAll<Estabelecimento>().Where(x => x.Codigo != 1).OrderBy(x => x.RazaoSocial),"Codigo","RazaoSocial");
+            ViewBag.Favorecido = new SelectList(_contextoPagamento.GetAll<Favorecido>().OrderBy(x => x.NomeFavorecido),"Codigo","NomeFavorecido");
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult VisualizarPagamentos(ValidarData Datas, int? Loja, int? Favorecido)
+        {
+            if (Datas.DataFinal < Datas.DataInicial)
+            {
+                ViewBag.DataErrada = User.Identity.Name + ", a data final não pode ser menor que a data inicial";
+            }
+            else
+            {
+                if (ModelState.IsValid)
+                {
+                    if (Loja == null)
+                    {
+                        IList<Pagamento> ListaPagamentos = _contextoPagamento.GetAll<Pagamento>()
+                                                   .Where(x => x.DataPagamento >= Datas.DataInicial && x.DataPagamento <= Datas.DataFinal && x.FavorecidoPagamento.Codigo == Favorecido)
+                                                  .OrderByDescending(x => x.DataPagamento).ToList();
+                        return View("ListaPagamentos", ListaPagamentos);
+                        
+                    }
+                    else if (Favorecido == null)
+                    {
+                        IList<Pagamento> ListaPagamentos = _contextoPagamento.GetAll<Pagamento>()
+                                                  .Where(x => x.DataPagamento >= Datas.DataInicial && x.DataPagamento <= Datas.DataFinal && x.EstabelecimentoQuePagou.Codigo == Loja)
+                                                 .OrderByDescending(x => x.DataPagamento).ToList();
+                        return View("ListaPagamentos", ListaPagamentos);
+                    }
+                    else if (Loja == null && Favorecido == null)
+                    {
+                        IList<Pagamento> ListaPagamentos = _contextoPagamento.GetAll<Pagamento>()
+                                                 .Where(x => x.DataPagamento >= Datas.DataInicial && x.DataPagamento <= Datas.DataFinal)
+                                                .OrderByDescending(x => x.DataPagamento).ToList();
+                        return View("ListaPagamentos", ListaPagamentos);
+                        
+                    }
+                    else
+                    {
+                        IList<Pagamento> ListaPagamentos = _contextoPagamento.GetAll<Pagamento>()
+                                                  .Where(x => x.DataPagamento >= Datas.DataInicial && x.DataPagamento <= Datas.DataFinal && x.FavorecidoPagamento.Codigo == Favorecido && x.EstabelecimentoQuePagou.Codigo == Loja)
+                                                 .OrderByDescending(x => x.DataPagamento).ToList();
+                        return View("ListaPagamentos", ListaPagamentos);
+
+                    }
+                   
+                }
+            }
+
+            ViewBag.Loja = new SelectList(_contextoPagamento.GetAll<Estabelecimento>().Where(x => x.Codigo != 1).OrderBy(x => x.RazaoSocial), "Codigo", "RazaoSocial");
+            ViewBag.Favorecido = new SelectList(_contextoPagamento.GetAll<Favorecido>().OrderBy(x => x.NomeFavorecido), "Codigo", "NomeFavorecido");
+            return View();
         }
 
         public ActionResult ListaPagamentos()
         {
-            return View(_contextoPagamento.GetAll<Pagamento>().OrderByDescending(x => x.DataPagamento).ToList());
+            return View();
         }
 
         public ActionResult PagamentoPorData(DateTime? data)

@@ -18,6 +18,8 @@ namespace ControleCaixaWeb.Models
         public virtual bool DespejoAutomatico { get; set; }
         [Display(Name="Dias Para Recebimento:")]
         public virtual int DiasRecebimento { get; set; }
+        [Display(Name="Padrão:")]
+        public virtual bool Padrao { get; set; }
 
     }
 }

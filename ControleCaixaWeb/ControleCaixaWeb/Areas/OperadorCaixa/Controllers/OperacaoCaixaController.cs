@@ -45,7 +45,7 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
                 long codigoEstabelecimento = BuscaEstabelecimento(NomeDoCaixa);
 
                 long ContadorSangria = (from c in _contextoOperacaocaixa.GetAll<OperacaoCaixa>()
-                                        .Where(x => x.DataLancamento.Date == OperacaoCaixaSangria.DataLancamento.Date && x.Descricao.StartsWith("SANGRIA") && x.UsuarioQueLancou.Nome == NomeDoCaixa)
+                                        .Where(x => x.DataLancamento.Date == OperacaoCaixaSangria.DataLancamento.Date && x.TipoOperacao == EnumTipoOperacao.Sangria && x.UsuarioQueLancou.Nome == NomeDoCaixa)
                                         select c).Count();
                 ContadorSangria = ContadorSangria + 1;
                 OperacaoCaixaSangria.Descricao = "SANGRIA:  " + ContadorSangria;
@@ -71,6 +71,8 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
                 OperacaoCaixaSangria.EstabelecimentoOperacao = _contextoOperacaocaixa.Get<Estabelecimento>(codigoEstabelecimento);
 
                 OperacaoCaixaSangria.Observacao = operacaoSangria.Observacao;
+                OperacaoCaixaSangria.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now;
+                OperacaoCaixaSangria.DataHoraInsercao = DateTime.Now;
                 OperacaoCaixaSangria.TipoOperacao = EnumTipoOperacao.Sangria;
                 _contextoOperacaocaixa.Add<OperacaoCaixa>(OperacaoCaixaSangria);
                 _contextoOperacaocaixa.SaveChanges();
@@ -78,6 +80,81 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
             return RedirectToAction("Sucesso", "Home");
         }
 
+
+        public ActionResult SangriaRapidaOperacaoCaixa()
+        {
+            string NomeDoCaixa = User.Identity.Name;
+            long codigoEstabelecimento = (from c in _contextoOperacaocaixa.GetAll<CadastrarUsuario>()
+                                         .Where(x => x.Nome == NomeDoCaixa)
+                                          select c.EstabelecimentoTrabalho.Codigo).First();
+
+            IList<FormaPagamentoEstabelecimento> ListaVerificaFormaPadrao = _contextoOperacaocaixa.GetAll<FormaPagamentoEstabelecimento>()
+                                                 .Where(x => x.ContaCorrenteFormaPagamento.EstabelecimentoDaConta.Codigo == codigoEstabelecimento && x.DespejoAutomatico == false && x.Padrao == true)
+                                                 .ToList();
+            if (ListaVerificaFormaPadrao.Count() == 0)
+            {
+                ViewBag.SemFormaPagamento = User.Identity.Name + ", Não existe uma forma de pagamento padrão \n" +
+                                                                 "Por favor tente no modo normal.";
+                return View();
+            }
+            else
+            {
+                return View();
+            }
+
+
+        }
+
+        [HttpPost]
+        public ActionResult SangriaRapidaOperacaoCaixa(OperacaoCaixa OperacaoCaixaSangria)
+        {
+            lock (_contextoOperacaocaixa)
+            {
+                string NomeDoCaixa = User.Identity.Name;
+
+                OperacaoCaixa SangriaRapida = new OperacaoCaixa();
+
+                SangriaRapida.DataLancamento = DateTime.Now;
+                long codigoEstabelecimento = BuscaEstabelecimento(NomeDoCaixa);
+
+                long ContadorSangria = (from c in _contextoOperacaocaixa.GetAll<OperacaoCaixa>()
+                                        .Where(x => x.DataLancamento.Date == SangriaRapida.DataLancamento.Date && x.TipoOperacao == EnumTipoOperacao.Sangria && x.UsuarioQueLancou.Nome == NomeDoCaixa)
+                                        select c).Count();
+                ContadorSangria = ContadorSangria + 1;
+                SangriaRapida.Descricao = "SANGRIA:  " + ContadorSangria;
+
+
+                if (OperacaoCaixaSangria.Valor < 0)
+                {
+
+                    SangriaRapida.Valor = OperacaoCaixaSangria.Valor * -1;
+                }
+                else
+                {
+                    SangriaRapida.Valor = OperacaoCaixaSangria.Valor;
+                }
+
+                SangriaRapida.UsuarioQueLancou = (from c in _contextoOperacaocaixa.GetAll<CadastrarUsuario>()
+                                                         .Where(x => x.Nome == NomeDoCaixa)
+                                                  select c).First();
+
+                SangriaRapida.FormaPagamentoUtilizada = (from c in _contextoOperacaocaixa.GetAll<FormaPagamentoEstabelecimento>()
+                                                         .Where(x => x.ContaCorrenteFormaPagamento.EstabelecimentoDaConta.Codigo == codigoEstabelecimento && x.DespejoAutomatico == false && x.Padrao == true)
+                                                         select c).FirstOrDefault();
+
+
+
+                SangriaRapida.EstabelecimentoOperacao = _contextoOperacaocaixa.Get<Estabelecimento>(codigoEstabelecimento);
+
+                SangriaRapida.Observacao = "Sangria rápida";
+                SangriaRapida.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now;
+                SangriaRapida.DataHoraInsercao = DateTime.Now;
+                SangriaRapida.TipoOperacao = EnumTipoOperacao.Sangria;
+                _contextoOperacaocaixa.Add<OperacaoCaixa>(SangriaRapida);
+                _contextoOperacaocaixa.SaveChanges();
+            }
+            return RedirectToAction("Sucesso", "Home");
+        }
 
 
         public ActionResult LancamentoOperacaoCaixa()
@@ -570,7 +647,7 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
                     OperacaoAlterada.UsuarioDataHoraInsercao = "Alterado por: " + User.Identity.Name + " Data: " + DateTime.Now;
                     OperacaoAlterada.DataHoraInsercao = DateTime.Now;
                     _contextoOperacaocaixa.SaveChanges();
-                    
+
                     return RedirectToAction("Sucesso", "Home");
                 }
                 else
@@ -589,7 +666,7 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
                     OperacaoCaixaPositiva.Conferido = false;
                     OperacaoCaixaPositiva.UsuarioDataHoraInsercao = "Alterado por: " + User.Identity.Name + " Data: " + DateTime.Now;
                     OperacaoCaixaPositiva.DataHoraInsercao = DateTime.Now;
-                  
+
                     _contextoOperacaocaixa.SaveChanges();
 
                     OperacaoCaixa OperacaoNegativa = (from c in _contextoOperacaocaixa.GetAll<OperacaoCaixa>()
@@ -711,7 +788,7 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
         {
             if (Datas.DataFinal < Datas.DataInicial)
             {
-                ViewBag.DataErrada = "A data final não pode ser menor que a data inicial";
+                ViewBag.DataErrada = User.Identity.Name + ",a data final não pode ser menor que a data inicial";
             }
             else
             {

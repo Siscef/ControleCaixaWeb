@@ -85,7 +85,7 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
             long codigoEstabelecimento = (from c in _contextoPagamento.GetAll<CadastrarUsuario>()
                                           .Where(x => x.Nome == NomeUsuarioLogado)
                                           select c.EstabelecimentoTrabalho.Codigo).First();
-            ViewBag.Forma = new SelectList(_contextoPagamento.GetAll<FormaPagamentoEstabelecimento>().Where(x => x.ContaCorrenteFormaPagamento.EstabelecimentoDaConta.Codigo == codigoEstabelecimento), "Codigo", "NomeTipoFormaPagamento");
+            ViewBag.Forma = new SelectList(_contextoPagamento.GetAll<FormaPagamentoEstabelecimento>().Where(x => x.ContaCorrenteFormaPagamento.EstabelecimentoDaConta.Codigo == codigoEstabelecimento && x.DespejoAutomatico == false), "Codigo", "NomeTipoFormaPagamento");
             ViewBag.Favorecido = new SelectList(_contextoPagamento.GetAll<Favorecido>(), "Codigo", "NomeFavorecido");
             return View();
         }
@@ -483,6 +483,7 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
             }
             else
             {
+                ViewBag.Estabelecimento = new SelectList(_contextoPagamento.GetAll<Estabelecimento>().Where(x => x.Codigo == BuscaEstabelecimento(User.Identity.Name)), "Codigo", "RazaoSocial");
                 return View();
 
             }
@@ -494,7 +495,7 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
         {
             if (Datas.DataFinal < Datas.DataInicial)
             {
-                ViewBag.DataErrada = "A data final não pode ser menor que a data inicial";
+                ViewBag.DataErrada = User.Identity.Name + ", a data final não pode ser menor que a data inicial!";
             }
             else
             {
@@ -527,7 +528,7 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
 
                         IList<Pagamento> listaDosPagamentos = null;
                         listaDosPagamentos = _contextoPagamento.GetAll<Pagamento>()
-                                               .Where(x => x.EstabelecimentoQuePagou.Codigo == Estabelecimento && x.DataPagamento.Date >= Datas.DataInicial && x.DataPagamento.Date <= Datas.DataFinal).OrderByDescending(x => x.DataPagamento).ToList();
+                                            .Where(x => x.EstabelecimentoQuePagou.Codigo == Estabelecimento && x.DataPagamento.Date >= Datas.DataInicial && x.DataPagamento.Date <= Datas.DataFinal).OrderByDescending(x => x.DataPagamento).ToList();
                         return View("ListaPagamento", listaDosPagamentos);
                     }
                     

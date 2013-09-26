@@ -14,6 +14,8 @@
 
         <div class="editor-label">
             @Html.HiddenFor(model => model.Codigo)
+            @Html.HiddenFor(model => model.FaturamentoUsuario.Codigo)
+
         </div>
         <div class="editor-field">
             @Html.HiddenFor(model => model.Codigo)
@@ -55,6 +57,7 @@
 
         <p>
             <input class="btn btn-warning" type="submit" value="Salvar Alterações" />
+
         </p>
     </fieldset>
 }

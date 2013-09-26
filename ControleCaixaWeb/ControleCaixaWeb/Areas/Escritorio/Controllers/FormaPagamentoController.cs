@@ -105,6 +105,9 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
 			formaPagamentoAlterada.NomeTipoFormaPagamento = formaPagamento.NomeTipoFormaPagamento;
 			formaPagamentoAlterada.TaxaFormaPagamento = formaPagamento.TaxaFormaPagamento;
 			formaPagamentoAlterada.DespejoAutomatico = formaPagamento.DespejoAutomatico;
+            formaPagamentoAlterada.DiasRecebimento = formaPagamento.DiasRecebimento;
+            formaPagamentoAlterada.Padrao = formaPagamento.Padrao;
+            formaPagamentoAlterada.TaxaFormaPagamento = formaPagamento.TaxaFormaPagamento;
 
 			_contextoFormaPagamento.SaveChanges( );
 

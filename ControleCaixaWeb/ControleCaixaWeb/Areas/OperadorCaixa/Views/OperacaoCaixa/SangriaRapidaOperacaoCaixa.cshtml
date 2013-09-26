@@ -1,0 +1,37 @@
+﻿@model ControleCaixaWeb.Models.OperacaoCaixa
+
+@{
+    ViewBag.Title = "SangriaRapidaOperacaoCaixa";
+    Layout = "~/Areas/OperadorCaixa/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Sangria Rápida</h2>
+<h4>@ViewBag.SemFormaPagamento </h4>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Sangria Rápida</legend>           
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Valor,"Valor:")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Valor)<p>Informe O Valor da Sangria</p>
+
+            @Html.ValidationMessageFor(model => model.Valor)
+        </div>     
+
+       
+
+        <p>
+           <input class ="btn btn-success" type="submit" value="Cadastar" />
+            <input class="btn btn-warning" type="reset" value="Limpar" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Página Inicial", "Index","Home")
+</div>
+

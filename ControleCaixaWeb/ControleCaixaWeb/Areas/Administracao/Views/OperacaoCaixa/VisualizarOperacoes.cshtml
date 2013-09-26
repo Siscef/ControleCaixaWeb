@@ -1,7 +1,7 @@
 ﻿@model ControleCaixaWeb.Models.ValidarData
 @{
-    ViewBag.Title = "LancamentosData";
-    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "VisualizarOperacoes";
+    Layout = "~/Areas/Administracao/Views/Shared/_Layout.cshtml";
 }
 
 <h3>Por favor forneça um intervalo de datas</h3>
@@ -30,27 +30,25 @@
             @Html.ValidationMessageFor(model => model.DataFinal)
         </div>
 
-        @if (ViewBag.UsuarioPrevilegiado == true)
-        {
-            <div class="editor-label">
-                Estabelecimento:
-            </div>
-            <div class="editor-field">
-                @Html.DropDownList("Loja", (IEnumerable<SelectListItem>)ViewBag.Estabelecimento, "Selecione Estabelecimento")
 
-            </div>
-              
-        }
-        else
-        {
-            <div class="editor-label">
-                Operador Caixa:
-            </div>
-            <div class="editor-field">
-                @Html.DropDownList("OperadorCaixa", (IEnumerable<SelectListItem>)ViewBag.OperadorCaixa, "Selecione Operador Caixa")
+        <div class="editor-label">
+            Estabelecimento:
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("Loja", (IEnumerable<SelectListItem>)ViewBag.Estabelecimento, "Selecione Estabelecimento")
 
-            </div>
-        }
+        </div>
+
+
+        <div class="editor-label">
+            Tipo Operação:
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("TipoOperacao", (from EnumTipoOperacao e in Enum.GetValues(typeof(EnumTipoOperacao))
+                                                select new SelectListItem { Value = ((int)e).ToString(),Text = e.ToString() }), "Selecione Tipo Operação")
+
+        </div>
+
 
 
 

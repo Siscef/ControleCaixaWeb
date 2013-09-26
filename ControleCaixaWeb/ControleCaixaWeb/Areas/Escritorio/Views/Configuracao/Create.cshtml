@@ -37,6 +37,24 @@
             @Html.ValidationMessageFor(model => model.EnviarEmailCaixaAlterado)
         </div>
 
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Email)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Email)
+            @Html.ValidationMessageFor(model => model.Email)
+        </div>
+
+         <div class="editor-label">
+            @Html.LabelFor(model => model.Assunto)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Assunto)
+            @Html.ValidationMessageFor(model => model.Assunto)
+        </div>
+
+
         <div class="editor-label">
             @Html.LabelFor(model => model.EstabelecimentoPadrao)
         </div>
@@ -52,5 +70,5 @@
 }
 
 <div>
-@Html.ActionLink("Página Inicial", "Index", "Home")
+    @Html.ActionLink("Página Inicial", "Index", "Home")
 </div>
