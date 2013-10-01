@@ -38,12 +38,12 @@
         </div>
         <div class="editor-label">
             @Html.LabelFor(model => model.Valor, "Valor:")
-            <div id="calculadora">
+           @* <div id="calculadora">
                 @Html.Partial("Calculadora")
-            </div>
+            </div>*@
         </div>
         <div class="editor-field">
-            @Html.TextBoxFor(model => model.Valor, new { id = "campoValorOperacaoCaixa1", name = "campoValorOperacaoCaixa1", @readonly = true })
+            @Html.TextBoxFor(model => model.Valor)
             <div class="calculator">
             </div>
             <p>

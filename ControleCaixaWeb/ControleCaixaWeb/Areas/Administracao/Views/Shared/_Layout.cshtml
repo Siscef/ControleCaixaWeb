@@ -85,7 +85,7 @@
             submenu.Add().Text("Ver Pagamentos").Action("VisualizarPagamentos", "Pagamentos", new { area = "Administracao" });
             submenu.Add().Text("Ver Despejo").Action("VisualizarDespejo", "DespejoOperacaoCaixa", new { area = "Administracao" });
             submenu.Add().Text("Ver Lancamentos Cartões").Action("VisualizarCartoes", "OperacaoContaCorrente", new { area = "Administracao" });
-            submenu.Add().Text("Ver Depósito").Action("VisualizarDeposito", "OperacaoCaixa", new { area = "Administracao"});
+            submenu.Add().Text("Ver Depósito").Action("VisualizarDeposito", "OperacaoContaCorrente", new { area = "Administracao" });
 
         });
         raiz.Add().Text("Configuração").Items(submenu =>

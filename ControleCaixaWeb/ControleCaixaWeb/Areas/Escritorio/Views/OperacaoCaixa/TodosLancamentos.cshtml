@@ -89,7 +89,7 @@
 			</td>
 			<td>
 				@Html.ActionLink("Ver Data", "OperacoesNestaData", new { id = item.DataLancamento.Date.ToString("yyyy-MM-dd") })|
-				@Html.ActionLink("Por FormaPagamento", "VerPorFormaPagamento", new { forma = item.FormaPagamentoUtilizada.Codigo, data = item.DataLancamento.Date.ToString("yyyy-MM-dd") })|
+				@Html.ActionLink("Por FormaPagamento", "VerPorFormaPagamento", new { forma = item.FormaPagamentoUtilizada.Codigo, data = item.DataLancamento.Date.ToString("yyyy-MM-dd"),operador = item.UsuarioQueLancou.Codigo })|
 				@Html.ActionLink("Por Usuario", "VerUsuario", new { id = item.UsuarioQueLancou.Codigo, data = item.DataLancamento.Date.ToString("yyyy-MM-dd") })|
                 @Html.ActionLink("Conferido?", "OPeracaoConferida", new { id = item.Codigo })
 			</td>

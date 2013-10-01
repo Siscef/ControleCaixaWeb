@@ -5,51 +5,53 @@
     Layout = "~/Areas/Administracao/Views/Shared/_Layout.cshtml";
 }
 
-<h2>ListaCartoesCredito</h2>
+<h2>Visualização simulação depósito</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table>
+
+<br />
+<h3>Soma valor bruto:  @Model.Sum(model => model.Valor)</h3>
+<br />
+<h3>Soma valor líquido:  @Model.Sum(model => model.ValorLiquido)</h3>
+<br />
+<h3>Soma valor desconto:  @Model.Sum(model => model.Desconto)</h3>
+<br />
+
+<table class="table table-bordered">
     <tr>
+      
         <th>
-            Codigo
+            Data Lançamento:
         </th>
         <th>
-            Data
+            Valor:
+        </th>
+
+         <th>
+            Valor líquido:
+        </th>
+
+          <th>
+            Taxa:
+        </th>
+          <th>
+            Desconto:
         </th>
         <th>
-            Valor
+            Data recebimento:
         </th>
         <th>
-            ValorLiquido
-        </th>
-        <th>
-            Taxa
-        </th>
-        <th>
-            Desconto
-        </th>
-        <th>
-            Descricao
-        </th>
-        <th>
-            UsuarioDataHoraInsercao
-        </th>
-        <th>
-            DataHoraInsercao
-        </th>
-        <th>
-            DataRecebimento
-        </th>
-        <th></th>
+            Conta corrente:
+        </th>    
+        
+         <th>
+            Operações:
+        </th>  
+        
     </tr>
 
 @foreach (var item in Model) {
     <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Codigo)
-        </td>
+        
         <td>
             @Html.DisplayFor(modelItem => item.Data)
         </td>
@@ -65,22 +67,16 @@
         <td>
             @Html.DisplayFor(modelItem => item.Desconto)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Descricao)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UsuarioDataHoraInsercao)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DataHoraInsercao)
-        </td>
-        <td>
+          <td>
             @Html.DisplayFor(modelItem => item.DataRecebimento)
         </td>
+          <td>
+            @Html.DisplayFor(modelItem => item.ContaLancamento.Numero)
+        </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+          
+            @Html.ActionLink("Detalhes", "Detalhes", new { id=item.Codigo })
+           
         </td>
     </tr>
 }

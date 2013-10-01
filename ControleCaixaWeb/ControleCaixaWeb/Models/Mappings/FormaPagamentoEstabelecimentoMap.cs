@@ -10,12 +10,12 @@ namespace ControleCaixaWeb.Models.Mappings
     {
         public FormaPagamentoEstabelcimentoMap()
         {
-            Table("ControleCaixaWeb_FormaPagamento_Estabelecimento");
+            Table("ControleCaixaWeb_Forma_Pagamento_Estabelecimento");
             Id(x => x.Codigo, "Codigo");
             Map(x => x.NomeTipoFormaPagamento, "NomeFormaPagamento").Not.Nullable().Unique().Length(45).ToString().ToUpper();
             Map(x => x.TaxaFormaPagamento, "TaxaFormaPagamento").Not.Nullable();
             Map(x => x.DespejoAutomatico, "DespejoAutomatico");
-            Map(x => x.DiasRecebimento, "DiasRecebimento").Not.Nullable();
+            Map(x => x.DiasRecebimento, "DiasRecebimento").Nullable();
             Map(x => x.Padrao, "Padrao").Nullable();
 
             References(x => x.ContaCorrenteFormaPagamento, "ContaCorrenteFormaPagamento")

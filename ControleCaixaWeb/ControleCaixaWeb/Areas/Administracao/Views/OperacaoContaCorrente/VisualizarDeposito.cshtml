@@ -1,6 +1,6 @@
 ﻿@model ControleCaixaWeb.Models.ValidarData
 @{
-    ViewBag.Title = "VisualizarOperacoes";
+    ViewBag.Title = "VisualizarDeposito";
     Layout = "~/Areas/Administracao/Views/Shared/_Layout.cshtml";
 }
 
@@ -32,23 +32,21 @@
 
 
         <div class="editor-label">
-            Estabelecimento:
+            Conta corrente:
         </div>
         <div class="editor-field">
-            @Html.DropDownList("Loja", (IEnumerable<SelectListItem>)ViewBag.Estabelecimento, "Selecione Estabelecimento")
+            @Html.DropDownList("ContaCorrente", (IEnumerable<SelectListItem>)ViewBag.ContaCorrente, "Selecione Conta corrente")
 
         </div>
 
-
+        
         <div class="editor-label">
-            Tipo Operação:
+           Forma pagamento
         </div>
         <div class="editor-field">
-            @Html.DropDownList("TipoOperacao", (from EnumTipoOperacao e in Enum.GetValues(typeof(EnumTipoOperacao))
-                                                select new SelectListItem { Value = ((int)e).ToString(), Text = e.ToString() }), "Selecione Tipo Operação")
+            @Html.DropDownList("Forma", (IEnumerable<SelectListItem>)ViewBag.Forma, "Selecione Forma pagamento")
 
         </div>
-
 
         <br />
         <p>
