@@ -203,7 +203,7 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
                 {
 
                     IList<OperacaoCaixa> ListaVerificarLancamentoDuplicado = _contextoOperacaocaixa.GetAll<OperacaoCaixa>().AsParallel()
-                                                                           .Where(x => x.Valor == OperacaoCaixaLancamento.Valor && x.Observacao == OperacaoCaixaLancamento.Observacao && x.UsuarioQueLancou.Nome == User.Identity.Name)
+                                                                           .Where(x => x.Valor == OperacaoCaixaLancamento.Valor && x.TipoOperacao == EnumTipoOperacao.LancamentoCaixa && x.UsuarioQueLancou.Nome == User.Identity.Name)
                                                                            .ToList();
                     bool VerificaSeSistemaFazDepositoAutomatico = (from c in _contextoOperacaocaixa.GetAll<Configuracao>()
                                                                    select c.FazerLancamentoContaCorrente).FirstOrDefault();
@@ -670,7 +670,7 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
                     _contextoOperacaocaixa.SaveChanges();
 
                     OperacaoCaixa OperacaoNegativa = (from c in _contextoOperacaocaixa.GetAll<OperacaoCaixa>()
-                                                      .Where(x => x.Observacao.ToString() == OperacaoCaixaParaAlterar.Codigo.ToString())
+                                                      .Where(x => x.Observacao.ToString() == OperacaoCaixaParaAlterar.Codigo.ToString() && x.TipoOperacao == EnumTipoOperacao.SaidaLancamentoCaixa)
                                                       select c).First();
 
                     OperacaoNegativa.DataLancamento = OperacaoCaixaParaAlterar.DataLancamento;

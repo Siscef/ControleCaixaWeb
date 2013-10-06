@@ -59,9 +59,18 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
                 {
                     foreach (var item in ListVerifica)
                     {
-                        Edit(item);
+                        Configuracao ConfiguracaoPadrao = _contextoConfiguracao.Get<Configuracao>(item.Codigo);
+
+                        ConfiguracaoPadrao.Assunto = configuracao.Assunto;
+                        ConfiguracaoPadrao.CasasDecimais = configuracao.CasasDecimais;
+                        ConfiguracaoPadrao.Email = configuracao.Email;
+                        ConfiguracaoPadrao.EnviarEmailCaixaAlterado = configuracao.EnviarEmailCaixaAlterado;
+                        ConfiguracaoPadrao.EstabelecimentoPadrao = _contextoConfiguracao.Get<Estabelecimento>(configuracao.EstabelecimentoPadrao.Codigo);
+                        ConfiguracaoPadrao.FazerLancamentoContaCorrente = configuracao.FazerLancamentoContaCorrente;
+                        _contextoConfiguracao.SaveChanges();
+                        return RedirectToAction("Sucesso", "Home");
                     }
-                    
+
                 }
 
 

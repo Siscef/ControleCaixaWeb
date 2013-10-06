@@ -5,12 +5,12 @@
     Layout = "~/Areas/Administracao/Views/Shared/_Layout.cshtml";
 }
 
-<h2>AlterarFormaPagamento</h2>
+<h2>Alterar Forma Pagamento</h2>
 
 @using (Html.BeginForm()) {
     @Html.ValidationSummary(true)
     <fieldset>
-        <legend>FormaPagamento Estabelecimento</legend>
+        <legend>Forma Pagamento Estabelecimento</legend>
 
         <div class="editor-label">
             @Html.HiddenFor(model => model.Codigo)
@@ -23,7 +23,7 @@
             @Html.LabelFor(model => model.NomeTipoFormaPagamento,"Nome Forma Pagamento:")
         </div>
         <div class="editor-field">
-            @Html.TextBoxFor(model => model.NomeTipoFormaPagamento, new { @class = "input-xlarge" })<p>Nome da forma </p>
+            @Html.TextBoxFor(model => model.NomeTipoFormaPagamento, new { @class = "input-xlarge" })<p>Nome Forma Pagamento</p>
             @Html.ValidationMessageFor(model => model.NomeTipoFormaPagamento)
         </div>
 
@@ -31,10 +31,19 @@
             @Html.LabelFor(model => model.TaxaFormaPagamento,"Taxa:")
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.TaxaFormaPagamento, new { @class = "input-xlarge" })<p>0,00</p>
+            @Html.EditorFor(model => model.TaxaFormaPagamento, new { @class = "input-xlarge" })<p>9,99</p>
             @Html.ValidationMessageFor(model => model.TaxaFormaPagamento)
         </div>
-          <div class="editor-label">
+
+         <div class="editor-label">
+            @Html.LabelFor(model => model.DiasRecebimento,"Prazo:")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.DiasRecebimento, new { @class = "input-xlarge" })<p>9,99</p>
+            @Html.ValidationMessageFor(model => model.DiasRecebimento)
+        </div>
+
+         <div class="editor-label">
             @Html.LabelFor(model => model.ContaCorrenteFormaPagamento,"Conta Corrente:")
         </div>
         <div class="editor-field">
@@ -45,15 +54,21 @@
 			@Html.LabelFor(model => model.DespejoAutomatico,"Despejo Automático?:")
 		</div>
 		<div class="editor-field">
-			@Html.EditorFor(model => model.DespejoAutomatico, new { @class = "input-xlarge" })<p>
-				Se Marcado: Sim</p>
+			@Html.EditorFor(model => model.DespejoAutomatico, new { @class = "input-xlarge" })
+				
 			@Html.ValidationMessageFor(model => model.DespejoAutomatico)
 		</div>
-        
 
-        <p>
-           <input class="btn btn-warning" type="submit" value="Salvar Alterações" />
-           
+        <div class="editor-label">
+			@Html.LabelFor(model => model.Padrao,"Padrão?:")
+		</div>
+		<div class="editor-field">
+			@Html.EditorFor(model => model.Padrao, new { @class = "input-xlarge" })
+				
+			@Html.ValidationMessageFor(model => model.Padrao)
+		</div>
+		<p>
+            <input class="btn btn-warning" type="submit" value="Salvar Alterações" />
         </p>
     </fieldset>
 }
@@ -61,3 +76,4 @@
 <div>
     @Html.ActionLink("Página Inicial", "Index","Home")
 </div>
+
