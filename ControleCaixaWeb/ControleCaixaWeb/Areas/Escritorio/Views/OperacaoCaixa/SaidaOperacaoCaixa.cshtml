@@ -1,5 +1,4 @@
 ﻿@model ControleCaixaWeb.Models.OperacaoCaixa
-
 @{
     ViewBag.Title = "Saida Operacao Caixa";
     Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
@@ -15,72 +14,74 @@
 <br />
 <h4>@ViewBag.MensagemSaldoInsuficienteLoja</h4>
 <br />
+<h4>@ViewBag.Mensagem</h4>
+<br />
 
 @using (Html.BeginForm())
 {
     @Html.ValidationSummary(true)
     <fieldset>
-    <div class="control-group">
-        <legend>Lançamento Caixa</legend>
+        <div class="control-group">
+            <legend>Lançamento Caixa</legend>
 
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.DataLancamento,"Data Lançamento:")
-        </div>
-        <div class="editor-field">
-            @Html.Telerik( ).DatePickerFor(model => model.DataLancamento).Name("DataLancamento")
-            @Html.ValidationMessageFor(model => model.DataLancamento)
-        </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.DataLancamento, "Data Lançamento:")
+            </div>
+            <div class="editor-field">
+                @Html.Telerik().DatePickerFor(model => model.DataLancamento).Name("DataLancamento")
+                @Html.ValidationMessageFor(model => model.DataLancamento)
+            </div>
 
-           <div class="editor-label">
-            @Html.LabelFor(model => model.FormaPagamentoUtilizada, "Plano Pagamento:")
-        </div>
-          <div class="editor-field">
-            @Html.DropDownList("FormaPagamento", (IEnumerable<SelectListItem>)ViewBag.FormaPagamentoUtilizada, "Selecione Plano Pagamento")@Html.ActionLink("Adicionar Plano Pagamento", "CadastrarFormaPagamento", "FormaPagamento")
-            @Html.ValidationMessageFor(model => model.FormaPagamentoUtilizada)
-        </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.FormaPagamentoUtilizada, "Plano Pagamento:")
+            </div>
+            <div class="editor-field">
+                @Html.DropDownList("FormaPagamento", (IEnumerable<SelectListItem>)ViewBag.FormaPagamentoUtilizada, "Selecione Plano Pagamento")@Html.ActionLink("Adicionar Plano Pagamento", "CadastrarFormaPagamento", "FormaPagamento")
+                @Html.ValidationMessageFor(model => model.FormaPagamentoUtilizada)
+            </div>
 
-        
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Valor,"Valor:")
-        </div>
-        <div class="editor-field">
-            @Html.TextBoxFor(model => model.Valor)<p>Valor Operação: 999,999</p>
-            @Html.ValidationMessageFor(model => model.Valor)
-        </div>
-        
-         <div class="editor-label">
-            @Html.LabelFor(model => model.EstabelecimentoOperacao, "Estabelecimento Destino:")
-        </div>
-          <div class="editor-field">
-            @Html.DropDownListFor(model => model.EstabelecimentoOperacao.Codigo, (IEnumerable<SelectListItem>)ViewBag.Estabelecimento, "Selecione Estabelecimento")<p>Para qual loja você está enviando?</p>
-            @Html.ValidationMessageFor(model => model.EstabelecimentoOperacao)
-        </div>
-               
 
-          <div class="editor-label">
-            @Html.LabelFor(model => model.Descricao,"Descrição:")
-        </div>
-        <div class="editor-field">
-            @Html.TextBoxFor(model => model.Descricao, new { @class = "input-xlarge", id = "input01" })<p>Coloque aqui uma breve descrição</p>
-        </div>       
-       
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Observacao,"Observação:")
-        </div>
-        <div class="editor-field">
-            @Html.TextAreaFor(model => model.Observacao, new { @class = "input-xlarge", id = "input01" })<p>Coloque uma observação:Opcional</p>
-            @Html.ValidationMessageFor(model => model.Observacao)
-        </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Valor, "Valor:")
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.Valor)<p>Valor Operação: 999,999</p>
+                @Html.ValidationMessageFor(model => model.Valor)
+            </div>
 
-        <p>
-            <input class ="btn btn-success" type="submit" value="Cadastar" />
-            <input class="btn btn-warning" type="reset" value="Limpar" />
-        </p>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.EstabelecimentoOperacao, "Estabelecimento Destino:")
+            </div>
+            <div class="editor-field">
+                @Html.DropDownListFor(model => model.EstabelecimentoOperacao.Codigo, (IEnumerable<SelectListItem>)ViewBag.Estabelecimento, "Selecione Estabelecimento")<p>Para qual loja você está enviando?</p>
+                @Html.ValidationMessageFor(model => model.EstabelecimentoOperacao)
+            </div>
+
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Descricao, "Descrição:")
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.Descricao, new { @class = "input-xlarge", id = "input01" })<p>Coloque aqui uma breve descrição</p>
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Observacao, "Observação:")
+            </div>
+            <div class="editor-field">
+                @Html.TextAreaFor(model => model.Observacao, new { @class = "input-xlarge", id = "input01" })<p>Coloque uma observação:Opcional</p>
+                @Html.ValidationMessageFor(model => model.Observacao)
+            </div>
+
+            <p>
+                <input class="btn btn-success" type="submit" value="Cadastar" />
+                <input class="btn btn-warning" type="reset" value="Limpar" />
+            </p>
         </div>
     </fieldset>
 }
 
 <div>
-    @Html.ActionLink("Página Inicial","Index","Home")
+    @Html.ActionLink("Página Inicial", "Index", "Home")
 </div>

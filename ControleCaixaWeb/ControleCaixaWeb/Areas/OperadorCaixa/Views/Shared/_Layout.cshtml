@@ -46,6 +46,7 @@
 
             submenu.Add().Text("Visualizar Lançamentos Hoje").Action("LancamentosHoje", "OperacaoCaixa", new { area = "OperadorCaixa" });
             submenu.Add().Text("Visualizar Lançamentos").Action("LancamentosData", "OperacaoCaixa", new { area = "OperadorCaixa" });
+            submenu.Add().Text("Conferir Lançamentos").Action("ConferirLancamentosData", "OperacaoCaixa", new { area = "OperadorCaixa" });
             submenu.Add().Text("Ver Meu Caixa").Action("FechamentoCaixaData", "FecharCaixa", new { area = "OperadorCaixa" });
 
         });

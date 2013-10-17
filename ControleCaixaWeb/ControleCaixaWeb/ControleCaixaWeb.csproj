@@ -1279,6 +1279,9 @@
     <Content Include="Areas\Administracao\Views\OperacaoContaCorrente\VisualizarCartoes.cshtml" />
     <Content Include="Areas\Administracao\Views\OperacaoContaCorrente\VisualizarDeposito.cshtml" />
     <Content Include="Areas\Administracao\Views\OperacaoContaCorrente\ListaDeposito.cshtml" />
+    <Content Include="Areas\Escritorio\Views\OperacaoCaixa\AlterarRecolhimento.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\OperacaoCaixa\ConferirLancamentosData.cshtml" />
+    <Content Include="Areas\OperadorCaixa\Views\OperacaoCaixa\ConferirTodosLancamentos.cshtml" />
     <None Include="Areas\OperadorCaixa\Views\Shared\Calculadora.cshtml" />
     <Content Include="Areas\OperadorCaixa\Views\Shared\_LayoutIndex.cshtml" />
     <None Include="Content\images\logoPrincipal.gbl" />

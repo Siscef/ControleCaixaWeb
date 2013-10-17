@@ -19,7 +19,7 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
             return View();
         }
 
-
+        #region sangraia
 
         public ActionResult SangriaOperacaoCaixa()
         {
@@ -156,7 +156,10 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
             return RedirectToAction("Sucesso", "Home");
         }
 
+        #endregion
 
+
+        #region lancamentos
         public ActionResult LancamentoOperacaoCaixa()
         {
             string NomeUsuarioLogado = User.Identity.Name;
@@ -167,8 +170,6 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
 
             return View();
         }
-
-
 
         [HttpPost]
         public ActionResult LancamentoOperacaoCaixa(OperacaoCaixa OperacaoCaixaLancamento)
@@ -604,8 +605,9 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
 
         }
 
+        #endregion
 
-
+        #region alterar
         public ActionResult AlterarLancamentoOperacaoCaixa(int id)
         {
             string NomeDoCaixa = User.Identity.Name;
@@ -616,8 +618,6 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
             return View(OperacaoAlterar);
 
         }
-
-
 
         [HttpPost]
         public ActionResult AlterarLancamentoOperacaoCaixa(OperacaoCaixa OperacaoCaixaParaAlterar)
@@ -716,7 +716,10 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
             return RedirectToAction("Sucesso", "Home");
         }
 
+        #endregion
 
+
+        #region exclusao
 
         public ActionResult ExcluirLancamentoCaixa(int id)
         {
@@ -724,8 +727,6 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
 
             return View(OperacaoParaExcluir);
         }
-
-
 
         [HttpPost]
         public ActionResult ExcluirLancamentoCaixa(OperacaoCaixa operacaoCaixaExcluir)
@@ -760,8 +761,10 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
             return RedirectToAction("Sucesso", "Home");
         }
 
+        #endregion
 
 
+        #region consultas
 
         public ActionResult LancamentoIndividual(DateTime dataLancamento)
         {
@@ -774,6 +777,11 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
 
         [HandleError(View = "Error")]
         public ActionResult TodosLancamentos()
+        {
+            return View();
+        }
+
+        public ActionResult ConferirTodosLancamentos()
         {
             return View();
         }
@@ -810,6 +818,59 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
         }
 
 
+
+        public ActionResult ConferirLancamentosData()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ConferirLancamentosData(ValidarData Datas, int? TipoOperacao)
+        {
+            
+            if (Datas.DataFinal < Datas.DataInicial)
+            {
+                ViewBag.DataErrada = User.Identity.Name + ",a data final não pode ser menor que a data inicial";
+            }
+            else
+            {
+                if (ModelState.IsValid)
+                {
+
+                    string nomeCaixa = User.Identity.Name;
+                    ViewBag.DataInicio = Datas.DataInicial;
+                    ViewBag.DataFim = Datas.DataFinal;
+                    IList<OperacaoCaixa> todosLancamentos = null;
+
+                    if (TipoOperacao == null)
+                    {
+                         todosLancamentos = _contextoOperacaocaixa.GetAll<OperacaoCaixa>()
+                                            
+                                            .Where(x => x.UsuarioQueLancou.Nome == nomeCaixa && x.DataLancamento.Date >= Datas.DataInicial && x.DataLancamento.Date <= Datas.DataFinal && x.Valor > 0)
+                                            .OrderByDescending(x => x.DataLancamento)
+                                            .ToList();
+                        
+                    }
+                    else
+                    {
+                        string tipoEnum = Enum.GetName(typeof(EnumTipoOperacao), TipoOperacao);
+                        todosLancamentos = _contextoOperacaocaixa.GetAll<OperacaoCaixa>()                                          
+                                           .Where(x => x.UsuarioQueLancou.Nome == nomeCaixa && x.DataLancamento.Date >= Datas.DataInicial && x.DataLancamento.Date <= Datas.DataFinal && x.Valor > 0 && x.TipoOperacao.ToString() == tipoEnum)
+                                           .OrderByDescending(x => x.DataLancamento)
+                                           .ToList();
+                    }            
+                    
+
+                    return View("ConferirTodosLancamentos", todosLancamentos);
+                }
+            }
+
+            return View();
+
+
+        }
+
+
         public ActionResult LancamentosNaData(DateTime? id)
         {
             string nomeUsuario = User.Identity.Name;
@@ -819,12 +880,6 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
                 .Where(x => x.DataLancamento.Date == id && x.UsuarioQueLancou.Nome == nomeUsuario && x.Valor > 0).ToList();
 
             return View(listaPorData);
-        }
-
-        public String DataAgora()
-        {
-            return DateTime.Now.Day + "/" + DateTime.Now.Month + "/" + DateTime.Now.Year + " " + DateTime.Now.Hour + ":" + DateTime.Now.Minute.ToString() + ":" + DateTime.Now.Second.ToString();
-
         }
 
         public ActionResult LancamentosHoje()
@@ -838,6 +893,19 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
             return View(ListaOperacaoHoje);
         }
 
+        #endregion
+
+
+
+
+
+        #region metodos
+
+        public String DataAgora()
+        {
+            return DateTime.Now.Day + "/" + DateTime.Now.Month + "/" + DateTime.Now.Year + " " + DateTime.Now.Hour + ":" + DateTime.Now.Minute.ToString() + ":" + DateTime.Now.Second.ToString();
+
+        }
         private long BuscaEstabelecimento(string nomeUsuario)
         {
             long codEstabelecimento = (from c in _contextoOperacaocaixa.GetAll<CadastrarUsuario>()
@@ -857,6 +925,8 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
             }
             return false;
         }
+
+        #endregion
 
     }
 }

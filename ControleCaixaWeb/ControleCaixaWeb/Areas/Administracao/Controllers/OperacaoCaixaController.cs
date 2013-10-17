@@ -59,7 +59,7 @@ namespace ControleCaixaWeb.Areas.Administracao.Controllers
 
                     listaOperacao = _contextoOperacao.GetAll<OperacaoCaixa>()
                                      .Where(x => x.DataLancamento >= Datas.DataInicial && x.DataLancamento <= Datas.DataFinal && x.EstabelecimentoOperacao.Codigo == Loja
-                                     && x.TipoOperacao.ToString() == tipoEnum)
+                                     && x.TipoOperacao.ToString() == tipoEnum.ToString())
                                     .OrderByDescending(x => x.DataLancamento).ToList();
 
                     return View("ListaDasOperacaoes", listaOperacao);

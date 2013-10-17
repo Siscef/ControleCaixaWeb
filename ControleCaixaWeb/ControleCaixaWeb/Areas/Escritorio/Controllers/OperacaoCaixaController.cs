@@ -155,6 +155,7 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
                 {
 
                     IList<OperacaoCaixa> ListaVerificarLancamentoDuplicado = _contextoOperacao.GetAll<OperacaoCaixa>()
+                                                                           .AsParallel()
                                                                            .Where(x => x.Valor == operacaoCaixa.Valor && x.Descricao == operacaoCaixa.Descricao)
                                                                            .ToList();
                     bool seDeposita = VerificaSeSistemaDepositaAutomatico();
@@ -205,7 +206,6 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
                                 PrimeiraOperacaoCaixaEntrada.TipoOperacao = EnumTipoOperacao.LancamentoCaixa;
                                 _contextoOperacao.Add<OperacaoCaixa>(PrimeiraOperacaoCaixaEntrada);
                                 _contextoOperacao.SaveChanges();
-
 
                                 if (seDeposita == true)
                                 {
@@ -588,45 +588,179 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
                     return View();
                 }
 
-                OperacaoCaixa operacaoSaida = new OperacaoCaixa();
-
-                operacaoSaida.DataLancamento = operacaoCaixa.DataLancamento;
-                operacaoSaida.Descricao = "RECOLHIMENTO " + operacaoCaixa.Descricao;
-                operacaoSaida.FormaPagamentoUtilizada = _contextoOperacao.Get<FormaPagamentoEstabelecimento>(Convert.ToInt64(Request["FormaPagamento"]));
-                operacaoSaida.UsuarioQueLancou = (from c in _contextoOperacao.GetAll<CadastrarUsuario>()
-                                                  .Where(x => x.Nome == NomeUsuarioLogado)
-                                                  select c).First();
-                operacaoSaida.EstabelecimentoOperacao = _contextoOperacao.Get<Estabelecimento>(codigoEstabelecimento);
-                if (operacaoCaixa.Observacao != null)
+                IList<OperacaoCaixa> ListaVerificaOperacaoCaixaDuplicada = _contextoOperacao.GetAll<OperacaoCaixa>()
+                                                                           .AsParallel()
+                                                                           .Where(x => x.TipoOperacao == EnumTipoOperacao.Recolhimento && x.Valor == operacaoCaixa.Valor * -1)
+                                                                           .ToList();
+                if (ListaVerificaOperacaoCaixaDuplicada.Count() >= 1)
                 {
-                    operacaoCaixa.Observacao = operacaoCaixa.Observacao.ToUpper();
+                    foreach (var itemVerificaLancamentoDuplicado in ListaVerificaOperacaoCaixaDuplicada)
+                    {
+                        if (itemVerificaLancamentoDuplicado.DataHoraInsercao == null)
+                        {
+                            OperacaoCaixa PrimeiraOperacaoSaida = new OperacaoCaixa();
+
+                            PrimeiraOperacaoSaida.DataLancamento = operacaoCaixa.DataLancamento;
+                            PrimeiraOperacaoSaida.Descricao = "RECOLHIMENTO " + operacaoCaixa.Descricao;
+                            PrimeiraOperacaoSaida.FormaPagamentoUtilizada = _contextoOperacao.Get<FormaPagamentoEstabelecimento>(Convert.ToInt64(Request["FormaPagamento"]));
+                            PrimeiraOperacaoSaida.UsuarioQueLancou = (from c in _contextoOperacao.GetAll<CadastrarUsuario>()
+                                                                      .AsParallel()
+                                                                      .Where(x => x.Nome == NomeUsuarioLogado)
+                                                                      select c).First();
+                            PrimeiraOperacaoSaida.EstabelecimentoOperacao = _contextoOperacao.Get<Estabelecimento>(codigoEstabelecimento);
+                            if (operacaoCaixa.Observacao != null)
+                            {
+                                operacaoCaixa.Observacao = operacaoCaixa.Observacao.ToUpper();
+                            }
+                            PrimeiraOperacaoSaida.Observacao = operacaoCaixa.Observacao;
+                            PrimeiraOperacaoSaida.Valor = operacaoCaixa.Valor * -1;
+
+                            PrimeiraOperacaoSaida.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now;
+                            PrimeiraOperacaoSaida.DataHoraInsercao = DateTime.Now;
+                            PrimeiraOperacaoSaida.TipoOperacao = EnumTipoOperacao.Recolhimento;
+                            _contextoOperacao.Add<OperacaoCaixa>(PrimeiraOperacaoSaida);
+                            _contextoOperacao.SaveChanges();
+
+
+                            OperacaoCaixa PrimeiraOperacaoEntrada = new OperacaoCaixa();
+
+                            PrimeiraOperacaoEntrada.DataLancamento = operacaoCaixaEntrada.DataLancamento;
+                            PrimeiraOperacaoEntrada.Descricao = " Entrada Transferencia " + operacaoCaixa.Descricao;
+                            PrimeiraOperacaoEntrada.FormaPagamentoUtilizada = _contextoOperacao.Get<FormaPagamentoEstabelecimento>(Convert.ToInt64(Request["FormaPagamento"]));
+                            PrimeiraOperacaoEntrada.EstabelecimentoOperacao = _contextoOperacao.Get<Estabelecimento>(operacaoCaixa.EstabelecimentoOperacao.Codigo);
+                            PrimeiraOperacaoEntrada.Observacao = PrimeiraOperacaoSaida.Codigo.ToString();
+                            PrimeiraOperacaoEntrada.UsuarioQueLancou = (from c in _contextoOperacao.GetAll<CadastrarUsuario>()
+                                                                        .Where(x => x.Nome == NomeUsuarioLogado)
+                                                                        select c).First();
+                            PrimeiraOperacaoEntrada.Valor = operacaoCaixaEntrada.Valor;
+                            PrimeiraOperacaoEntrada.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now;
+                            PrimeiraOperacaoEntrada.DataHoraInsercao = DateTime.Now;
+                            PrimeiraOperacaoEntrada.TipoOperacao = EnumTipoOperacao.Recebimento;
+                            _contextoOperacao.Add<OperacaoCaixa>(PrimeiraOperacaoEntrada);
+                            _contextoOperacao.SaveChanges();
+                            return RedirectToAction("Sucesso", "Home");
+
+                        }
+                        else
+                        {
+                            TimeSpan diferenca = Convert.ToDateTime(DateTime.Now) - Convert.ToDateTime(itemVerificaLancamentoDuplicado.DataHoraInsercao.ToString("yyyy/MM/dd HH:mm:ss"));
+
+                            if (diferenca.TotalMinutes <= 4)
+                            {
+                                double TempoDecorrido = 4 - Math.Round(diferenca.TotalMinutes, 0);
+                                ViewBag.Mensagem = "Atenção! " + User.Identity.Name + " Faz: " + Math.Round(diferenca.TotalMinutes, 0) + " minuto(s)" +
+                                                   " que você fez essa operação, se ela realmente existe tente daqui a: " + TempoDecorrido.ToString() + " minuto(s)";
+                                ViewBag.FormaPagamentoUtilizada = new SelectList(_contextoOperacao.GetAll<FormaPagamentoEstabelecimento>().Where(x => x.ContaCorrenteFormaPagamento.EstabelecimentoDaConta.Codigo == BuscaEstabelecimento(NomeUsuarioLogado) && x.DespejoAutomatico == false), "Codigo", "NomeTipoFormaPagamento", operacaoCaixaEntrada.FormaPagamentoUtilizada);
+                                ViewBag.UsuarioQueLancou = new SelectList(_contextoOperacao.GetAll<CadastrarUsuario>(), "Codigo", "Nome", operacaoCaixa.UsuarioQueLancou);
+                                ViewBag.UsuarioQueVai = new SelectList(_contextoOperacao.GetAll<CadastrarUsuario>(), "Codigo", "Nome", operacaoCaixa.UsuarioQueLancou);
+                                ViewBag.Estabelecimento = new SelectList(_contextoOperacao.GetAll<Estabelecimento>(), "Codigo", "RazaoSocial", operacaoCaixa.EstabelecimentoOperacao.Codigo);
+                                return View();
+                            }
+
+                            //aqui faz a segunda parte
+                            else
+                            {
+                                OperacaoCaixa SegundaOperacaoSaida = new OperacaoCaixa();
+
+                                SegundaOperacaoSaida.DataLancamento = operacaoCaixa.DataLancamento;
+                                SegundaOperacaoSaida.Descricao = "RECOLHIMENTO " + operacaoCaixa.Descricao;
+                                SegundaOperacaoSaida.FormaPagamentoUtilizada = _contextoOperacao.Get<FormaPagamentoEstabelecimento>(Convert.ToInt64(Request["FormaPagamento"]));
+                                SegundaOperacaoSaida.UsuarioQueLancou = (from c in _contextoOperacao.GetAll<CadastrarUsuario>()
+                                                                          .AsParallel()
+                                                                          .Where(x => x.Nome == NomeUsuarioLogado)
+                                                                         select c).First();
+                                SegundaOperacaoSaida.EstabelecimentoOperacao = _contextoOperacao.Get<Estabelecimento>(codigoEstabelecimento);
+                                if (operacaoCaixa.Observacao != null)
+                                {
+                                    operacaoCaixa.Observacao = operacaoCaixa.Observacao.ToUpper();
+                                }
+                                SegundaOperacaoSaida.Observacao = operacaoCaixa.Observacao;
+                                SegundaOperacaoSaida.Valor = operacaoCaixa.Valor * -1;
+
+                                SegundaOperacaoSaida.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now;
+                                SegundaOperacaoSaida.DataHoraInsercao = DateTime.Now;
+                                SegundaOperacaoSaida.TipoOperacao = EnumTipoOperacao.Recolhimento;
+                                _contextoOperacao.Add<OperacaoCaixa>(SegundaOperacaoSaida);
+                                _contextoOperacao.SaveChanges();
+
+
+                                OperacaoCaixa SegundaOperacaoEntrada = new OperacaoCaixa();
+
+                                SegundaOperacaoEntrada.DataLancamento = operacaoCaixaEntrada.DataLancamento;
+                                SegundaOperacaoEntrada.Descricao = " Entrada Transferencia " + operacaoCaixa.Descricao;
+                                SegundaOperacaoEntrada.FormaPagamentoUtilizada = _contextoOperacao.Get<FormaPagamentoEstabelecimento>(Convert.ToInt64(Request["FormaPagamento"]));
+                                SegundaOperacaoEntrada.EstabelecimentoOperacao = _contextoOperacao.Get<Estabelecimento>(operacaoCaixa.EstabelecimentoOperacao.Codigo);
+                                SegundaOperacaoEntrada.Observacao = SegundaOperacaoSaida.Codigo.ToString();
+                                SegundaOperacaoEntrada.UsuarioQueLancou = (from c in _contextoOperacao.GetAll<CadastrarUsuario>()
+                                                                            .Where(x => x.Nome == NomeUsuarioLogado)
+                                                                           select c).First();
+                                SegundaOperacaoEntrada.Valor = operacaoCaixaEntrada.Valor;
+                                SegundaOperacaoEntrada.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now;
+                                SegundaOperacaoEntrada.DataHoraInsercao = DateTime.Now;
+                                SegundaOperacaoEntrada.TipoOperacao = EnumTipoOperacao.Recebimento;
+                                _contextoOperacao.Add<OperacaoCaixa>(SegundaOperacaoEntrada);
+                                _contextoOperacao.SaveChanges();
+                                return RedirectToAction("Sucesso", "Home");
+
+
+                            }
+
+
+
+                        }
+
+
+
+                    }
+
+
                 }
-                operacaoSaida.Observacao = operacaoCaixa.Observacao;
-                operacaoSaida.Valor = operacaoCaixa.Valor * -1;
+                else
+                {
+                    OperacaoCaixa TerceiraOperacaoSaida = new OperacaoCaixa();
 
-                operacaoSaida.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now;
-                operacaoSaida.DataHoraInsercao = DateTime.Now;
-                operacaoSaida.TipoOperacao = EnumTipoOperacao.Recolhimento;
-                _contextoOperacao.Add<OperacaoCaixa>(operacaoSaida);
-                _contextoOperacao.SaveChanges();
+                    TerceiraOperacaoSaida.DataLancamento = operacaoCaixa.DataLancamento;
+                    TerceiraOperacaoSaida.Descricao = "RECOLHIMENTO " + operacaoCaixa.Descricao;
+                    TerceiraOperacaoSaida.FormaPagamentoUtilizada = _contextoOperacao.Get<FormaPagamentoEstabelecimento>(Convert.ToInt64(Request["FormaPagamento"]));
+                    TerceiraOperacaoSaida.UsuarioQueLancou = (from c in _contextoOperacao.GetAll<CadastrarUsuario>()
+                                                              .AsParallel()
+                                                              .Where(x => x.Nome == NomeUsuarioLogado)
+                                                              select c).First();
+                    TerceiraOperacaoSaida.EstabelecimentoOperacao = _contextoOperacao.Get<Estabelecimento>(codigoEstabelecimento);
+                    if (operacaoCaixa.Observacao != null)
+                    {
+                        operacaoCaixa.Observacao = operacaoCaixa.Observacao.ToUpper();
+                    }
+                    TerceiraOperacaoSaida.Observacao = operacaoCaixa.Observacao;
+                    TerceiraOperacaoSaida.Valor = operacaoCaixa.Valor * -1;
+
+                    TerceiraOperacaoSaida.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now;
+                    TerceiraOperacaoSaida.DataHoraInsercao = DateTime.Now;
+                    TerceiraOperacaoSaida.TipoOperacao = EnumTipoOperacao.Recolhimento;
+                    _contextoOperacao.Add<OperacaoCaixa>(TerceiraOperacaoSaida);
+                    _contextoOperacao.SaveChanges();
 
 
-                OperacaoCaixa OperacaoEntrada = new OperacaoCaixa();
+                    OperacaoCaixa TerceiraOperacaoEntrada = new OperacaoCaixa();
 
-                OperacaoEntrada.DataLancamento = operacaoCaixaEntrada.DataLancamento;
-                OperacaoEntrada.Descricao = " Entrada Transferencia " + operacaoCaixa.Descricao;
-                OperacaoEntrada.FormaPagamentoUtilizada = _contextoOperacao.Get<FormaPagamentoEstabelecimento>(Convert.ToInt64(Request["FormaPagamento"]));
-                OperacaoEntrada.EstabelecimentoOperacao = _contextoOperacao.Get<Estabelecimento>(operacaoCaixa.EstabelecimentoOperacao.Codigo);
-                OperacaoEntrada.Observacao = operacaoCaixaEntrada.Observacao;
-                OperacaoEntrada.UsuarioQueLancou = (from c in _contextoOperacao.GetAll<CadastrarUsuario>()
-                                                   .Where(x => x.Nome == NomeUsuarioLogado)
-                                                    select c).First();
-                OperacaoEntrada.Valor = operacaoCaixaEntrada.Valor;
-                OperacaoEntrada.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now;
-                OperacaoEntrada.DataHoraInsercao = DateTime.Now;
-                OperacaoEntrada.TipoOperacao = EnumTipoOperacao.Recebimento;
-                _contextoOperacao.Add<OperacaoCaixa>(OperacaoEntrada);
-                _contextoOperacao.SaveChanges();
+                    TerceiraOperacaoEntrada.DataLancamento = operacaoCaixaEntrada.DataLancamento;
+                    TerceiraOperacaoEntrada.Descricao = " Entrada Transferencia " + operacaoCaixa.Descricao;
+                    TerceiraOperacaoEntrada.FormaPagamentoUtilizada = _contextoOperacao.Get<FormaPagamentoEstabelecimento>(Convert.ToInt64(Request["FormaPagamento"]));
+                    TerceiraOperacaoEntrada.EstabelecimentoOperacao = _contextoOperacao.Get<Estabelecimento>(operacaoCaixa.EstabelecimentoOperacao.Codigo);
+                    TerceiraOperacaoEntrada.Observacao = TerceiraOperacaoSaida.Codigo.ToString();
+                    TerceiraOperacaoEntrada.UsuarioQueLancou = (from c in _contextoOperacao.GetAll<CadastrarUsuario>()
+                                                       .Where(x => x.Nome == NomeUsuarioLogado)
+                                                                select c).First();
+                    TerceiraOperacaoEntrada.Valor = operacaoCaixaEntrada.Valor;
+                    TerceiraOperacaoEntrada.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now;
+                    TerceiraOperacaoEntrada.DataHoraInsercao = DateTime.Now;
+                    TerceiraOperacaoEntrada.TipoOperacao = EnumTipoOperacao.Recebimento;
+                    _contextoOperacao.Add<OperacaoCaixa>(TerceiraOperacaoEntrada);
+                    _contextoOperacao.SaveChanges();
+
+                    return RedirectToAction("Sucesso", "Home");
+                }
+
             }
 
             return RedirectToAction("Sucesso", "Home");
@@ -768,6 +902,94 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
 
 
             }
+
+            return RedirectToAction("Sucesso", "Home");
+        }
+
+
+        public ActionResult AlterarRecolhimento(int id)
+        {
+            string NomeUsuarioLogado = User.Identity.Name;
+            long codigoEstabelecimento = BuscaEstabelecimento(NomeUsuarioLogado);
+            OperacaoCaixa OperacaoParaAlterar = _contextoOperacao.Get<OperacaoCaixa>(id);
+            ViewBag.FormaPagamentoUtilizada = new SelectList(_contextoOperacao.GetAll<FormaPagamentoEstabelecimento>().Where(x => x.ContaCorrenteFormaPagamento.EstabelecimentoDaConta.Codigo == codigoEstabelecimento && x.DespejoAutomatico == false), "Codigo", "NomeTipoFormaPagamento");
+            ViewBag.UsuarioQueLancou = new SelectList(_contextoOperacao.GetAll<CadastrarUsuario>().Where(x => x.EstabelecimentoTrabalho.Codigo == codigoEstabelecimento && x.Nome == NomeUsuarioLogado), "Codigo", "Nome");
+
+            return View(OperacaoParaAlterar);
+        }
+
+
+        [HttpPost]
+        public ActionResult AlterarRecolhimento(OperacaoCaixa operacaoCaixaRecolhimento)
+        {
+            try
+            {
+                decimal valorRecolhimento = operacaoCaixaRecolhimento.Valor > 0 ? operacaoCaixaRecolhimento.Valor : operacaoCaixaRecolhimento.Valor * -1;
+                OperacaoCaixa OperacaoCaixaRecolhimentoNegativa = _contextoOperacao.Get<OperacaoCaixa>(operacaoCaixaRecolhimento.Codigo);
+                OperacaoCaixa OperacaoCaixaRecolhimentoPositiva = (from c in _contextoOperacao.GetAll<OperacaoCaixa>()
+                                                                  .AsParallel()
+                                                                  .Where(x => x.TipoOperacao == EnumTipoOperacao.Recebimento && x.Observacao == OperacaoCaixaRecolhimentoNegativa.Codigo.ToString())
+                                                                   select c).FirstOrDefault();
+
+                OperacaoCaixaRecolhimentoNegativa.Conferido = operacaoCaixaRecolhimento.Conferido;
+                OperacaoCaixaRecolhimentoNegativa.DataHoraInsercao = OperacaoCaixaRecolhimentoNegativa.DataHoraInsercao;
+                OperacaoCaixaRecolhimentoNegativa.DataLancamento = operacaoCaixaRecolhimento.DataLancamento;
+                OperacaoCaixaRecolhimentoNegativa.Descricao = operacaoCaixaRecolhimento.Descricao;
+                OperacaoCaixaRecolhimentoNegativa.EstabelecimentoOperacao = _contextoOperacao.Get<Estabelecimento>(OperacaoCaixaRecolhimentoNegativa.EstabelecimentoOperacao.Codigo);
+                OperacaoCaixaRecolhimentoNegativa.FormaPagamentoUtilizada = _contextoOperacao.Get<FormaPagamentoEstabelecimento>(operacaoCaixaRecolhimento.FormaPagamentoUtilizada.Codigo);
+                OperacaoCaixaRecolhimentoNegativa.Observacao = operacaoCaixaRecolhimento.Observacao;
+                OperacaoCaixaRecolhimentoNegativa.TipoOperacao = EnumTipoOperacao.Recolhimento;
+                OperacaoCaixaRecolhimentoNegativa.UsuarioDataHoraInsercao = "Alterado por: " + User.Identity.Name + " Data: " + DateTime.Now;
+                OperacaoCaixaRecolhimentoNegativa.UsuarioQueLancou = _contextoOperacao.Get<CadastrarUsuario>(operacaoCaixaRecolhimento.UsuarioQueLancou.Codigo);
+                if (operacaoCaixaRecolhimento.Valor > 0)
+                {
+                    OperacaoCaixaRecolhimentoNegativa.Valor = operacaoCaixaRecolhimento.Valor * -1;
+                }
+                else
+                {
+                    OperacaoCaixaRecolhimentoNegativa.Valor = operacaoCaixaRecolhimento.Valor;
+                }
+
+
+                OperacaoCaixaRecolhimentoPositiva.Conferido = OperacaoCaixaRecolhimentoPositiva.Conferido;
+                OperacaoCaixaRecolhimentoPositiva.DataHoraInsercao = OperacaoCaixaRecolhimentoPositiva.DataHoraInsercao;
+                OperacaoCaixaRecolhimentoPositiva.DataLancamento = OperacaoCaixaRecolhimentoPositiva.DataLancamento;
+                OperacaoCaixaRecolhimentoPositiva.Descricao = operacaoCaixaRecolhimento.Descricao;
+                OperacaoCaixaRecolhimentoPositiva.EstabelecimentoOperacao = _contextoOperacao.Get<Estabelecimento>(OperacaoCaixaRecolhimentoPositiva.EstabelecimentoOperacao.Codigo);
+                OperacaoCaixaRecolhimentoPositiva.FormaPagamentoUtilizada = _contextoOperacao.Get<FormaPagamentoEstabelecimento>(operacaoCaixaRecolhimento.FormaPagamentoUtilizada.Codigo);
+                OperacaoCaixaRecolhimentoPositiva.Observacao = OperacaoCaixaRecolhimentoNegativa.Codigo.ToString();
+                OperacaoCaixaRecolhimentoPositiva.TipoOperacao = EnumTipoOperacao.Recebimento;
+                OperacaoCaixaRecolhimentoPositiva.UsuarioDataHoraInsercao = "Alterado por: " + User.Identity.Name + " Data: " + DateTime.Now;
+                OperacaoCaixaRecolhimentoPositiva.UsuarioQueLancou = _contextoOperacao.Get<CadastrarUsuario>(operacaoCaixaRecolhimento.UsuarioQueLancou.Codigo);
+                if (operacaoCaixaRecolhimento.Valor < 0)
+                {
+                    OperacaoCaixaRecolhimentoPositiva.Valor = operacaoCaixaRecolhimento.Valor * -1;
+
+                }
+                else
+                {
+                    OperacaoCaixaRecolhimentoPositiva.Valor = operacaoCaixaRecolhimento.Valor;
+                }
+
+                _contextoOperacao.SaveChanges();
+
+
+
+
+            }
+            catch (Exception)
+            {
+                string NomeUsuarioLogado = User.Identity.Name;
+                long codigoEstabelecimento = BuscaEstabelecimento(NomeUsuarioLogado);
+                ViewBag.FormaPagamentoUtilizada = new SelectList(_contextoOperacao.GetAll<FormaPagamentoEstabelecimento>().Where(x => x.ContaCorrenteFormaPagamento.EstabelecimentoDaConta.Codigo == codigoEstabelecimento && x.DespejoAutomatico == false), "Codigo", "NomeTipoFormaPagamento");
+                ViewBag.UsuarioQueLancou = new SelectList(_contextoOperacao.GetAll<CadastrarUsuario>().Where(x => x.EstabelecimentoTrabalho.Codigo == codigoEstabelecimento && x.Nome == NomeUsuarioLogado), "Codigo", "Nome");
+
+                ViewBag.Mensagem = "Não foi possível alterar a operação equivalente";
+
+                return View();
+            }
+
+
 
             return RedirectToAction("Sucesso", "Home");
         }
