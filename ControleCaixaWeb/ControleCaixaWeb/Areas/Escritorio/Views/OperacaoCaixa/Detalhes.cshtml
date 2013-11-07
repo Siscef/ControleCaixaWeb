@@ -25,6 +25,16 @@
         @Html.DisplayFor(model => model.Descricao)
     </div>
 
+    <div class="display-label">Usuário:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UsuarioQueLancou.Nome)
+    </div>
+
+    <div class="display-label">Forma Pagto:</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.FormaPagamentoUtilizada.NomeTipoFormaPagamento)
+    </div>
+
     <div class="display-label">Observação:</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Observacao)

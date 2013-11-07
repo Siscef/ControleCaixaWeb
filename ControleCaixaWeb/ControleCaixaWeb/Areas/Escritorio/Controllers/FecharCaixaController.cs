@@ -27,8 +27,6 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
 			return View(listaDosFechamentos);
 		}
 
-
-
 		public ActionResult Detalhes(int id)
 		{
 			FechamentoCaixa FecharCaixa = _contextoFecharCaixa.Get<FechamentoCaixa>(id);
@@ -48,8 +46,6 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
 
 			return View( );
 		}
-
-
 
 		[HttpPost]
 		public ActionResult LancarFechamentoCaixa(FechamentoCaixa fechamentoCaixa)
@@ -105,15 +101,11 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
 		}
 
 
-
-
 		public ActionResult AlterarFechamentoCaixa(int id)
 		{
 			FechamentoCaixa fecharCaixaAlterar = _contextoFecharCaixa.Get<FechamentoCaixa>(id);
 			return View(fecharCaixaAlterar);
 		}
-
-
 
 		[HttpPost]
 		public ActionResult AlterarFechamentoCaixa(FechamentoCaixa fechamentoCaixa)
@@ -161,15 +153,11 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
 			return RedirectToAction("Sucesso", "Home");
 		}
 
-
-
 		public ActionResult ExcluirFechamentoCaixa(int id)
 		{
 			FechamentoCaixa fecharCaixaExcluir = _contextoFecharCaixa.Get<FechamentoCaixa>(id);
 			return View(fecharCaixaExcluir);
 		}
-
-
 
 		[HttpPost]
 		public ActionResult ExcluirFechamentoCaixa(FechamentoCaixa fechamentoCaixa)
@@ -186,6 +174,60 @@ namespace ControleCaixaWeb.Areas.Escritorio.Controllers
 
 			return View( );
 		}
+
+        public ActionResult FaltasCaixa()
+        {
+            string NomeUsuarioLogado = User.Identity.Name;
+            long CodigoEstabelecimentoLocalTrabalho = BuscaEstabelecimento(NomeUsuarioLogado);
+            ViewBag.Funcionario = new SelectList(_contextoFecharCaixa.GetAll<CadastrarUsuario>().Where(x => x.EstabelecimentoTrabalho.Codigo == CodigoEstabelecimentoLocalTrabalho).OrderBy(x => x.Nome), "Codigo", "Nome");
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult FaltasCaixa(ValidarData Datas, int? Funcionario)
+        {
+            if (Datas.DataFinal < Datas.DataInicial)
+            {
+                ViewBag.DataErrada = "A data final não pode ser menor que a data inicial";
+
+            }
+
+            if (ModelState.IsValid)
+            {
+                ViewBag.DataInicio = Datas.DataInicial;
+                ViewBag.DataFim = Datas.DataFinal;
+                long CodigoEstabelecimento = BuscaEstabelecimento(User.Identity.Name);
+                IList<ResultadoCaixa> ListResultadoCaixa = null;
+                if (Funcionario == null)
+                {
+                     ListResultadoCaixa = _contextoFecharCaixa.GetAll<ResultadoCaixa>()
+                                                               .Where(x => x.DataLancamento >= Datas.DataInicial && x.DataLancamento <= Datas.DataFinal && x.EstabelecimentoOperacao.Codigo == CodigoEstabelecimento)
+                                                               .Distinct()
+                                                               .ToList();
+
+
+                    
+                }
+                else
+                {
+                    ListResultadoCaixa = _contextoFecharCaixa.GetAll<ResultadoCaixa>()
+                                                              .Where(x => x.DataLancamento >= Datas.DataInicial && x.DataLancamento <= Datas.DataFinal && x.EstabelecimentoOperacao.Codigo == CodigoEstabelecimento && x.UsuarioOPeradorCaixa.Codigo == Funcionario)
+                                                              .Distinct()
+                                                              .ToList();
+
+                }
+
+                return View("VerFaltasCaixa", ListResultadoCaixa);
+
+            }
+            return View();
+        }
+
+
+        public ActionResult VerFaltasCaixa()
+        {
+            return View();
+        }
 
 		[HandleError(View = "Error")]
 		public ActionResult VerNestaData(DateTime? id, long id2)

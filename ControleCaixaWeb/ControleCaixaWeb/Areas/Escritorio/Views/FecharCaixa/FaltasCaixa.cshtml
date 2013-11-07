@@ -1,0 +1,52 @@
+﻿@model ControleCaixaWeb.Models.ValidarData
+@{
+    ViewBag.Title = "FaltasCaixa";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Faltas Caixa</h2>
+<h4>
+    @ViewBag.DataErrada
+</h4>
+
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>ValidarData</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DataInicial)
+        </div>
+        <div class="editor-field">
+            @Html.Telerik().DatePickerFor(model => model.DataInicial)
+            @Html.ValidationMessageFor(model => model.DataInicial)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DataFinal)
+        </div>
+        <div class="editor-field">
+            @Html.Telerik().DatePickerFor(model => model.DataFinal)
+            @Html.ValidationMessageFor(model => model.DataFinal)
+        </div>
+
+         <div class="editor-label">
+            Operador:
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("Funcionário", (IEnumerable<SelectListItem>)ViewBag.Funcionario, "Selecione Operador")
+
+        </div>
+
+        <p>
+
+            <input class="btn btn-success" type="submit" value="Visualizar" />
+            <input class="btn btn-warning" type="reset" value="Limpar" />
+
+        </p>
+    </fieldset>
+}
+
+

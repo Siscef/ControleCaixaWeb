@@ -37,7 +37,7 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
         }
 
 
-
+        #region Lancamentos
         public ActionResult LancarFechamentoCaixa()
         {
 
@@ -153,8 +153,9 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
             return View();
         }
 
+        #endregion
 
-
+        #region Alterar
         public ActionResult AlterarFechamentoCaixa(int id)
         {
             FechamentoCaixa fecharCaixaAlterar = _contextoFecharCaixa.Get<FechamentoCaixa>(id);
@@ -207,8 +208,9 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
             return RedirectToAction("Sucesso", "Home");
         }
 
+        #endregion
 
-
+        #region Excluir
         public ActionResult ExcluirFechamentoCaixa(int id)
         {
             FechamentoCaixa fecharCaixaExcluir = _contextoFecharCaixa.Get<FechamentoCaixa>(id);
@@ -227,6 +229,7 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
             return RedirectToAction("Sucesso", "Home");
         }
 
+        #endregion
         public ActionResult VerMeuCaixa()
         {
             return View();
@@ -251,6 +254,27 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
                                select l.Faturamento).Sum();
 
             ViewBag.listaParaResultadoFechamento = (((valores + caixaFechamento) - caixaAbertura) - faturamento);
+
+            ResultadoCaixa Resultado = new ResultadoCaixa();
+
+            Resultado.DataLancamento = Convert.ToDateTime(id);
+            Resultado.UsuarioOPeradorCaixa = (from c in _contextoFecharCaixa.GetAll<CadastrarUsuario>()
+                                              .Where(x => x.Nome == NomeUsuario)
+                                              select c).First();
+            Resultado.EstabelecimentoOperacao = _contextoFecharCaixa.Get<Estabelecimento>(BuscaEstabelecimento(NomeUsuario));
+            Resultado.ValorResultadoCaixa = Convert.ToDecimal((((valores + caixaFechamento) - caixaAbertura) - faturamento));
+            Resultado.ContadorVisualizacao = 1;
+
+            IList<ResultadoCaixa> ResultadoDuplicado = _contextoFecharCaixa.GetAll<ResultadoCaixa>()
+                                                 .Where(x => x.DataLancamento == Resultado.DataLancamento && x.EstabelecimentoOperacao.Codigo == Resultado.EstabelecimentoOperacao.Codigo && x.ValorResultadoCaixa == Resultado.ValorResultadoCaixa)
+                                                 .ToList();
+            if (ResultadoDuplicado.Count() == 0)
+            {
+                _contextoFecharCaixa.Add<ResultadoCaixa>(Resultado);
+                _contextoFecharCaixa.SaveChanges();
+
+            }
+
 
             return View(listaVerMeuCaixaNumaData);
         }

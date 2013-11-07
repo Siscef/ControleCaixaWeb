@@ -1,0 +1,42 @@
+﻿@model IEnumerable<ControleCaixaWeb.Models.ResultadoCaixa>
+
+@{
+    ViewBag.Title = "VerFaltasCaixa";
+    Layout = "~/Areas/Escritorio/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Ver Falta de Caixa</h2>
+<br />
+<h5>Visualizado: @Model.Sum(model => model.ContadorVisualizacao) Veze(s)</h5>
+
+<table class="table table-bordered">
+    <tr>
+        <th>
+            Codigo:
+        </th>
+        <th>
+            Data Lançamento:
+        </th>
+        <th>
+            Valor Resultado Caixa:
+        </th>
+        
+       
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Codigo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DataLancamento)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ValorResultadoCaixa)
+        </td>
+       
+    </tr>
+}
+
+</table>

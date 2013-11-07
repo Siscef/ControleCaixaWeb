@@ -358,12 +358,14 @@
     <Compile Include="Models\Mappings\OperacaoFinanceiraMap.cs" />
     <Compile Include="Models\Mappings\PagamentoMap.cs" />
     <Compile Include="Models\Mappings\PapelMap.cs" />
+    <Compile Include="Models\Mappings\ResultadoCaixaMap.cs" />
     <Compile Include="Models\Mappings\TrocarSenhaMap.cs" />
     <Compile Include="Models\Mappings\UsuarioMap.cs" />
     <Compile Include="Models\OperacaoCaixa.cs" />
     <Compile Include="Models\OperacaoFinanceiraContaCorrente.cs" />
     <Compile Include="Models\Pagamento.cs" />
     <Compile Include="Models\Papel.cs" />
+    <Compile Include="Models\ResultadoCaixa.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Models\ValidarData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -1282,6 +1284,8 @@
     <Content Include="Areas\Escritorio\Views\OperacaoCaixa\AlterarRecolhimento.cshtml" />
     <Content Include="Areas\OperadorCaixa\Views\OperacaoCaixa\ConferirLancamentosData.cshtml" />
     <Content Include="Areas\OperadorCaixa\Views\OperacaoCaixa\ConferirTodosLancamentos.cshtml" />
+    <Content Include="Areas\Escritorio\Views\FecharCaixa\FaltasCaixa.cshtml" />
+    <Content Include="Areas\Escritorio\Views\FecharCaixa\VerFaltasCaixa.cshtml" />
     <None Include="Areas\OperadorCaixa\Views\Shared\Calculadora.cshtml" />
     <Content Include="Areas\OperadorCaixa\Views\Shared\_LayoutIndex.cshtml" />
     <None Include="Content\images\logoPrincipal.gbl" />
