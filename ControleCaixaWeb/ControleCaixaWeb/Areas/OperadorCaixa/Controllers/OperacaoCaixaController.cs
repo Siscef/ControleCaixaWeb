@@ -25,9 +25,7 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
         public ActionResult SangriaOperacaoCaixa()
         {
             string NomeDoCaixa = User.Identity.Name;
-            long codigoEstabelecimento = (from c in _contextoOperacaocaixa.GetAll<CadastrarUsuario>()
-                                         .Where(x => x.Nome == NomeDoCaixa)
-                                          select c.EstabelecimentoTrabalho.Codigo).First();
+            long codigoEstabelecimento = BuscaEstabelecimento(NomeDoCaixa);
 
             ViewBag.NomeForma = new SelectList(_contextoOperacaocaixa.GetAll<FormaPagamentoEstabelecimento>().Where(x => x.ContaCorrenteFormaPagamento.EstabelecimentoDaConta.Codigo == codigoEstabelecimento && x.DespejoAutomatico == false), "Codigo", "NomeTipoFormaPagamento");
             return View();
@@ -41,64 +39,252 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
                 string NomeDoCaixa = User.Identity.Name;
                 double NumeroDiasParaRecebimento = Convert.ToDouble(VerificaDiasRecebimento(operacaoSangria.FormaPagamentoUtilizada.Codigo));
                 string NomeMaquinaCliente = System.Net.Dns.GetHostEntry(Request.UserHostAddress).HostName;
-                OperacaoCaixa OperacaoCaixaSangria = new OperacaoCaixa();
 
-                OperacaoCaixaSangria.DataLancamento = DateTime.Now;
-                long codigoEstabelecimento = BuscaEstabelecimento(NomeDoCaixa);
-
-                long ContadorSangria = (from c in _contextoOperacaocaixa.GetAll<OperacaoCaixa>()
-                                        .Where(x => x.DataLancamento.Date == OperacaoCaixaSangria.DataLancamento.Date && x.TipoOperacao == EnumTipoOperacao.Sangria && x.UsuarioQueLancou.Nome == NomeDoCaixa)
-                                        select c).Count();
-                ContadorSangria = ContadorSangria + 1;
-                OperacaoCaixaSangria.Descricao = "SANGRIA:  " + ContadorSangria;
-
-
-                if (operacaoSangria.Valor < 0)
+                IList<OperacaoCaixa> ListaVerificarLancamentoDuplicado = _contextoOperacaocaixa.GetAll<OperacaoCaixa>()
+                                                                        .Where(x => x.Valor == operacaoSangria.Valor && x.TipoOperacao == EnumTipoOperacao.Sangria
+                                                                        && x.UsuarioQueLancou.Nome == User.Identity.Name
+                                                                        && x.DataHoraInsercao.Year == DateTime.Now.Year && x.DataHoraInsercao.Month == DateTime.Now.Month
+                                                                        && x.DataHoraInsercao.Day == DateTime.Now.Day && x.DataHoraInsercao.Hour == DateTime.Now.Hour)
+                                                                       .OrderByDescending(x => x.DataHoraInsercao)
+                                                                        .ToList();
+                if (ListaVerificarLancamentoDuplicado.Count() >= 1)
                 {
+                    foreach (var itemListaVerificaOperacaoDuplicada in ListaVerificarLancamentoDuplicado)
+                    {
+                        if (itemListaVerificaOperacaoDuplicada.DataHoraInsercao == null)
+                        {
+                            //Primeira Tentativa
+                            #region PrimeiraTentativaSangria
 
-                    OperacaoCaixaSangria.Valor = operacaoSangria.Valor * -1;
+                            OperacaoCaixa PrimeiraOperacaoCaixaSangria = new OperacaoCaixa();
+
+                            PrimeiraOperacaoCaixaSangria.DataLancamento = DateTime.Now;
+                            long codigoEstabelecimento = BuscaEstabelecimento(NomeDoCaixa);
+
+                            long ContadorSangria = (from c in _contextoOperacaocaixa.GetAll<OperacaoCaixa>()
+                                                    .Where(x => x.DataLancamento.Date == PrimeiraOperacaoCaixaSangria.DataLancamento.Date
+                                                    && x.TipoOperacao == EnumTipoOperacao.Sangria && x.UsuarioQueLancou.Nome == NomeDoCaixa)
+                                                    select c).Count();
+                            ContadorSangria = ContadorSangria + 1;
+                            PrimeiraOperacaoCaixaSangria.Descricao = "SANGRIA:  " + ContadorSangria;
+
+                            if (operacaoSangria.Valor < 0)
+                            {
+
+                                PrimeiraOperacaoCaixaSangria.Valor = operacaoSangria.Valor * -1;
+                            }
+                            else
+                            {
+                                PrimeiraOperacaoCaixaSangria.Valor = operacaoSangria.Valor;
+                            }
+
+                            PrimeiraOperacaoCaixaSangria.UsuarioQueLancou = (from c in _contextoOperacaocaixa.GetAll<CadastrarUsuario>()
+                                                                     .Where(x => x.Nome == NomeDoCaixa)
+                                                                             select c).First();
+
+                            PrimeiraOperacaoCaixaSangria.FormaPagamentoUtilizada = _contextoOperacaocaixa.Get<FormaPagamentoEstabelecimento>(operacaoSangria.FormaPagamentoUtilizada.Codigo);
+                            PrimeiraOperacaoCaixaSangria.EstabelecimentoOperacao = _contextoOperacaocaixa.Get<Estabelecimento>(codigoEstabelecimento);
+                            PrimeiraOperacaoCaixaSangria.Observacao = operacaoSangria.Observacao;
+                            PrimeiraOperacaoCaixaSangria.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now + "Em: " + NomeMaquinaCliente;
+                            PrimeiraOperacaoCaixaSangria.DataHoraInsercao = DateTime.Now;
+                            PrimeiraOperacaoCaixaSangria.TipoOperacao = EnumTipoOperacao.Sangria;
+                            _contextoOperacaocaixa.Add<OperacaoCaixa>(PrimeiraOperacaoCaixaSangria);
+                            _contextoOperacaocaixa.SaveChanges();
+
+
+                            OperacaoFinanceiraContaCorrente PrimeiraOperacaoDeposito = new OperacaoFinanceiraContaCorrente();
+
+                            PrimeiraOperacaoDeposito.ContaLancamento = _contextoOperacaocaixa.Get<ContaCorrente>(PrimeiraOperacaoCaixaSangria.FormaPagamentoUtilizada.ContaCorrenteFormaPagamento.Codigo);
+                            PrimeiraOperacaoDeposito.Data = PrimeiraOperacaoCaixaSangria.DataLancamento;
+                            PrimeiraOperacaoDeposito.DataHoraInsercao = DateTime.Now;
+                            PrimeiraOperacaoDeposito.Taxa = PrimeiraOperacaoCaixaSangria.FormaPagamentoUtilizada.TaxaFormaPagamento;
+                            PrimeiraOperacaoDeposito.Valor = PrimeiraOperacaoCaixaSangria.Valor;
+                            PrimeiraOperacaoDeposito.ValorLiquido = PrimeiraOperacaoDeposito.Valor - ((PrimeiraOperacaoDeposito.Valor * PrimeiraOperacaoDeposito.Taxa) / 100);
+                            PrimeiraOperacaoDeposito.Desconto = PrimeiraOperacaoDeposito.Valor - PrimeiraOperacaoDeposito.ValorLiquido;
+                            PrimeiraOperacaoDeposito.Descricao = "Simulação de depósito";
+                            PrimeiraOperacaoDeposito.FormaPagamento = _contextoOperacaocaixa.Get<FormaPagamentoEstabelecimento>(PrimeiraOperacaoCaixaSangria.FormaPagamentoUtilizada.Codigo);
+                            PrimeiraOperacaoDeposito.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now;
+                            PrimeiraOperacaoDeposito.DataRecebimento = PrimeiraOperacaoCaixaSangria.DataLancamento.AddDays(Convert.ToDouble(NumeroDiasParaRecebimento));
+                            PrimeiraOperacaoDeposito.OperacaoCaixaOrigem = _contextoOperacaocaixa.Get<OperacaoCaixa>(PrimeiraOperacaoCaixaSangria.Codigo);
+                            _contextoOperacaocaixa.Add<OperacaoFinanceiraContaCorrente>(PrimeiraOperacaoDeposito);
+                            _contextoOperacaocaixa.SaveChanges();
+
+                            return RedirectToAction("Sucesso", "Home");
+
+                            #endregion
+                            //Fim primeira tentativa
+
+                        }
+                        else
+                        {
+
+                            //Teste de tempo para verificar se faz 4 minutos que a ultima sangria foi efetuada
+                            //Quando chegar aqui é feita a verificação, caso faça mais que quatro minutos prossegue
+                            #region Teste_4_minutos
+
+                            TimeSpan diferenca = Convert.ToDateTime(DateTime.Now) - Convert.ToDateTime(itemListaVerificaOperacaoDuplicada.DataHoraInsercao.ToString("yyyy/MM/dd HH:mm:ss"));
+                            if (diferenca.TotalMinutes <= 4)
+                            {
+                                double TempoDecorrido = 4 - Math.Round(diferenca.TotalMinutes, 0);
+                                if (Math.Round(diferenca.TotalMinutes, 0) <= 1)
+                                {
+                                    ViewBag.Mensagem = "Atenção! " + User.Identity.Name + " Faz: " + Math.Round(diferenca.TotalSeconds, 0) + " segundos(s)" +
+                                                   " que você fez essa operação, se ela realmente existe tente daqui a: " + TempoDecorrido.ToString() + " minuto(s)";
+                                }
+
+                                ViewBag.Mensagem = "Atenção! " + User.Identity.Name + " Faz: " + Math.Round(diferenca.TotalMinutes, 0) + " minuto(s)" +
+                                             " que você fez essa operação, se ela realmente existe tente daqui a: " + TempoDecorrido.ToString() + " minuto(s)";
+
+                                ViewBag.NomeForma = new SelectList(_contextoOperacaocaixa.GetAll<FormaPagamentoEstabelecimento>().Where(x => x.ContaCorrenteFormaPagamento.EstabelecimentoDaConta.Codigo == BuscaEstabelecimento(User.Identity.Name) && x.DespejoAutomatico == false), "Codigo", "NomeTipoFormaPagamento");
+
+                                return View();
+
+                            #endregion
+                            }
+                            else
+                            {
+                                //Segunda tentativa
+
+                                #region Segunda_Tentativa
+
+                                OperacaoCaixa SegundaOperacaoCaixaSangria = new OperacaoCaixa();
+
+                                SegundaOperacaoCaixaSangria.DataLancamento = DateTime.Now;
+                                long codigoEstabelecimento = BuscaEstabelecimento(NomeDoCaixa);
+
+                                long ContadorSangria = (from c in _contextoOperacaocaixa.GetAll<OperacaoCaixa>()
+                                                        .Where(x => x.DataLancamento.Date == SegundaOperacaoCaixaSangria.DataLancamento.Date
+                                                        && x.TipoOperacao == EnumTipoOperacao.Sangria && x.UsuarioQueLancou.Nome == NomeDoCaixa)
+                                                        select c).Count();
+                                ContadorSangria = ContadorSangria + 1;
+                                SegundaOperacaoCaixaSangria.Descricao = "SANGRIA:  " + ContadorSangria;
+
+                                if (operacaoSangria.Valor < 0)
+                                {
+
+                                    SegundaOperacaoCaixaSangria.Valor = operacaoSangria.Valor * -1;
+                                }
+                                else
+                                {
+                                    SegundaOperacaoCaixaSangria.Valor = operacaoSangria.Valor;
+                                }
+
+                                SegundaOperacaoCaixaSangria.UsuarioQueLancou = (from c in _contextoOperacaocaixa.GetAll<CadastrarUsuario>()
+                                                                         .Where(x => x.Nome == NomeDoCaixa)
+                                                                                select c).First();
+
+                                SegundaOperacaoCaixaSangria.FormaPagamentoUtilizada = _contextoOperacaocaixa.Get<FormaPagamentoEstabelecimento>(operacaoSangria.FormaPagamentoUtilizada.Codigo);
+                                SegundaOperacaoCaixaSangria.EstabelecimentoOperacao = _contextoOperacaocaixa.Get<Estabelecimento>(codigoEstabelecimento);
+                                SegundaOperacaoCaixaSangria.Observacao = operacaoSangria.Observacao;
+                                SegundaOperacaoCaixaSangria.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now + "Em: " + NomeMaquinaCliente;
+                                SegundaOperacaoCaixaSangria.DataHoraInsercao = DateTime.Now;
+                                SegundaOperacaoCaixaSangria.TipoOperacao = EnumTipoOperacao.Sangria;
+                                _contextoOperacaocaixa.Add<OperacaoCaixa>(SegundaOperacaoCaixaSangria);
+                                _contextoOperacaocaixa.SaveChanges();
+
+
+                                OperacaoFinanceiraContaCorrente SegundaOperacaoDeposito = new OperacaoFinanceiraContaCorrente();
+
+                                SegundaOperacaoDeposito.ContaLancamento = _contextoOperacaocaixa.Get<ContaCorrente>(SegundaOperacaoCaixaSangria.FormaPagamentoUtilizada.ContaCorrenteFormaPagamento.Codigo);
+                                SegundaOperacaoDeposito.Data = SegundaOperacaoCaixaSangria.DataLancamento;
+                                SegundaOperacaoDeposito.DataHoraInsercao = DateTime.Now;
+                                SegundaOperacaoDeposito.Taxa = SegundaOperacaoCaixaSangria.FormaPagamentoUtilizada.TaxaFormaPagamento;
+                                SegundaOperacaoDeposito.Valor = SegundaOperacaoCaixaSangria.Valor;
+                                SegundaOperacaoDeposito.ValorLiquido = SegundaOperacaoDeposito.Valor - ((SegundaOperacaoDeposito.Valor * SegundaOperacaoDeposito.Taxa) / 100);
+                                SegundaOperacaoDeposito.Desconto = SegundaOperacaoDeposito.Valor - SegundaOperacaoDeposito.ValorLiquido;
+                                SegundaOperacaoDeposito.Descricao = "Simulação de depósito";
+                                SegundaOperacaoDeposito.FormaPagamento = _contextoOperacaocaixa.Get<FormaPagamentoEstabelecimento>(SegundaOperacaoCaixaSangria.FormaPagamentoUtilizada.Codigo);
+                                SegundaOperacaoDeposito.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now;
+                                SegundaOperacaoDeposito.DataRecebimento = SegundaOperacaoCaixaSangria.DataLancamento.AddDays(Convert.ToDouble(NumeroDiasParaRecebimento));
+                                SegundaOperacaoDeposito.OperacaoCaixaOrigem = _contextoOperacaocaixa.Get<OperacaoCaixa>(SegundaOperacaoCaixaSangria.Codigo);
+                                _contextoOperacaocaixa.Add<OperacaoFinanceiraContaCorrente>(SegundaOperacaoDeposito);
+                                _contextoOperacaocaixa.SaveChanges();
+
+                                return RedirectToAction("Sucesso", "Home");
+
+
+                                #endregion
+
+                                //Fim segunda tentativa
+
+                            }
+                        }
+
+                    }
                 }
                 else
                 {
-                    OperacaoCaixaSangria.Valor = operacaoSangria.Valor;
+                    //Terceira tentativa
+                    #region Terceira_Tentativa
+
+                    OperacaoCaixa TerceiraOperacaoCaixaSangria = new OperacaoCaixa();
+
+                    TerceiraOperacaoCaixaSangria.DataLancamento = DateTime.Now;
+                    long codigoEstabelecimento = BuscaEstabelecimento(NomeDoCaixa);
+
+                    long ContadorSangria = (from c in _contextoOperacaocaixa.GetAll<OperacaoCaixa>()
+                                            .Where(x => x.DataLancamento.Date == TerceiraOperacaoCaixaSangria.DataLancamento.Date
+                                            && x.TipoOperacao == EnumTipoOperacao.Sangria && x.UsuarioQueLancou.Nome == NomeDoCaixa)
+                                            select c).Count();
+                    ContadorSangria = ContadorSangria + 1;
+                    TerceiraOperacaoCaixaSangria.Descricao = "SANGRIA:  " + ContadorSangria;
+
+                    if (operacaoSangria.Valor < 0)
+                    {
+
+                        TerceiraOperacaoCaixaSangria.Valor = operacaoSangria.Valor * -1;
+                    }
+                    else
+                    {
+                        TerceiraOperacaoCaixaSangria.Valor = operacaoSangria.Valor;
+                    }
+
+                    TerceiraOperacaoCaixaSangria.UsuarioQueLancou = (from c in _contextoOperacaocaixa.GetAll<CadastrarUsuario>()
+                                                             .Where(x => x.Nome == NomeDoCaixa)
+                                                                     select c).First();
+
+                    TerceiraOperacaoCaixaSangria.FormaPagamentoUtilizada = _contextoOperacaocaixa.Get<FormaPagamentoEstabelecimento>(operacaoSangria.FormaPagamentoUtilizada.Codigo);
+                    TerceiraOperacaoCaixaSangria.EstabelecimentoOperacao = _contextoOperacaocaixa.Get<Estabelecimento>(codigoEstabelecimento);
+                    TerceiraOperacaoCaixaSangria.Observacao = operacaoSangria.Observacao;
+                    TerceiraOperacaoCaixaSangria.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now + "Em: " + NomeMaquinaCliente;
+                    TerceiraOperacaoCaixaSangria.DataHoraInsercao = DateTime.Now;
+                    TerceiraOperacaoCaixaSangria.TipoOperacao = EnumTipoOperacao.Sangria;
+                    _contextoOperacaocaixa.Add<OperacaoCaixa>(TerceiraOperacaoCaixaSangria);
+                    _contextoOperacaocaixa.SaveChanges();
+
+
+                    OperacaoFinanceiraContaCorrente TerceiraOperacaoDeposito = new OperacaoFinanceiraContaCorrente();
+
+                    TerceiraOperacaoDeposito.ContaLancamento = _contextoOperacaocaixa.Get<ContaCorrente>(TerceiraOperacaoCaixaSangria.FormaPagamentoUtilizada.ContaCorrenteFormaPagamento.Codigo);
+                    TerceiraOperacaoDeposito.Data = TerceiraOperacaoCaixaSangria.DataLancamento;
+                    TerceiraOperacaoDeposito.DataHoraInsercao = DateTime.Now;
+                    TerceiraOperacaoDeposito.Taxa = TerceiraOperacaoCaixaSangria.FormaPagamentoUtilizada.TaxaFormaPagamento;
+                    TerceiraOperacaoDeposito.Valor = TerceiraOperacaoCaixaSangria.Valor;
+                    TerceiraOperacaoDeposito.ValorLiquido = TerceiraOperacaoDeposito.Valor - ((TerceiraOperacaoDeposito.Valor * TerceiraOperacaoDeposito.Taxa) / 100);
+                    TerceiraOperacaoDeposito.Desconto = TerceiraOperacaoDeposito.Valor - TerceiraOperacaoDeposito.ValorLiquido;
+                    TerceiraOperacaoDeposito.Descricao = "Simulação de depósito";
+                    TerceiraOperacaoDeposito.FormaPagamento = _contextoOperacaocaixa.Get<FormaPagamentoEstabelecimento>(TerceiraOperacaoCaixaSangria.FormaPagamentoUtilizada.Codigo);
+                    TerceiraOperacaoDeposito.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now;
+                    TerceiraOperacaoDeposito.DataRecebimento = TerceiraOperacaoCaixaSangria.DataLancamento.AddDays(Convert.ToDouble(NumeroDiasParaRecebimento));
+                    TerceiraOperacaoDeposito.OperacaoCaixaOrigem = _contextoOperacaocaixa.Get<OperacaoCaixa>(TerceiraOperacaoCaixaSangria.Codigo);
+                    _contextoOperacaocaixa.Add<OperacaoFinanceiraContaCorrente>(TerceiraOperacaoDeposito);
+                    _contextoOperacaocaixa.SaveChanges();
+
+                    return RedirectToAction("Sucesso", "Home");
+
+
+                    #endregion
+
+                    //Fim Terceira tentativa
                 }
-
-                OperacaoCaixaSangria.UsuarioQueLancou = (from c in _contextoOperacaocaixa.GetAll<CadastrarUsuario>()
-                                                         .Where(x => x.Nome == NomeDoCaixa)
-                                                         select c).First();
-
-                OperacaoCaixaSangria.FormaPagamentoUtilizada = _contextoOperacaocaixa.Get<FormaPagamentoEstabelecimento>(operacaoSangria.FormaPagamentoUtilizada.Codigo);
-                OperacaoCaixaSangria.EstabelecimentoOperacao = _contextoOperacaocaixa.Get<Estabelecimento>(codigoEstabelecimento);
-                OperacaoCaixaSangria.Observacao = operacaoSangria.Observacao;
-                OperacaoCaixaSangria.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now + "Em: " + NomeMaquinaCliente;
-                OperacaoCaixaSangria.DataHoraInsercao = DateTime.Now;
-                OperacaoCaixaSangria.TipoOperacao = EnumTipoOperacao.Sangria;
-                _contextoOperacaocaixa.Add<OperacaoCaixa>(OperacaoCaixaSangria);
-                _contextoOperacaocaixa.SaveChanges();
-
-
-                OperacaoFinanceiraContaCorrente PrimeiraOperacaoDeposito = new OperacaoFinanceiraContaCorrente();
-
-                PrimeiraOperacaoDeposito.ContaLancamento = _contextoOperacaocaixa.Get<ContaCorrente>(OperacaoCaixaSangria.FormaPagamentoUtilizada.ContaCorrenteFormaPagamento.Codigo);
-                PrimeiraOperacaoDeposito.Data = OperacaoCaixaSangria.DataLancamento;
-                PrimeiraOperacaoDeposito.DataHoraInsercao = DateTime.Now;
-                PrimeiraOperacaoDeposito.Taxa = OperacaoCaixaSangria.FormaPagamentoUtilizada.TaxaFormaPagamento;
-                PrimeiraOperacaoDeposito.Valor = OperacaoCaixaSangria.Valor;
-                PrimeiraOperacaoDeposito.ValorLiquido = PrimeiraOperacaoDeposito.Valor - ((PrimeiraOperacaoDeposito.Valor * PrimeiraOperacaoDeposito.Taxa) / 100);
-                PrimeiraOperacaoDeposito.Desconto = PrimeiraOperacaoDeposito.Valor - PrimeiraOperacaoDeposito.ValorLiquido;
-                PrimeiraOperacaoDeposito.Descricao = "Simulação de depósito";
-                PrimeiraOperacaoDeposito.FormaPagamento = _contextoOperacaocaixa.Get<FormaPagamentoEstabelecimento>(OperacaoCaixaSangria.FormaPagamentoUtilizada.Codigo);
-                PrimeiraOperacaoDeposito.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now;
-                PrimeiraOperacaoDeposito.DataRecebimento = OperacaoCaixaSangria.DataLancamento.AddDays(Convert.ToDouble(NumeroDiasParaRecebimento));
-                PrimeiraOperacaoDeposito.OperacaoCaixaOrigem = _contextoOperacaocaixa.Get<OperacaoCaixa>(OperacaoCaixaSangria.Codigo);
-                _contextoOperacaocaixa.Add<OperacaoFinanceiraContaCorrente>(PrimeiraOperacaoDeposito);
-                _contextoOperacaocaixa.SaveChanges();
-
 
             }
             return RedirectToAction("Sucesso", "Home");
         }
 
+        #endregion
+
+        #region sangriarapida
 
         public ActionResult SangriaRapidaOperacaoCaixa()
         {
@@ -136,59 +322,211 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
                                           select c.Codigo).First();
                 double NumeroDiasParaRecebimento = Convert.ToDouble(VerificaDiasRecebimento(CodFormaPagamento));
 
-                OperacaoCaixa SangriaRapida = new OperacaoCaixa();
+                IList<OperacaoCaixa> ListaVerificarLancamentoDuplicado = _contextoOperacaocaixa.GetAll<OperacaoCaixa>()
+                                                                         .Where(x => x.Valor == OperacaoCaixaSangria.Valor && x.TipoOperacao == EnumTipoOperacao.Sangria
+                                                                         && x.UsuarioQueLancou.Nome == User.Identity.Name
+                                                                         && x.DataHoraInsercao.Year == DateTime.Now.Year && x.DataHoraInsercao.Month == DateTime.Now.Month
+                                                                         && x.DataHoraInsercao.Day == DateTime.Now.Day && x.DataHoraInsercao.Hour == DateTime.Now.Hour)
+                                                                        .OrderByDescending(x => x.DataHoraInsercao)
+                                                                         .ToList();
 
-                SangriaRapida.DataLancamento = DateTime.Now;
-
-
-                long ContadorSangria = (from c in _contextoOperacaocaixa.GetAll<OperacaoCaixa>()
-                                        .Where(x => x.DataLancamento.Date == SangriaRapida.DataLancamento.Date && x.TipoOperacao == EnumTipoOperacao.Sangria && x.UsuarioQueLancou.Nome == NomeDoCaixa)
-                                        select c).Count();
-                ContadorSangria = ContadorSangria + 1;
-                SangriaRapida.Descricao = "SANGRIA:  " + ContadorSangria;
-
-
-                if (OperacaoCaixaSangria.Valor < 0)
+                if (ListaVerificarLancamentoDuplicado.Count() >= 1)
                 {
+                    foreach (var itemListaVerificaOperacaoDuplicada in ListaVerificarLancamentoDuplicado)
+                    {
+                        if (itemListaVerificaOperacaoDuplicada.DataHoraInsercao == null)
+                        {
+                            //primeira tentativa
 
-                    SangriaRapida.Valor = OperacaoCaixaSangria.Valor * -1;
+                            OperacaoCaixa PrimeiraOperacaoSangriaRapida = new OperacaoCaixa();
+
+                            PrimeiraOperacaoSangriaRapida.DataLancamento = DateTime.Now;
+                            long ContadorSangria = (from c in _contextoOperacaocaixa.GetAll<OperacaoCaixa>()
+                                                    .Where(x => x.DataLancamento.Date == PrimeiraOperacaoSangriaRapida.DataLancamento.Date && x.TipoOperacao == EnumTipoOperacao.Sangria && x.UsuarioQueLancou.Nome == NomeDoCaixa)
+                                                    select c).Count();
+                            ContadorSangria = ContadorSangria + 1;
+                            PrimeiraOperacaoSangriaRapida.Descricao = "SANGRIA :  " + ContadorSangria;
+                            if (OperacaoCaixaSangria.Valor < 0)
+                            {
+
+                                PrimeiraOperacaoSangriaRapida.Valor = OperacaoCaixaSangria.Valor * -1;
+                            }
+                            else
+                            {
+                                PrimeiraOperacaoSangriaRapida.Valor = OperacaoCaixaSangria.Valor;
+                            }
+
+                            PrimeiraOperacaoSangriaRapida.UsuarioQueLancou = (from c in _contextoOperacaocaixa.GetAll<CadastrarUsuario>()
+                                                                      .Where(x => x.Nome == NomeDoCaixa)
+                                                                              select c).First();
+                            PrimeiraOperacaoSangriaRapida.FormaPagamentoUtilizada = _contextoOperacaocaixa.Get<FormaPagamentoEstabelecimento>(CodFormaPagamento);
+                            PrimeiraOperacaoSangriaRapida.EstabelecimentoOperacao = _contextoOperacaocaixa.Get<Estabelecimento>(codigoEstabelecimento);
+                            PrimeiraOperacaoSangriaRapida.Observacao = "Sangria rápida";
+                            PrimeiraOperacaoSangriaRapida.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now;
+                            PrimeiraOperacaoSangriaRapida.DataHoraInsercao = DateTime.Now;
+                            PrimeiraOperacaoSangriaRapida.TipoOperacao = EnumTipoOperacao.Sangria;
+                            _contextoOperacaocaixa.Add<OperacaoCaixa>(PrimeiraOperacaoSangriaRapida);
+                            _contextoOperacaocaixa.SaveChanges();
+
+                            OperacaoFinanceiraContaCorrente PrimeiraOPeracaoDeposito = new OperacaoFinanceiraContaCorrente();
+
+                            PrimeiraOPeracaoDeposito.ContaLancamento = _contextoOperacaocaixa.Get<ContaCorrente>(PrimeiraOperacaoSangriaRapida.FormaPagamentoUtilizada.ContaCorrenteFormaPagamento.Codigo);
+                            PrimeiraOPeracaoDeposito.Data = PrimeiraOperacaoSangriaRapida.DataLancamento;
+                            PrimeiraOPeracaoDeposito.DataHoraInsercao = DateTime.Now;
+                            PrimeiraOPeracaoDeposito.Taxa = PrimeiraOperacaoSangriaRapida.FormaPagamentoUtilizada.TaxaFormaPagamento;
+                            PrimeiraOPeracaoDeposito.Valor = PrimeiraOperacaoSangriaRapida.Valor;
+                            PrimeiraOPeracaoDeposito.ValorLiquido = PrimeiraOPeracaoDeposito.Valor - ((PrimeiraOPeracaoDeposito.Valor * PrimeiraOPeracaoDeposito.Taxa) / 100);
+                            PrimeiraOPeracaoDeposito.Desconto = PrimeiraOPeracaoDeposito.Valor - PrimeiraOPeracaoDeposito.ValorLiquido;
+                            PrimeiraOPeracaoDeposito.Descricao = "Simulação de depósito";
+                            PrimeiraOPeracaoDeposito.FormaPagamento = _contextoOperacaocaixa.Get<FormaPagamentoEstabelecimento>(PrimeiraOperacaoSangriaRapida.FormaPagamentoUtilizada.Codigo);
+                            PrimeiraOPeracaoDeposito.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now;
+                            PrimeiraOPeracaoDeposito.DataRecebimento = PrimeiraOperacaoSangriaRapida.DataLancamento.AddDays(Convert.ToDouble(NumeroDiasParaRecebimento));
+                            PrimeiraOPeracaoDeposito.OperacaoCaixaOrigem = _contextoOperacaocaixa.Get<OperacaoCaixa>(PrimeiraOperacaoSangriaRapida.Codigo);
+                            _contextoOperacaocaixa.Add<OperacaoFinanceiraContaCorrente>(PrimeiraOPeracaoDeposito);
+                            _contextoOperacaocaixa.SaveChanges();
+
+                            return RedirectToAction("Sucesso", "Home");
+                            //fim da segunda tentativa
+
+                        }
+                        else
+                        {
+                            TimeSpan diferenca = Convert.ToDateTime(DateTime.Now) - Convert.ToDateTime(itemListaVerificaOperacaoDuplicada.DataHoraInsercao.ToString("yyyy/MM/dd HH:mm:ss"));
+                            if (diferenca.TotalMinutes <= 4)
+                            {
+                                double TempoDecorrido = 4 - Math.Round(diferenca.TotalMinutes, 0);
+                                if (Math.Round(diferenca.TotalMinutes, 0) <= 1)
+                                {
+                                    ViewBag.Mensagem = "Atenção! " + User.Identity.Name + " Faz: " + Math.Round(diferenca.TotalSeconds, 0) + " segundos(s)" +
+                                                   " que você fez essa operação, se ela realmente existe tente daqui a: " + TempoDecorrido.ToString() + " minuto(s)";
+                                }
+
+                                ViewBag.Mensagem = "Atenção! " + User.Identity.Name + " Faz: " + Math.Round(diferenca.TotalMinutes, 0) + " minuto(s)" +
+                                             " que você fez essa operação, se ela realmente existe tente daqui a: " + TempoDecorrido.ToString() + " minuto(s)";
+
+
+
+                                return View();
+                            }
+                            else
+                            {
+                                //segunda tentativa aqui
+
+                                OperacaoCaixa SegundaOperacaoSangriaRapida = new OperacaoCaixa();
+
+                                SegundaOperacaoSangriaRapida.DataLancamento = DateTime.Now;
+                                long ContadorSangria = (from c in _contextoOperacaocaixa.GetAll<OperacaoCaixa>()
+                                                        .Where(x => x.DataLancamento.Date == SegundaOperacaoSangriaRapida.DataLancamento.Date && x.TipoOperacao == EnumTipoOperacao.Sangria && x.UsuarioQueLancou.Nome == NomeDoCaixa)
+                                                        select c).Count();
+                                ContadorSangria = ContadorSangria + 1;
+                                SegundaOperacaoSangriaRapida.Descricao = "SANGRIA :  " + ContadorSangria;
+                                if (OperacaoCaixaSangria.Valor < 0)
+                                {
+
+                                    SegundaOperacaoSangriaRapida.Valor = OperacaoCaixaSangria.Valor * -1;
+                                }
+                                else
+                                {
+                                    SegundaOperacaoSangriaRapida.Valor = OperacaoCaixaSangria.Valor;
+                                }
+
+                                SegundaOperacaoSangriaRapida.UsuarioQueLancou = (from c in _contextoOperacaocaixa.GetAll<CadastrarUsuario>()
+                                                                          .Where(x => x.Nome == NomeDoCaixa)
+                                                                                 select c).First();
+                                SegundaOperacaoSangriaRapida.FormaPagamentoUtilizada = _contextoOperacaocaixa.Get<FormaPagamentoEstabelecimento>(CodFormaPagamento);
+                                SegundaOperacaoSangriaRapida.EstabelecimentoOperacao = _contextoOperacaocaixa.Get<Estabelecimento>(codigoEstabelecimento);
+                                SegundaOperacaoSangriaRapida.Observacao = "Sangria rápida";
+                                SegundaOperacaoSangriaRapida.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now;
+                                SegundaOperacaoSangriaRapida.DataHoraInsercao = DateTime.Now;
+                                SegundaOperacaoSangriaRapida.TipoOperacao = EnumTipoOperacao.Sangria;
+                                _contextoOperacaocaixa.Add<OperacaoCaixa>(SegundaOperacaoSangriaRapida);
+                                _contextoOperacaocaixa.SaveChanges();
+
+                                OperacaoFinanceiraContaCorrente SegundaOPeracaoDeposito = new OperacaoFinanceiraContaCorrente();
+
+                                SegundaOPeracaoDeposito.ContaLancamento = _contextoOperacaocaixa.Get<ContaCorrente>(SegundaOperacaoSangriaRapida.FormaPagamentoUtilizada.ContaCorrenteFormaPagamento.Codigo);
+                                SegundaOPeracaoDeposito.Data = SegundaOperacaoSangriaRapida.DataLancamento;
+                                SegundaOPeracaoDeposito.DataHoraInsercao = DateTime.Now;
+                                SegundaOPeracaoDeposito.Taxa = SegundaOperacaoSangriaRapida.FormaPagamentoUtilizada.TaxaFormaPagamento;
+                                SegundaOPeracaoDeposito.Valor = SegundaOperacaoSangriaRapida.Valor;
+                                SegundaOPeracaoDeposito.ValorLiquido = SegundaOPeracaoDeposito.Valor - ((SegundaOPeracaoDeposito.Valor * SegundaOPeracaoDeposito.Taxa) / 100);
+                                SegundaOPeracaoDeposito.Desconto = SegundaOPeracaoDeposito.Valor - SegundaOPeracaoDeposito.ValorLiquido;
+                                SegundaOPeracaoDeposito.Descricao = "Simulação de depósito";
+                                SegundaOPeracaoDeposito.FormaPagamento = _contextoOperacaocaixa.Get<FormaPagamentoEstabelecimento>(SegundaOperacaoSangriaRapida.FormaPagamentoUtilizada.Codigo);
+                                SegundaOPeracaoDeposito.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now;
+                                SegundaOPeracaoDeposito.DataRecebimento = SegundaOperacaoSangriaRapida.DataLancamento.AddDays(Convert.ToDouble(NumeroDiasParaRecebimento));
+                                SegundaOPeracaoDeposito.OperacaoCaixaOrigem = _contextoOperacaocaixa.Get<OperacaoCaixa>(SegundaOperacaoSangriaRapida.Codigo);
+                                _contextoOperacaocaixa.Add<OperacaoFinanceiraContaCorrente>(SegundaOPeracaoDeposito);
+                                _contextoOperacaocaixa.SaveChanges();
+
+                                return RedirectToAction("Sucesso", "Home");
+
+                                //fim da segunda tentativa
+
+                            }
+                        }
+
+                    }
+
+
                 }
                 else
                 {
-                    SangriaRapida.Valor = OperacaoCaixaSangria.Valor;
+                    //Terceira tentativa
+
+                    OperacaoCaixa TerceiraOperacaoSangriaRapida = new OperacaoCaixa();
+
+                    TerceiraOperacaoSangriaRapida.DataLancamento = DateTime.Now;
+                    long ContadorSangria = (from c in _contextoOperacaocaixa.GetAll<OperacaoCaixa>()
+                                            .Where(x => x.DataLancamento.Date == TerceiraOperacaoSangriaRapida.DataLancamento.Date && x.TipoOperacao == EnumTipoOperacao.Sangria && x.UsuarioQueLancou.Nome == NomeDoCaixa)
+                                            select c).Count();
+                    ContadorSangria = ContadorSangria + 1;
+                    TerceiraOperacaoSangriaRapida.Descricao = "SANGRIA :  " + ContadorSangria;
+                    if (OperacaoCaixaSangria.Valor < 0)
+                    {
+
+                        TerceiraOperacaoSangriaRapida.Valor = OperacaoCaixaSangria.Valor * -1;
+                    }
+                    else
+                    {
+                        TerceiraOperacaoSangriaRapida.Valor = OperacaoCaixaSangria.Valor;
+                    }
+
+                    TerceiraOperacaoSangriaRapida.UsuarioQueLancou = (from c in _contextoOperacaocaixa.GetAll<CadastrarUsuario>()
+                                                              .Where(x => x.Nome == NomeDoCaixa)
+                                                                      select c).First();
+                    TerceiraOperacaoSangriaRapida.FormaPagamentoUtilizada = _contextoOperacaocaixa.Get<FormaPagamentoEstabelecimento>(CodFormaPagamento);
+                    TerceiraOperacaoSangriaRapida.EstabelecimentoOperacao = _contextoOperacaocaixa.Get<Estabelecimento>(codigoEstabelecimento);
+                    TerceiraOperacaoSangriaRapida.Observacao = "Sangria rápida";
+                    TerceiraOperacaoSangriaRapida.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now;
+                    TerceiraOperacaoSangriaRapida.DataHoraInsercao = DateTime.Now;
+                    TerceiraOperacaoSangriaRapida.TipoOperacao = EnumTipoOperacao.Sangria;
+                    _contextoOperacaocaixa.Add<OperacaoCaixa>(TerceiraOperacaoSangriaRapida);
+                    _contextoOperacaocaixa.SaveChanges();
+
+                    OperacaoFinanceiraContaCorrente TerceiraOPeracaoDeposito = new OperacaoFinanceiraContaCorrente();
+
+                    TerceiraOPeracaoDeposito.ContaLancamento = _contextoOperacaocaixa.Get<ContaCorrente>(TerceiraOperacaoSangriaRapida.FormaPagamentoUtilizada.ContaCorrenteFormaPagamento.Codigo);
+                    TerceiraOPeracaoDeposito.Data = TerceiraOperacaoSangriaRapida.DataLancamento;
+                    TerceiraOPeracaoDeposito.DataHoraInsercao = DateTime.Now;
+                    TerceiraOPeracaoDeposito.Taxa = TerceiraOperacaoSangriaRapida.FormaPagamentoUtilizada.TaxaFormaPagamento;
+                    TerceiraOPeracaoDeposito.Valor = TerceiraOperacaoSangriaRapida.Valor;
+                    TerceiraOPeracaoDeposito.ValorLiquido = TerceiraOPeracaoDeposito.Valor - ((TerceiraOPeracaoDeposito.Valor * TerceiraOPeracaoDeposito.Taxa) / 100);
+                    TerceiraOPeracaoDeposito.Desconto = TerceiraOPeracaoDeposito.Valor - TerceiraOPeracaoDeposito.ValorLiquido;
+                    TerceiraOPeracaoDeposito.Descricao = "Simulação de depósito";
+                    TerceiraOPeracaoDeposito.FormaPagamento = _contextoOperacaocaixa.Get<FormaPagamentoEstabelecimento>(TerceiraOperacaoSangriaRapida.FormaPagamentoUtilizada.Codigo);
+                    TerceiraOPeracaoDeposito.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now;
+                    TerceiraOPeracaoDeposito.DataRecebimento = TerceiraOperacaoSangriaRapida.DataLancamento.AddDays(Convert.ToDouble(NumeroDiasParaRecebimento));
+                    TerceiraOPeracaoDeposito.OperacaoCaixaOrigem = _contextoOperacaocaixa.Get<OperacaoCaixa>(TerceiraOperacaoSangriaRapida.Codigo);
+                    _contextoOperacaocaixa.Add<OperacaoFinanceiraContaCorrente>(TerceiraOPeracaoDeposito);
+                    _contextoOperacaocaixa.SaveChanges();
+
+                    return RedirectToAction("Sucesso", "Home");
+
+                    //fim da terceira tentativa
+
                 }
 
-                SangriaRapida.UsuarioQueLancou = (from c in _contextoOperacaocaixa.GetAll<CadastrarUsuario>()
-                                                 .Where(x => x.Nome == NomeDoCaixa)
-                                                  select c).First();
-
-                SangriaRapida.FormaPagamentoUtilizada = _contextoOperacaocaixa.Get<FormaPagamentoEstabelecimento>(CodFormaPagamento);
-                SangriaRapida.EstabelecimentoOperacao = _contextoOperacaocaixa.Get<Estabelecimento>(codigoEstabelecimento);
-                SangriaRapida.Observacao = "Sangria rápida";
-                SangriaRapida.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now;
-                SangriaRapida.DataHoraInsercao = DateTime.Now;
-                SangriaRapida.TipoOperacao = EnumTipoOperacao.Sangria;
-                _contextoOperacaocaixa.Add<OperacaoCaixa>(SangriaRapida);
-                _contextoOperacaocaixa.SaveChanges();
-
-
-
-                OperacaoFinanceiraContaCorrente PrimeiraOperacaoDeposito = new OperacaoFinanceiraContaCorrente();
-
-                PrimeiraOperacaoDeposito.ContaLancamento = _contextoOperacaocaixa.Get<ContaCorrente>(SangriaRapida.FormaPagamentoUtilizada.ContaCorrenteFormaPagamento.Codigo);
-                PrimeiraOperacaoDeposito.Data = SangriaRapida.DataLancamento;
-                PrimeiraOperacaoDeposito.DataHoraInsercao = DateTime.Now;
-                PrimeiraOperacaoDeposito.Taxa = SangriaRapida.FormaPagamentoUtilizada.TaxaFormaPagamento;
-                PrimeiraOperacaoDeposito.Valor = SangriaRapida.Valor;
-                PrimeiraOperacaoDeposito.ValorLiquido = PrimeiraOperacaoDeposito.Valor - ((PrimeiraOperacaoDeposito.Valor * PrimeiraOperacaoDeposito.Taxa) / 100);
-                PrimeiraOperacaoDeposito.Desconto = PrimeiraOperacaoDeposito.Valor - PrimeiraOperacaoDeposito.ValorLiquido;
-                PrimeiraOperacaoDeposito.Descricao = "Simulação de depósito";
-                PrimeiraOperacaoDeposito.FormaPagamento = _contextoOperacaocaixa.Get<FormaPagamentoEstabelecimento>(SangriaRapida.FormaPagamentoUtilizada.Codigo);
-                PrimeiraOperacaoDeposito.UsuarioDataHoraInsercao = "Lançado por: " + User.Identity.Name + " Data: " + DateTime.Now;
-                PrimeiraOperacaoDeposito.DataRecebimento = SangriaRapida.DataLancamento.AddDays(Convert.ToDouble(NumeroDiasParaRecebimento));
-                PrimeiraOperacaoDeposito.OperacaoCaixaOrigem = _contextoOperacaocaixa.Get<OperacaoCaixa>(SangriaRapida.Codigo);
-                _contextoOperacaocaixa.Add<OperacaoFinanceiraContaCorrente>(PrimeiraOperacaoDeposito);
-                _contextoOperacaocaixa.SaveChanges();
 
 
 
@@ -238,20 +576,16 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
 
                     }
 
-
                 }
                 if (ModelState.IsValid)
                 {
 
-                    IList<OperacaoCaixa> ListaVerificarLancamentoDuplicado = _contextoOperacaocaixa.GetAll<OperacaoCaixa>().AsParallel()
+                    IList<OperacaoCaixa> ListaVerificarLancamentoDuplicado = _contextoOperacaocaixa.GetAll<OperacaoCaixa>()
                                                                            .Where(x => x.Valor == OperacaoCaixaLancamento.Valor && x.TipoOperacao == EnumTipoOperacao.LancamentoCaixa && x.UsuarioQueLancou.Nome == User.Identity.Name)
                                                                            .ToList();
                     bool VerificaSeSistemaFazDepositoAutomatico = (from c in _contextoOperacaocaixa.GetAll<Configuracao>()
                                                                    select c.FazerLancamentoContaCorrente).FirstOrDefault();
-
                     decimal NumeroDiasParaRecebimento = VerificaDiasRecebimento(OperacaoCaixaLancamento.FormaPagamentoUtilizada.Codigo);
-
-
                     if (ListaVerificarLancamentoDuplicado.Count() >= 1)
                     {
                         foreach (var itemListaVerificaOperacaoDuplicada in ListaVerificarLancamentoDuplicado)
@@ -259,7 +593,6 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
                             if (itemListaVerificaOperacaoDuplicada.DataHoraInsercao == null)
                             {
                                 string NomeDoCaixa = User.Identity.Name;
-
                                 //Entrada no caixa
 
                                 OperacaoCaixa PrimeiroLancamentoOperacaoCaixa = new OperacaoCaixa();
@@ -274,7 +607,6 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
                                     PrimeiroLancamentoOperacaoCaixa.DataLancamento = OperacaoCaixaLancamento.DataLancamento;
                                 }
                                 PrimeiroLancamentoOperacaoCaixa.Descricao = "Lancamento:" + DateTime.Now.Date.ToString("dd-MM-yyyy");
-
 
                                 OperacaoCaixaLancamento.Valor = Convert.ToDecimal(OperacaoCaixaLancamento.Valor.ToString().Replace(".", ","));
 
@@ -302,7 +634,6 @@ namespace ControleCaixaWeb.Areas.OperadorCaixa.Controllers
                                 PrimeiroLancamentoOperacaoCaixa.TipoOperacao = EnumTipoOperacao.LancamentoCaixa;
                                 _contextoOperacaocaixa.Add<OperacaoCaixa>(PrimeiroLancamentoOperacaoCaixa);
                                 _contextoOperacaocaixa.SaveChanges();
-
 
                                 OperacaoFinanceiraContaCorrente PrimeiraOperacaoDeposito = new OperacaoFinanceiraContaCorrente();
 
